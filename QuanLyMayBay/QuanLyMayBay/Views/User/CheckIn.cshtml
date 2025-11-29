@@ -1,0 +1,411 @@
+﻿@model List<QuanLyMayBay.Models.CheckInViewModel>
+@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#1E40AF',
+                    'primary-dark': '#1E3A8A',
+                    'primary-light': '#3B82F6',
+                    'blue-50': '#EFF6FF',
+                    'blue-100': '#DBEAFE'
+                }
+            }
+        }
+    }
+</script>
+<header class="bg-white shadow-sm border-b border-blue-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary">Check-in Trực Tuyến</h1>
+                <p class="text-sm sm:text-base text-gray-600 mt-1">Hoàn tất thủ tục check-in và nhận thẻ lên máy bay</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg">
+                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <span class="text-sm font-semibold text-primary">@ViewBag.TongChuyenBay Chuyến Bay</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    @if (ViewBag.ChuaDangNhap == true)
+    {
+        <div class="bg-white rounded-xl shadow-sm border border-blue-100 p-8 text-center max-w-xl mx-auto">
+            <svg class="w-12 h-12 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 5c2.672 0 8 1.336 8 4v2H4v-2c0-2.664 5.328-4 8-4z" />
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Bạn phải đăng nhập để xem trạng thái Check-in</h2>
+            <p class="text-gray-600 mb-6">Vui lòng đăng nhập để sử dụng chức năng check-in vé máy bay trực tuyến.</p>
+            <a href="@Url.Action("DangNhap", "User")" class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark transition-all">
+                Đăng nhập
+            </a>
+        </div>
+        return; // Không render tiếp bên dưới khi chưa đăng nhập
+    }
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-4 sm:p-6 mb-6 text-white">
+        <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            <div class="flex-1">
+                <h3 class="font-bold text-lg mb-2">Thông tin quan trọng</h3>
+                <ul class="text-sm space-y-1 opacity-95">
+                    <li>• Check-in trực tuyến mở cửa từ 24 giờ đến 1 giờ trước giờ khởi hành</li>
+                    <li>• Vui lòng có mặt tại sân bay ít nhất 90 phút trước giờ bay quốc tế, 60 phút cho nội địa</li>
+                    <li>• Mang theo giấy tờ tùy thân hợp lệ khi làm thủ tục tại sân bay</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-blue-100 p-4 mb-6">
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+            <div class="flex flex-wrap gap-2">
+                <a href="@Url.Action("CheckIn", new { filter = "ready" })" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center @((ViewBag.CurrentFilter == "ready" ? "bg-primary text-white" : "bg-white border border-blue-200 text-gray-700 hover:bg-blue-50"))">
+                    Sẵn sàng check-in
+                    <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white">@ViewBag.SanSangCheckIn</span>
+                </a>
+                <a href="@Url.Action("CheckIn", new { filter = "checkedin" })" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center @((ViewBag.CurrentFilter == "checkedin" ? "bg-primary text-white" : "bg-white border border-blue-200 text-gray-700 hover:bg-blue-50"))">
+                    Đã check-in
+                    <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white">@ViewBag.DaCheckIn</span>
+                </a>
+                <a href="@Url.Action("CheckIn", new { filter = "overdue" })" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center @((ViewBag.CurrentFilter == "overdue" ? "bg-primary text-white" : "bg-white border border-blue-200 text-gray-700 hover:bg-blue-50"))">
+                    Quá hạn
+                    <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white">@ViewBag.QuaHan</span>
+                </a>
+            </div>
+            <select class="px-4 py-2 border border-blue-200 rounded-lg text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary">
+                <option>Sắp xếp: Ngày bay gần nhất</option>
+                <option>Sắp xếp: Ngày bay xa nhất</option>
+                <option>Sắp xếp: Theo tên</option>
+            </select>
+        </div>
+    </div>
+
+    @*<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var ve in Model)
+                {
+                    <div class="bg-white rounded-xl shadow-md border border-blue-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                        <div class="bg-gradient-to-r from-primary to-primary-light p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold rounded-full">@(ve.HangGhe ?? "Phổ thông").ToUpper()</span>
+                                @if (ve.DaCheckIn)
+                                {
+                                    <span class="px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Đã check-in
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Chưa check-in
+                                    </span>
+                                }
+                            </div>
+                            <div class="flex items-center justify-between text-white">
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold">@(ve.SanBayDiMa ?? "N/A")</p>
+                                    <p class="text-xs opacity-90">@(ve.SanBayDiThanhPho ?? "")</p>
+                                </div>
+                                <div class="flex-1 px-3">
+                                    <svg class="w-full h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold">@(ve.SanBayDenMa ?? "N/A")</p>
+                                    <p class="text-xs opacity-90">@(ve.SanBayDenThanhPho ?? "")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 space-y-3">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <p class="text-xs text-gray-500 mb-1">Mã vé</p>
+                                    <p class="text-sm font-bold text-gray-900">@(ve.MaVe ?? "N/A")</p>
+                                </div>
+                                @if (!string.IsNullOrEmpty(ve.ThoiGianConLai))
+                                {
+                                    <div class="bg-amber-50 px-3 py-1 rounded-lg">
+                                        <p class="text-xs font-semibold text-amber-700">@ve.ThoiGianConLai</p>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="border-t border-blue-100 pt-3 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Hành khách</span>
+                                    <span class="text-sm font-semibold text-gray-900">@(ve.TenHanhKhach ?? "N/A")</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Mã chuyến</span>
+                                    <span class="text-sm font-semibold text-gray-900">@(ve.MaCB ?? "N/A")</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Ngày & giờ bay</span>
+                                    <span class="text-sm font-semibold text-gray-900">@ve.GioCatCanh.ToString("dd/MM/yyyy - HH:mm")</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Thời gian bay</span>
+                                    <span class="text-sm font-semibold text-gray-900">@(ve.ThoiGianBay ?? "N/A")</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Ghế hiện tại</span>
+                                    <span class="text-sm font-semibold text-primary">@(ve.SoGhe ?? "N/A")</span>
+                                </div>
+                            </div>
+
+                            @if (ve.CoTheCheckIn)
+                            {
+                                <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-xs font-semibold text-blue-900">Đủ điều kiện check-in</span>
+                                    </div>
+                                    <p class="text-xs text-blue-700">Bạn có thể check-in ngay bây giờ</p>
+                                </div>
+                            }
+                            else if (!ve.DaCheckIn)
+                            {
+                                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-xs font-semibold text-gray-900">Chưa đến thời gian check-in</span>
+                                    </div>
+                                    <p class="text-xs text-gray-700">Check-in mở cửa từ 24 giờ trước giờ bay</p>
+                                </div>
+                            }
+
+                            <div class="space-y-2 pt-2">
+                                @if (ve.CoTheCheckIn)
+                                {
+                                    <a href="@Url.Action("XacNhanCheckIn", "User", new { maVe = ve.MaVe })" class="w-full px-4 py-3 bg-gradient-to-r from-primary to-primary-light text-white rounded-lg text-sm font-bold hover:from-primary-dark hover:to-primary transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Check-in ngay
+                                    </a>
+                                }
+                                else if (ve.DaCheckIn)
+                                {
+                                    <a href="@Url.Action("XacNhanCheckIn", "User", new { maVe = ve.MaVe })" class="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg text-sm font-bold hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        Xem thẻ lên máy bay
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button disabled class="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg text-sm font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Chưa đến giờ check-in
+                                    </button>
+                                }
+                                <a href="@Url.Action("XacNhanCheckIn", "User", new { maVe = ve.MaVe })" class="w-full px-4 py-2 bg-blue-50 text-primary rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-span-full text-center py-12">
+                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <p class="text-gray-600 text-lg font-semibold mb-2">Chưa có vé để check-in</p>
+                    <p class="text-gray-500 text-sm">Bạn cần có vé đã thanh toán để sử dụng tính năng check-in</p>
+                </div>
+            }
+        </div>*@
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var ve in Model)
+            {
+                var statusClass = ve.DaCheckIn ? "bg-green-500 text-white" : (ve.CoTheCheckIn ? "bg-amber-500 text-white" : "bg-gray-300 text-gray-500");
+                var statusText = ve.DaCheckIn ? "Đã check-in" : (ve.CoTheCheckIn ? "Chưa check-in" : "Chưa đến giờ check-in");
+                <div class="bg-white rounded-xl shadow-md border border-blue-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gradient-to-r from-primary to-primary-light p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold rounded-full">@(ve.HangGhe ?? "Phổ thông").ToUpper()</span>
+                            <span class="px-3 py-1 @statusClass text-xs font-bold rounded-full flex items-center gap-1">
+                                @statusText
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-white">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold">@(ve.SanBayDiMa ?? "N/A")</p>
+                                <p class="text-xs opacity-90">@(ve.SanBayDiThanhPho ?? "")</p>
+                            </div>
+                            <div class="flex-1 px-3">
+                                <svg class="w-full h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold">@(ve.SanBayDenMa ?? "N/A")</p>
+                                <p class="text-xs opacity-90">@(ve.SanBayDenThanhPho ?? "")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <p class="text-xs text-gray-500 mb-1">Mã vé</p>
+                                <p class="text-sm font-bold text-gray-900">@(ve.MaVe ?? "N/A")</p>
+                            </div>
+                            @if (!string.IsNullOrEmpty(ve.ThoiGianConLai))
+                            {
+                                <div class="bg-amber-50 px-3 py-1 rounded-lg">
+                                    <p class="text-xs font-semibold text-amber-700">@ve.ThoiGianConLai</p>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="border-t border-blue-100 pt-3 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Hành khách</span>
+                                <span class="text-sm font-semibold text-gray-900">@(ve.TenHanhKhach ?? "N/A")</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Mã chuyến</span>
+                                <span class="text-sm font-semibold text-gray-900">@(ve.MaCB ?? "N/A")</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Ngày & giờ bay</span>
+                                <span class="text-sm font-semibold text-gray-900">@ve.GioCatCanh.ToString("dd/MM/yyyy - HH:mm")</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Thời gian bay</span>
+                                <span class="text-sm font-semibold text-gray-900">@(ve.ThoiGianBay ?? "N/A")</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Ghế hiện tại</span>
+                                <span class="text-sm font-semibold text-primary">@(ve.SoGhe ?? "N/A")</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2">
+                            @if (ve.CoTheCheckIn && !ve.DaCheckIn)
+                            {
+                                <a href="@Url.Action("XacNhanCheckIn", "User", new { maVe = ve.MaVe })" class="w-full px-4 py-3 bg-gradient-to-r from-primary to-primary-light text-white rounded-lg text-sm font-bold hover:from-primary-dark hover:to-primary transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Check-in ngay
+                                </a>
+                            }
+                            else if (ve.DaCheckIn)
+                            {
+                                <a href="@Url.Action("XemTheLenMayBay", "User", new { maVe = ve.MaVe })" class="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg text-sm font-bold hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    Xem thẻ lên máy bay
+                                </a>
+                            }
+                            else
+                            {
+                                <button disabled class="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg text-sm font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Chưa đến giờ check-in
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-full text-center py-12">
+                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <p class="text-gray-600 text-lg font-semibold mb-2">Chưa có vé để check-in</p>
+                <p class="text-gray-500 text-sm">Bạn cần có vé đã thanh toán để sử dụng tính năng check-in</p>
+            </div>
+        }
+    </div>
+
+
+
+
+    <div class="mt-8 bg-white rounded-xl shadow-sm border border-blue-100 p-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Hướng dẫn check-in trực tuyến
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 text-sm mb-1">Chọn chuyến bay</h4>
+                    <p class="text-xs text-gray-600">Chọn chuyến bay bạn muốn check-in</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 text-sm mb-1">Xác nhận thông tin</h4>
+                    <p class="text-xs text-gray-600">Kiểm tra thông tin hành khách</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 text-sm mb-1">Chọn ghế ngồi</h4>
+                    <p class="text-xs text-gray-600">Chọn hoặc thay đổi ghế ngồi</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">4</div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 text-sm mb-1">Nhận thẻ lên máy bay</h4>
+                    <p class="text-xs text-gray-600">Tải hoặc in thẻ lên máy bay</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+

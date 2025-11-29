@@ -1,0 +1,418 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@model QuanLyMayBay.Models.ChonChoModel
+
+<input type="hidden" id="MaCB" value="@Model.MaCB" />
+<input type="hidden" id="MaGH" value="@Model.MaGH" />
+<input type="hidden" id="SoHanhKhach" value="@Model.SoHanhKhach" />
+
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="mb-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Chọn Ghế Ngồi</h1>
+        <p class="text-gray-600">
+            Chuyến bay <strong>@Model.MaMB</strong> •
+            @Model.DiemDi → @Model.DiemDen •
+            @Model.GioCatCanh.ToString("HH:mm") - @Model.GioHaCanh.ToString("HH:mm") •
+            @Model.SoHanhKhach Hành khách
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        <!-- SƠ ĐỒ GHẾ -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-4 md:p-6">
+                <h2 class="text-lg md:text-xl font-semibold mb-4">Sơ Đồ Ghế</h2>
+
+                <!-- Chú thích -->
+                <div class="flex flex-wrap gap-4 mb-6 text-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-green-500 rounded"></div>
+                        <span>Ghế trống</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-gray-400 rounded"></div>
+                        <span>Đã đặt</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-orange-500 rounded"></div>
+                        <span>Ghế đặc biệt</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-blue-500 rounded border-2 border-blue-700"></div>
+                        <span>Đã chọn</span>
+                    </div>
+                </div>
+
+                <!-- Lưu ý -->
+                <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <span class="font-semibold">Lưu ý:</span>
+                        Vui lòng chọn <strong>@Model.SoHanhKhach ghế</strong> cho @Model.SoHanhKhach hành khách
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <!-- Đầu máy bay -->
+                    <div class="w-full h-8 bg-gradient-to-r from-gray-300 to-gray-400 rounded-t-full mb-6 flex items-center justify-center">
+                        <span class="text-xs font-medium text-gray-700">Đầu máy bay</span>
+                    </div>
+
+                    <!-- VÒNG LẶP THEO HẠNG GHẾ -->
+                    @foreach (var hangGhe in Model.CauHinhGhe)
+                    {
+                        var gia = Model.GiaGhe.ContainsKey(hangGhe.HANGGHE) ? Model.GiaGhe[hangGhe.HANGGHE] : 0;
+                        var soHang = (int)Math.Ceiling((double)hangGhe.SOLUONG / 6);
+                        var isSpecial = hangGhe.HANGGHE.Contains("Thương gia") || hangGhe.HANGGHE.Contains("10");
+
+                        <div class="mb-8">
+                            <h3 class="text-sm font-medium text-gray-700 mb-3">@hangGhe.HANGGHE</h3>
+                            <div class="grid grid-cols-6 gap-2 max-w-lg mx-auto">
+                                @for (int h = 1; h <= soHang; h++)
+                                {
+                                    for (char c = 'A'; c <= 'F'; c++)
+                                    {
+                                        string tenGhe = $"{h.ToString("D2")}{c}";
+                                        bool daDat = Model.GheDaDat.Contains(tenGhe);
+                                        string cssClass = daDat ? "occupied" : "available";
+                                        if (isSpecial && !daDat)
+                                        {
+                                            cssClass = "special";
+                                        }
+
+
+                                        string onclick = daDat ? "" : "onclick=\"selectSeat(this)\"";
+
+
+                                        <div class="seat @cssClass"
+                                             data-seat="@tenGhe"
+                                             data-price="@gia"
+                                            data-class-name="@hangGhe.HANGGHE"
+                                             @Html.Raw(onclick)
+                                             title="@tenGhe - @gia.ToString("N0") VNĐ">
+                                            <span class="text-xs font-medium">@tenGhe</span>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- TÓM TẮT -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-4 md:p-6 sticky top-6">
+                <h2 class="text-lg md:text-xl font-semibold mb-4">Tóm Tắt Đặt Vé</h2>
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-600">Hành khách:</span>
+                        <span class="font-medium">@Model.SoHanhKhach người lớn</span>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                        @for (int i = 1; i <= Model.SoHanhKhach; i++)
+                        {
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-600">Hành khách @i:</span>
+                                <span class="font-medium text-sm" id="selected-seat-@i">Chưa chọn</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="flex justify-between items-center mb-2 mt-4">
+                        <span class="text-gray-600">Tổng giá vé:</span>
+                        <span class="font-medium" id="ticket-price">0 VNĐ</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-600">Hành lý:</span>
+                        <span class="font-medium">7kg xách tay/người</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-600">Phí hành lý:</span>
+                        <span class="font-medium" id="baggage-fee">0 VNĐ</span>
+                    </div>
+                </div>
+
+                <div class="border-t pt-4 mb-6">
+                    <div class="flex justify-between items-center text-lg font-bold">
+                        <span>Tổng tiền:</span>
+                        <span class="text-blue-600" id="total-price">0 VNĐ</span>
+                    </div>
+                </div>
+
+                <button id="continue-btn"
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        disabled>
+                    Chọn @Model.SoHanhKhach ghế để tiếp tục
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <form id="passenger-form" method="post" action="@Url.Action("LuuVaoGioHangChiTiet", "User")" class="mt-8 bg-white rounded-lg shadow-md p-4 md:p-6 hidden">
+        <input type="hidden" name="MaCB" value="@Model.MaCB" />
+        <input type="hidden" name="MaGH" value="@Model.MaGH" />
+        <input type="hidden" name="totalPrice" id="totalPriceInput" value="0">
+
+        <h2 class="text-lg md:text-xl font-semibold mb-6">Thông Tin Hành Khách</h2>
+
+        @for (int i = 1; i <= Model.SoHanhKhach; i++)
+        {
+            <input type="hidden" name="Passengers[@(i-1)].Seat" id="seat-input-@i" />
+            <input type="hidden" name="Passengers[@(i-1)].SeatClass" id="seat-class-input-@i" />
+
+
+            <div class="mb-8 p-4 @(i % 2 == 1 ? "bg-blue-50 border-l-4 border-blue-500" : "bg-green-50 border-l-4 border-green-500")">
+                <h3 class="font-semibold @(i % 2 == 1 ? "text-blue-900" : "text-green-900") mb-2">
+                    Hành Khách @i - Ghế <span id="passenger-@i-seat">-</span>
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
+                <div><label>Họ và tên *</label><input type="text" name="Passengers[@(i-1)].Name" id="p@i-name" required /></div>
+                <div>
+                    <label>Giới tính *</label>
+                    <select name="Passengers[@(i-1)].Gender" id="p@i-gender" required>
+                        <option value="">Chọn</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+                <div><label>Ngày sinh *</label><input type="date" name="Passengers[@(i-1)].Dob" id="p@i-dob" required /></div>
+                <div>
+                    <label>Quốc gia *</label>
+                    <select name="Passengers[@(i-1)].Country" id="p@i-country" required>
+                        <option value="">Chọn</option>
+                        <option value="VN">Việt Nam</option>
+                        <option value="US">Hoa Kỳ</option>
+                        <option value="JP">Nhật Bản</option>
+                    </select>
+                </div>
+                <div><label>Email *</label><input type="email" name="Passengers[@(i-1)].Email" id="p@i-email" required /></div>
+                <div><label>Số điện thoại *</label><input type="tel" name="Passengers[@(i-1)].Phone" id="p@i-phone" required /></div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4">Hành Lý - Hành Khách @i</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label>Xách tay</label>
+                        <select name="Passengers[@(i-1)].CarryOnFee" id="p@(i)-carry-on" onchange="updateBaggageFee()">
+                            <option value="0">7kg (Miễn phí)</option>
+                            <option value="200000">10kg (+200,000 VNĐ)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Ký gửi</label>
+                        <select name="Passengers[@(i-1)].CheckedFee" id="p@(i)-checked" onchange="updateBaggageFee()">
+                            <option value="0">Không</option>
+                            <option value="500000">20kg (+500,000 VNĐ)</option>
+                            <option value="800000">30kg (+800,000 VNĐ)</option>
+                            <option value="1200000">40kg (+1,200,000 VNĐ)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            if (i < Model.SoHanhKhach)
+            { <div class="border-t pt-8 mb-8"></div>}
+        }
+
+        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+            <div class="flex justify-between"><span>Tổng phí hành lý thêm:</span><span id="additional-baggage-fee">0 VNĐ</span></div>
+        </div>
+
+        <div class="mt-8 flex flex-col sm:flex-row gap-4">
+            <button type="button" class="flex-1 bg-gray-200 py-3 rounded-lg" onclick="goBackToSeatSelection()">Quay lại</button>
+            <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg">Tiếp tục đến thanh toán</button>
+        </div>
+    </form>
+</div>
+
+<!-- Tooltip -->
+<div id="seat-tooltip" class="absolute bg-black text-white text-xs px-2 py-1 rounded shadow-lg pointer-events-none z-50 hidden">
+    <div id="tooltip-content"></div>
+</div>
+
+<style>
+    .seat {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+        .seat.available {
+            background-color: #10b981;
+        }
+
+            .seat.available:hover {
+                background-color: #059669;
+                transform: scale(1.1);
+            }
+
+        .seat.occupied {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .seat.special {
+            background-color: #f59e0b;
+        }
+
+            .seat.special:hover {
+                background-color: #d97706;
+                transform: scale(1.1);
+            }
+
+        .seat.selected {
+            background-color: #3b82f6;
+            border: 2px solid #1d4ed8;
+        }
+
+    @@media (max-width: 768px) {
+        .seat {
+            width: 28px;
+            height: 28px;
+            font-size: 9px;
+        }
+    }
+</style>
+
+<script>
+    let selectedSeats = [];
+    let seatPrices = [];
+    let baggageFee = 0;
+    const soHanhKhach = @Model.SoHanhKhach;
+
+    function selectSeat(seatElement) {
+        if (selectedSeats.length >= soHanhKhach && !seatElement.classList.contains('selected')) {
+            alert(`Bạn chỉ được chọn tối đa ${soHanhKhach} ghế.`);
+            return;
+        }
+
+        const seatNumber = seatElement.dataset.seat;
+        const seatPrice = parseInt(seatElement.dataset.price) || 0;
+
+        if (seatElement.classList.contains('selected')) {
+            // Bỏ chọn
+            seatElement.classList.remove('selected');
+            const index = selectedSeats.indexOf(seatNumber);
+            if (index > -1) {
+                selectedSeats.splice(index, 1);
+                seatPrices.splice(index, 1);
+            }
+        } else {
+            // Chọn ghế
+            seatElement.classList.add('selected');
+            selectedSeats.push(seatNumber);
+            seatPrices.push(seatPrice);
+        }
+        updateSummary();
+    }
+
+    function updateSummary() {
+        // Cập nhật danh sách ghế ở tóm tắt
+        for (let i = 1; i <= soHanhKhach; i++) {
+            const seatText = selectedSeats[i - 1] || 'Chưa chọn';
+            const el = document.getElementById(`selected-seat-${i}`);
+            if (el) el.textContent = seatText;
+        }
+
+        // Cập nhật tổng giá vé
+        const totalTicketPrice = seatPrices.reduce((a, b) => a + b, 0);
+        document.getElementById('ticket-price').textContent = formatPrice(totalTicketPrice);
+
+        // Nút tiếp tục
+        const continueBtn = document.getElementById('continue-btn');
+        if (selectedSeats.length === soHanhKhach) {
+            continueBtn.disabled = false;
+            continueBtn.textContent = 'Tiếp tục';
+            continueBtn.onclick = showPassengerForm;
+        } else {
+            continueBtn.disabled = true;
+            continueBtn.textContent = `Chọn thêm ${soHanhKhach - selectedSeats.length} ghế`;
+        }
+
+        updateTotalPrice(); // ← Cập nhật tổng tiền
+    }
+
+    function showPassengerForm() {
+        // Gán ghế vào phần hiển thị + hidden input để gửi form
+        for (let i = 1; i <= soHanhKhach; i++) {
+            const seatText = selectedSeats[i - 1] || '-';
+            const displayEl = document.getElementById(`passenger-${i}-seat`);
+            const hiddenInput = document.getElementById(`seat-input-${i}`);
+            const hiddenClassInput = document.getElementById(`seat-class-input-${i}`);
+            const className = document.querySelector(`.seat.selected[data-seat="${seatText}"]`)?.dataset.className || '';
+
+            hiddenClassInput.value = className;
+            if (displayEl) displayEl.textContent = seatText;
+            if (hiddenInput) hiddenInput.value = seatText;
+        }
+        document.getElementById('passenger-form').classList.remove('hidden');
+        document.getElementById('passenger-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function goBackToSeatSelection() {
+        document.getElementById('passenger-form').classList.add('hidden');
+    }
+
+    function updateBaggageFee() {
+        baggageFee = 0;
+        for (let i = 1; i <= soHanhKhach; i++) {
+            const carryOn = parseInt(document.getElementById(`p${i}-carry-on`)?.value) || 0;
+            const checked = parseInt(document.getElementById(`p${i}-checked`)?.value) || 0;
+            baggageFee += carryOn + checked;
+        }
+        document.getElementById('baggage-fee').textContent = formatPrice(baggageFee);
+        document.getElementById('additional-baggage-fee').textContent = formatPrice(baggageFee);
+        updateTotalPrice(); // ← Quan trọng: cập nhật lại tổng tiền khi đổi hành lý
+    }
+
+    // HÀM DUY NHẤT ĐÚNG - ĐÃ SỬA LỖI TRÙNG TÊN
+    function updateTotalPrice() {
+        const ticketTotal = seatPrices.reduce((a, b) => a + b, 0);
+        const total = ticketTotal + baggageFee;
+        document.getElementById('total-price').textContent = formatPrice(total);
+        document.getElementById('totalPriceInput').value = total; // ← Gửi đúng giá trị về server
+    }
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN').format(price) + ' VNĐ';
+    }
+
+    // Tooltip khi hover vào ghế
+    document.addEventListener('mousemove', e => {
+        const tooltip = document.getElementById('seat-tooltip');
+        tooltip.style.left = (e.pageX + 10) + 'px';
+        tooltip.style.top = (e.pageY - 30) + 'px';
+    });
+
+    document.querySelectorAll('.seat').forEach(seat => {
+        seat.addEventListener('mouseenter', function () {
+            if (!this.classList.contains('occupied')) {
+                document.getElementById('tooltip-content').innerHTML =
+                    `Ghế ${this.dataset.seat}<br>${formatPrice(this.dataset.price)}`;
+                document.getElementById('seat-tooltip').classList.remove('hidden');
+            }
+        });
+        seat.addEventListener('mouseleave', () => {
+            document.getElementById('seat-tooltip').classList.add('hidden');
+        });
+    });
+
+    // Gắn sự kiện thay đổi hành lý
+    document.querySelectorAll('select[id^="p"][id$="-carry-on"], select[id^="p"][id$="-checked"]')
+        .forEach(select => select.addEventListener('change', updateBaggageFee));
+</script>

@@ -1,0 +1,444 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    // LẤY DỮ LIỆU TỪ SESSION – AN TOÀN
+    DateTime? ngaydi = Session["Ngaydi"] as DateTime?;
+    string ngaydiStr = ngaydi?.ToString("dd/MM/yyyy") ?? DateTime.Now.ToString("dd/MM/yyyy");
+    string chieu = Session["Chieu"]?.ToString() ?? "Tìm chuyến bay";
+
+    var selectedGia = Session["Filter_Gia"] as string[] ?? new string[0];
+    var selectedHang = Session["Filter_Hang"] as string[] ?? new string[0];
+    var selectedGio = Session["Filter_Gio"] as string[] ?? new string[0];
+    var selectedHangGhe = Session["Filter_HangGhe"] as string[] ?? new string[0];
+}
+
+@using System.Globalization;
+
+
+@model List<QuanLyMayBay.Models.ChuyenBayModel>
+
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+            <h1 class="text-xl font-bold text-gray-800 mb-2">@chieu</h1>
+            <div class="text-sm text-gray-600">
+                <span>@Session["trip-type"]</span>
+                <span class="mx-2">•</span>
+                <span class="font-medium">@Session["DiemDi"] → @Session["DiemDen"]</span>
+                <span class="mx-2">•</span>
+                <span>@ngaydiStr</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex flex-col lg:flex-row gap-6">
+
+        <!-- Desktop Sidebar Filter -->
+        <form method="post" action="@Url.Action("LocChuyen","User")" class="hidden lg:block w-80 flex-shrink-0">
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Bộ lọc tìm kiếm</h3>
+
+                <!-- Price Filter -->
+                <div class="mb-6">
+                    <h4 class="font-medium text-gray-700 mb-3">Khoảng giá</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="gia" value="duoi2"
+                                   @(Array.IndexOf(selectedGia, "duoi2") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Dưới 2 triệu</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="gia" value="2den5"
+                                   @(Array.IndexOf(selectedGia, "2den5") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">2 - 5 triệu</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="gia" value="tren5"
+                                   @(Array.IndexOf(selectedGia, "tren5") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Trên 5 triệu</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Airlines Filter -->
+                <div class="mb-6">
+                    <h4 class="font-medium text-gray-700 mb-3">Hãng hàng không</h4>
+                    <div class="space-y-2">
+                        @if (Session["Hang"] != null)
+                        {
+                            var hangList = Session["Hang"] as List<string>;
+                            foreach (var hang in hangList)
+                            {
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="hang" value="@hang"
+                                           @(Array.IndexOf(selectedHang, hang) >= 0 ? "checked" : "")
+                                           class="rounded border-gray-300 text-primary">
+                                    <span class="ml-2 text-sm text-gray-600">@hang</span>
+                                </label>
+                            }
+                        }
+
+                    </div>
+                </div>
+
+
+                <!-- Departure Time -->
+                <div class="mb-6">
+                    <h4 class="font-medium text-gray-700 mb-3">Thời gian khởi hành</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="gio" value="sang"
+                                   @(Array.IndexOf(selectedGio, "sang") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Sáng sớm (06:00 - 12:00)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="gio" value="chieu"
+                                   @(Array.IndexOf(selectedGio, "chieu") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Chiều (12:00 - 18:00)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="gio" value="toi"
+                                   @(Array.IndexOf(selectedGio, "toi") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Tối (18:00 - 24:00)</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Lọc theo Hạng -->
+                <div class="mb-6">
+                    <h4 class="font-medium text-gray-700 mb-3">Hạng vé</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="hangghe" value="Phổ thông"
+                                   @(Array.IndexOf(selectedHangGhe, "Phổ thông") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Phổ thông</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="hangghe" value="Thương gia"
+                                   @(Array.IndexOf(selectedHangGhe, "Thương gia") >= 0 ? "checked" : "")
+                                   class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Thương gia</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    Áp dụng bộ lọc
+                </button>
+            </div>
+        </form>
+
+        <!-- Main Content -->
+        <div class="flex-1">
+            <!-- Sort Options -->
+            <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium">@( Model ==null ?0:Model.Count)</span> được tìm thấy
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="window.location.href='@Url.Action("Sort","User",new {sort ="min"})'"
+                                class="px-4 py-2 @(ViewBag.Sort=="min"?"bg-primary text-white":"bg-gray-100 text-gray-700 hover:bg-gray-200") rounded-lg text-sm font-medium">
+                            Giá thấp nhất
+                        </button>
+                        <button onclick="window.location.href='@Url.Action("Sort","User",new {sort ="max"})'"
+                                class="px-4 py-2 @(ViewBag.Sort=="max"?"bg-primary text-white":"bg-gray-100 text-gray-700 hover:bg-gray-200") rounded-lg text-sm font-medium">
+                            Giá cao nhất
+                        </button>
+                        <button onclick="window.location.href='@Url.Action("Sort","User",new {sort ="early"})'"
+                                class="px-4 py-2 @(ViewBag.Sort=="early"?"bg-primary text-white":"bg-gray-100 text-gray-700 hover:bg-gray-200") rounded-lg text-sm font-medium">
+                            Khởi hành sớm nhất
+                        </button>
+                        <button onclick="window.location.href='@Url.Action("Sort","User",new {sort ="timespan"})'"
+                                class="px-4 py-2 @(ViewBag.Sort=="timespan"?"bg-primary text-white":"bg-gray-100 text-gray-700 hover:bg-gray-200") rounded-lg text-sm font-medium">
+                            Thời gian bay ngắn nhất
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Flight Results -->
+            <div class="space-y-4">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <!-- Flight Card 1 -->
+                        <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                            <div class="p-4 md:p-6">
+                                <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+                                    <!-- Airline Info -->
+                                    <div class="flex items-center gap-3 lg:w-48">
+                                        @{
+                                            var images = Session["AirlineImages"] as Dictionary<string, string>;
+                                            var logo = images != null && images.ContainsKey(item.Hang) ? images[item.Hang] : Url.Content("~/Content/Images/Airline/default.png");
+                                        }
+                                        <img src="@logo" alt="@item.Hang" class="w-10 h-10 rounded object-contain">
+                                        <div>
+                                            <div class="font-medium text-gray-900">@item.Hang</div>
+                                            <div class="text-sm text-gray-500">@item.MaMB</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flight Details -->
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <div class="text-center">
+                                                <div class="mb-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100 flex items-center">
+                                                    <i class="fas fa-calendar-alt mr-1 text-[10px]"></i>
+                                                    @item.GioCatCanh.ToString("dd/MM")
+                                                </div>
+                                                <div class="text-lg font-bold text-gray-900">@item.GioCatCanh.ToString("hh:mm")</div>
+                                                <div class="text-sm text-gray-500">@item.DiemDi</div>
+                                            </div>
+                                            <div class="flex-1 mx-4">
+                                                <div class="relative">
+                                                    <div class="absolute inset-0 flex items-center">
+                                                        <div class="w-full border-t border-gray-300"></div>
+                                                    </div>
+                                                    <div class="relative flex justify-center">
+                                                        <span class="bg-white px-2 text-xs text-gray-500">@item.TongThoiGianBay</span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center text-xs text-gray-500 mt-1">Bay thẳng</div>
+                                            </div>
+                                            <div class="text-center">
+                                                <div class="mb-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100 flex items-center">
+                                                    <i class="fas fa-calendar-alt mr-1 text-[10px]"></i>
+                                                    @item.GioHaCanh.ToString("dd/MM")
+                                                </div>
+                                                <div class="text-lg font-bold text-gray-900">@item.GioHaCanh.ToString("hh:mm")</div>
+                                                <div class="text-sm text-gray-500">@item.DiemDen</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price and Action -->
+                                    <div class="flex items-center justify-between lg:flex-col lg:items-end lg:w-40 gap-4">
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-accent">@(item.Gia.ToString("N0", new CultureInfo("vn-VN")))đ</div>
+                                            <div class="text-sm text-gray-500">@item.HangGhe</div>
+                                        </div>
+                                        <button onclick="checkPassengerAndBook('@item.MaCB')"
+                                                class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors whitespace-nowrap">
+                                            Chọn chuyến
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <h3 class="text-gray-500 opacity-50">
+                        Không có chuyến bay nào theo yêu cầu
+                    </h3>
+                }
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Filter Modal -->
+<div id="filterModal" class="fixed inset-0 z-50 hidden lg:hidden">
+    <div class="fixed inset-0 bg-black bg-opacity-50" onclick="closeFilterModal()"></div>
+    <div class="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl max-h-[80vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-900">Bộ lọc tìm kiếm</h3>
+                <button onclick="closeFilterModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Filter Content (same as desktop) -->
+            <div class="space-y-6">
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-3">Khoảng giá</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Dưới 2 triệu</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">2 - 5 triệu</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Trên 5 triệu</span>
+                        </label>
+
+                    </div>
+                </div>
+
+
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-3">Hãng hàng không</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Vietnam Airlines</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">VietJet Air</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Bamboo Airways</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-3">Thời gian khởi hành</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Sáng sớm (06:00 - 12:00)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Chiều (12:00 - 18:00)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Tối (18:00 - 24:00)</span>
+                        </label>
+
+                    </div>
+                </div>
+
+
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-3">Số điểm dừng</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">Bay thẳng</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">1 điểm dừng</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-600">2+ điểm dừng</span>
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="flex gap-3 mt-8">
+                <button onclick="closeFilterModal()" class="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium">
+                    Hủy
+                </button>
+                <button onclick="closeFilterModal()" class="flex-1 bg-primary text-white py-3 px-4 rounded-lg font-medium">
+                    Áp dụng
+                </button>
+
+            </div>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <button class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors" onclick="goBackToSeatSelection()">
+                    Quay lại chọn ghế
+                </button>
+                <button class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    Tiếp tục đến thanh toán
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Cập nhật khách hàng-->
+<div id="passengerModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center px-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 transform transition-all scale-100">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-users text-2xl text-blue-600"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900">Số lượng hành khách</h3>
+            <p class="text-sm text-gray-500 mt-2">Vui lòng nhập số lượng hành khách để tiếp tục.</p>
+        </div>
+
+        <form id="passengerForm" method="post" action="@Url.Action("CapNhatHanhKhach", "User")">
+            <input type="hidden" id="selectedMaCB" name="maCB" value="" />
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Số người lớn (>12 tuổi)</label>
+                <div class="flex items-center border border-gray-300 rounded-lg">
+                    <button type="button" onclick="adjustPassenger(-1)" class="px-4 py-2 hover:bg-gray-100 text-gray-600 rounded-l-lg">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" id="passengerInput" name="soLuong" value="1" min="1" max="9"
+                           class="w-full text-center border-none focus:ring-0 p-2 text-lg font-bold text-gray-800" readonly />
+                    <button type="button" onclick="adjustPassenger(1)" class="px-4 py-2 hover:bg-gray-100 text-gray-600 rounded-r-lg">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" onclick="closePassengerModal()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors">
+                    Hủy
+                </button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors shadow-md">
+                    Xác nhận
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openFilterModal() {
+        document.getElementById('filterModal').classList.remove('hidden');
+    }
+
+    function closeFilterModal() {
+        document.getElementById('filterModal').classList.add('hidden');
+    }
+
+    document.getElementById('filterToggle').addEventListener('click', openFilterModal);
+
+    function checkPassengerAndBook(maCB) {
+        if (@((int)Session["passenger"]) > 0) {
+            window.location.href = '/User/ChonCho?MaCB=' + maCB;
+        } else {
+            document.getElementById('selectedMaCB').value = maCB;
+            document.getElementById('passengerModal').classList.remove('hidden');
+        }
+    }
+
+    function closePassengerModal() {
+        document.getElementById('passengerModal').classList.add('hidden');
+    }
+
+    function adjustPassenger(delta) {
+        var input = document.getElementById('passengerInput');
+        var val = parseInt(input.value) + delta;
+        if (val >= 1 && val <= 9) {
+            input.value = val;
+        }
+    }
+</script>
+
