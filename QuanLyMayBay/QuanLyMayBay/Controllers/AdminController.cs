@@ -76,27 +76,128 @@ namespace QuanLyMayBay.Controllers
         }
         public ActionResult TrangChu()
         {
-            var data = from ctv in db.CHITIETVEs
-                       join pdv in db.PHIEUDATVEs on ctv.MAPHIEU equals pdv.MAPHIEU
-                       join kh in db.KHACHHANGs on pdv.MAKH equals kh.MAKH
-                       select new PhieuDatVe
-                       {
-                           MAPHIEU = ctv.MAPHIEU,
-                           MAVE = ctv.MAVE,
-                           TENKH = kh.TENKH,
-                           NGAYDAT = ctv.NGAYDAT,
-                           GIATIEN = (int)ctv.GIATIEN,
-                           TRANGTHAI = pdv.TRANGTHAI.ToString()
-                       };
+            DateTime today = DateTime.Today; // Lấy ngày hôm nay (00:00:00)
 
-            return View(data.ToList());
+
+
+            DateTime yesterday = today.AddDays(-1);
+
+            // --- 1. LẤY DANH SÁCH PHIẾU ĐẶT VÉ ---
+            var recentBookings = (from ctv in db.CHITIETVEs
+                                  join pdv in db.PHIEUDATVEs on ctv.MAPHIEU equals pdv.MAPHIEU
+                                  join kh in db.KHACHHANGs on pdv.MAKH equals kh.MAKH
+                                  orderby ctv.NGAYDAT descending // Sắp xếp mới nhất
+                                  select new PhieuDatVeDisplay
+                                  {
+                                      MAPHIEU = ctv.MAPHIEU,
+                                      MAVE = ctv.MAVE,
+                                      TENKH = kh.TENKH,
+                                      NGAYDAT = ctv.NGAYDAT,
+                                      GIATIEN = ctv.GIATIEN ?? 0,
+                                      TRANGTHAI = pdv.TRANGTHAI
+                                  }).Take(10).ToList(); // Chỉ lấy 10 cái mới nhất cho bảng
+
+            // --- 2. TÍNH TOÁN KPI ---
+
+            // A. Doanh thu
+            var dtHomNay = (decimal)(db.CHITIETVEs.Where(x => x.NGAYDAT == today).Sum(x => (long?)x.GIATIEN) ?? 0);
+            var dtHomQua = (decimal)(db.CHITIETVEs.Where(x => x.NGAYDAT == yesterday).Sum(x => (long?)x.GIATIEN) ?? 0);
+            double phanTramDT = dtHomQua > 0 ? (double)((dtHomNay - dtHomQua) / dtHomQua) * 100 : 100;
+
+            // B. Vé bán
+            var veHomNay = db.CHITIETVEs.Count(x => x.NGAYDAT == today);
+            var veHomQua = db.CHITIETVEs.Count(x => x.NGAYDAT == yesterday);
+            double phanTramVe = veHomQua > 0 ? (double)((veHomNay - veHomQua) / (double)veHomQua) * 100 : 100;
+
+            // C. Chuyến bay (Trạng thái lấy từ bảng CHUYENBAY)
+            var dangBay = db.CHUYENBAYs.Count(x => x.TRANGTHAI == "Đang bay");
+            var dungGio = db.CHUYENBAYs.Count(x => x.TRANGTHAI == "Đúng giờ");
+
+            // D. Tỷ lệ trễ
+            var totalFlight = db.CHUYENBAYs.Count();
+            var delayedFlight = db.CHUYENBAYs.Count(x => x.TRANGTHAI == "Chậm trễ" || x.TRANGTHAI == "Delay");
+            double tyLeTre = totalFlight > 0 ? (double)delayedFlight / totalFlight * 100 : 0;
+
+            // --- 3. DỮ LIỆU BIỂU ĐỒ ---
+
+            // A. Biểu đồ doanh thu 7 ngày gần nhất
+            var sevenDaysAgo = today.AddDays(-6);
+
+            // BƯỚC 1: Chỉ lấy dữ liệu thô về trước (Dùng .ToList() để ngắt kết nối DB ngay lập tức)
+            // Lưu ý: Select những trường cần thiết để nhẹ gánh
+            var rawData = db.CHITIETVEs
+                .Where(x => x.NGAYDAT >= sevenDaysAgo)
+                .Select(x => new { x.NGAYDAT, x.GIATIEN })
+                .ToList();
+
+            // BƯỚC 2: Xử lý tính toán GroupBy trên RAM (C#) - Nhanh hơn và không bao giờ Timeout
+            var revenueData = rawData
+                .GroupBy(x => x.NGAYDAT)
+                .Select(g => new {
+                    Ngay = g.Key,
+                    // Lúc này dữ liệu đã ở trên RAM, tính toán thoải mái không lo lỗi SQL
+                    TongTien = g.Sum(x => (decimal?)x.GIATIEN) ?? 0
+                })
+                .ToList();
+
+            // Chuẩn hóa dữ liệu biểu đồ (điền 0 cho những ngày không có doanh thu)
+            List<string> labelsChart1 = new List<string>();
+            List<decimal> valuesChart1 = new List<decimal>();
+
+            for (int i = 6; i >= 0; i--)
+            {
+                var dateCheck = today.AddDays(-i);
+                labelsChart1.Add(dateCheck.ToString("dd/MM"));
+                var data = revenueData.FirstOrDefault(x => x.Ngay == dateCheck);
+                valuesChart1.Add(data != null ? data.TongTien : 0);
+            }
+
+            // B. Top 5 chuyến bay bán chạy nhất (Dựa trên số lượng vé trong bảng VEMAYBAY)
+            // Join CHUYENBAY -> LOTRINH -> SANBAY để lấy tên hành trình cho đẹp (VD: Ha Noi - HCM)
+            var topFlights = (from v in db.VEMAYBAYs
+                              join cb in db.CHUYENBAYs on v.MACB equals cb.MACB
+                              join lt in db.LOTRINHs on cb.MACB equals lt.MACB
+                              join sbDi in db.SANBAYs on lt.SBDI equals sbDi.MASB
+                              join sbDen in db.SANBAYs on lt.SBDEN equals sbDen.MASB
+                              group v by new { cb.MACB, sbDi.THANHPHO, DenTP = sbDen.THANHPHO } into g
+                              orderby g.Count() descending
+                              select new
+                              {
+                                  TenChuyen = g.Key.THANHPHO + " - " + g.Key.DenTP,
+                                  SoLuong = g.Count()
+                              }).Take(5).ToList();
+
+            // --- 4. TỔNG HỢP VÀO VIEWMODEL ---
+            var model = new DashboardViewModel
+            {
+                DanhSachPhieuDat = recentBookings,
+
+                // KPI
+                DoanhThuHomNay = dtHomNay,
+                PhanTramDoanhThu = Math.Round(phanTramDT, 1),
+                VeBanHomNay = veHomNay,
+                PhanTramVeBan = Math.Round(phanTramVe, 1),
+                ChuyenBayDangBay = dangBay,
+                ChuyenBayDungGio = dungGio,
+                TyLeTreChuyen = Math.Round(tyLeTre, 1),
+                PhanTramTreChuyen = 1.2, // Fake số liệu so sánh vì DB ko có lịch sử trạng thái chuyến bay
+
+                // Charts
+                ChartLabels = labelsChart1,
+                ChartRevenueData = valuesChart1,
+                TopFlightLabels = topFlights.Select(x => x.TenChuyen).ToList(),
+                TopFlightData = topFlights.Select(x => x.SoLuong).ToList()
+            };
+
+            return View(model);
         }
+
         public ActionResult ThongKe(DateTime? startDate, DateTime? endDate, string searchQuery, int page = 1)
         {
 
             // 2. Thiết lập ngày tháng mặc định
             DateTime today = DateTime.Today;
-            if (!startDate.HasValue) startDate = new DateTime(today.Year, today.Month, 1);
+            if (!startDate.HasValue) startDate = new DateTime(today.Year, 1, 1);
             if (!endDate.HasValue) endDate = today;
             DateTime filterEndDate = endDate.Value.AddDays(1);
 
@@ -726,7 +827,7 @@ namespace QuanLyMayBay.Controllers
             return View("QLVe", vemb);
         }
 
-
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult QLPerson(string selectedMakh = null)
         {
             var model = new QLPersonViewModel();
@@ -823,6 +924,7 @@ namespace QuanLyMayBay.Controllers
             return View("QLPerson");
         }
         [HttpPost]
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult ThemNhanVien(NHANVIEN nv)
         {
             if (ModelState.IsValid)
@@ -833,6 +935,7 @@ namespace QuanLyMayBay.Controllers
 
             return RedirectToAction("QLPerson");
         }
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult XoaNhanVien(string manv)
         {
             var nv = db.NHANVIENs.Find(manv);
@@ -846,6 +949,7 @@ namespace QuanLyMayBay.Controllers
 
             return RedirectToAction("QLPerson");
         }
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult SuaNhanVien(string manv)
         {
             var nv = db.NHANVIENs.Find(manv);
@@ -859,6 +963,7 @@ namespace QuanLyMayBay.Controllers
             return View(nv);
         }
         [HttpPost]
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult SuaNhanVien(NHANVIEN model)
         {
             if (ModelState.IsValid)
@@ -882,56 +987,89 @@ namespace QuanLyMayBay.Controllers
         }
 
         // Trang Backup/Restore
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult CaiDat()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult BackupDatabase(string backupName)
+        // Chỉ cho phép Giám đốc (CV09) và Quản lý cấp cao (CV05) thực hiện sao lưu
+        [PhanQuyenAdmin("CV09", "CV05")]
+        public ActionResult BackupDatabase(string backupName, string backupType)
         {
             try
             {
-                string dbName = "QUANLYMAYBAY";
-
-                string fileName = string.IsNullOrEmpty(backupName)
-                    ? $"{dbName}_{DateTime.Now:yyyyMMdd_HHmm}.bak"
-                    : $"QLMayBay_{backupName}.bak";
-
-                // Xác định thư mục lưu
-                string virtualPath = "~/App_Data/";
-                string folderPath = Server.MapPath(virtualPath);
+                string folderPath = @"D:\Backups_QLMayBay\";
 
                 if (!Directory.Exists(folderPath))
                 {
-                    Directory.CreateDirectory(folderPath);
+                   Directory.CreateDirectory(folderPath);
                 }
 
-                if (!System.IO.Directory.Exists(folderPath))
+                // 2. Chuẩn bị thông số file
+                string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string suffix = "";
+                string extension = ".bak";
+                string messageType = "";
+
+                // Xử lý loại backup dựa trên input từ View
+                switch (backupType)
                 {
-                    System.IO.Directory.CreateDirectory(folderPath);
+                    case "full":
+                        suffix = "FULL";
+                        messageType = "Toàn bộ (Full)";
+                        break;
+                    case "diff":
+                        suffix = "DIFF";
+                        messageType = "Khác biệt (Diff)";
+                        break;
+                    case "log":
+                        suffix = "LOG";
+                        extension = ".trn"; // File log thường dùng đuôi .trn
+                        messageType = "Nhật ký (Log)";
+                        break;
+                    default:
+                        // Mặc định là Full nếu không chọn gì
+                        suffix = "FULL";
+                        backupType = "full";
+                        messageType = "Toàn bộ (Full)";
+                        break;
                 }
 
-                // 3. Ghép đường dẫn file
+                // 3. Tạo tên file hoàn chỉnh
+                // VD: QLMayBay_FULL_GhiChu_20251208.bak
+                string customName = string.IsNullOrEmpty(backupName) ? timeStamp : backupName + "_" + timeStamp;
+                string fileName = $"QLMayBay_{suffix}_{customName}{extension}";
                 string fullPath = System.IO.Path.Combine(folderPath, fileName);
 
-                string query = $"BACKUP DATABASE [{dbName}] TO DISK = '{fullPath}'";
+                string sqlCommand = "EXEC sp_BackupDatabase @p0, @p1";
 
-                // 4. Thực thi
-                db.Database.ExecuteSqlCommand(System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction, query);
+                // Tăng thời gian chờ (Timeout) lên 300s (5 phút) vì backup file lớn có thể lâu
+                db.Database.CommandTimeout = 300;
 
-                TempData["Message"] = $"Sao lưu thành công! File lưu tại: {fullPath}";
+                // Thực thi lệnh
+                db.Database.ExecuteSqlCommand(
+                    TransactionalBehavior.DoNotEnsureTransaction,
+                    sqlCommand,
+                    fullPath,   // @p0: Đường dẫn file
+                    backupType  // @p1: Loại backup ('full', 'diff', 'log')
+                );
+
+                TempData["Message"] = $"Sao lưu {messageType} thành công!\nFile lưu tại: {fullPath}";
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Lỗi sao lưu: " + ex.Message;
+                TempData["Error"] = "Lỗi khi sao lưu: " + ex.Message;
             }
 
+            // Quay lại trang Cài đặt
             return RedirectToAction("CaiDat");
         }
 
         // Action: RESTORE DATABASE
         [HttpPost]
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult RestoreDatabase(HttpPostedFileBase backupFile)
         {
             if (backupFile != null && backupFile.ContentLength > 0)
@@ -970,6 +1108,10 @@ namespace QuanLyMayBay.Controllers
             }
 
             return RedirectToAction("CaiDat");
+        }
+        public ActionResult ApiFlight()
+        {
+            return View();
         }
 
     }
