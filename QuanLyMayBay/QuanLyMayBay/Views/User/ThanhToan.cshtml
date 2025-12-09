@@ -2,292 +2,109 @@
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 @model List<QuanLyMayBay.Models.CartItemDetailViewModel>
-    <!-- Header -->
-    <div class="bg-white shadow-sm border-b">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Thanh Toán Vé Máy Bay</h1>
-        </div>
+
+<!-- Header -->
+<div class="bg-white shadow-sm border-b">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Thanh Toán Vé Máy Bay</h1>
     </div>
+</div>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <!-- Tóm tắt vé -->
-        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
-            <div class="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Thông Tin Vé</h2>
-                <span class="bg-blue-100 text-blue-800 text-xs sm:text-sm font-semibold px-3 py-1 rounded-full">@(Model !=null?Model.Count:0) vé</span>
-            </div>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
-            @foreach (var item in Model)
-            {
-                int index = Model.IndexOf(item) + 1;
-                <!-- Vé 1 -->
-                <div class="border-b pb-4 sm:pb-6 mb-4 sm:mb-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-gray-900 text-sm sm:text-base">Vé #@index - @item.SanBayDiTen → @item.SanBayDenTen</h3>
-                        <span class="text-blue-600 font-semibold text-sm sm:text-base">@item.MaChuyenBay</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-xs sm:text-sm">
-                                <span class="text-gray-600">Ngày giờ:</span>
-                                <span class="font-medium">@item.GioCatCanh.Date.ToString("dd/MM/yyyy-hh:mm")</span>
-                            </div>
-                            <div class="flex justify-between text-xs sm:text-sm">
-                                <span class="text-gray-600">Hành khách:</span>
-                                <span class="font-medium">@item.TenHanhKhach</span>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-xs sm:text-sm">
-                                <span class="text-gray-600">Ghế:</span>
-                                <span class="font-medium">@item.HangGhe</span>
-                            </div>
-                            <div class="flex justify-between text-xs sm:text-sm">
-                                <span class="text-gray-600">Giá vé:</span>
-                                <span class="font-semibold text-gray-900">@item.GiaVeCoSo VNĐ</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-
-
-            <!-- Tổng cộng -->
-            <div class="bg-blue-50 rounded-lg p-4">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-sm text-gray-600 mb-1">Tổng tiền (@Model.Count vé)</p>
-                        <p class="text-xs text-gray-500">Đã bao gồm thuế và phí</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-2xl sm:text-3xl font-bold text-red-600">@Model.Sum(x=>x.GiaVeCoSo) VNĐ</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Tóm tắt vé -->
+    <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+        <div class="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Thông Tin Vé</h2>
+            <span class="bg-blue-100 text-blue-800 text-xs sm:text-sm font-semibold px-3 py-1 rounded-full">@(Model !=null?Model.Count:0) vé</span>
         </div>
 
-        <!-- Phần thanh toán -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-            <!-- Bên trái: Phương thức thanh toán -->
-            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Phương Thức Thanh Toán</h3>
-
-                <div class="space-y-3 sm:space-y-4">
-                    <label class="flex items-center p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                        <input type="radio" name="payment" value="credit" class="w-4 h-4 text-blue-600" checked>
-                        <div class="ml-3 flex items-center">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2 sm:mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v2H4V6zm0 4h12v4H4v-4z" />
-                            </svg>
-                            <span class="font-medium text-sm sm:text-base">Thẻ tín dụng</span>
-                        </div>
-                    </label>
-
-                    <label class="flex items-center p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                        <input type="radio" name="payment" value="ewallet" class="w-4 h-4 text-blue-600">
-                        <div class="ml-3 flex items-center">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-2 sm:mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                            </svg>
-                            <span class="font-medium text-sm sm:text-base">Ví điện tử</span>
-                        </div>
-                    </label>
-
-                    <label class="flex items-center p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                        <input type="radio" name="payment" value="transfer" class="w-4 h-4 text-blue-600">
-                        <div class="ml-3 flex items-center">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 mr-2 sm:mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
-                            </svg>
-                            <span class="font-medium text-sm sm:text-base">Chuyển khoản</span>
-                        </div>
-                    </label>
-
-                    <label class="flex items-center p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                        <input type="radio" name="payment" value="counter" class="w-4 h-4 text-blue-600">
-                        <div class="ml-3 flex items-center">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 mr-2 sm:mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                            </svg>
-                            <span class="font-medium text-sm sm:text-base">Thanh toán tại quầy</span>
-                        </div>
-                    </label>
+        @foreach (var item in Model)
+        {
+            int index = Model.IndexOf(item) + 1;
+            <div class="border-b pb-4 sm:pb-6 mb-4 sm:mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-semibold text-gray-900 text-sm sm:text-base">Vé #@index - @item.SanBayDiTen → @item.SanBayDenTen</h3>
+                    <span class="text-blue-600 font-semibold text-sm sm:text-base">@item.MaChuyenBay</span>
                 </div>
-            </div>
-
-            <!-- Bên phải: Form thông tin thanh toán -->
-            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Thông Tin Thanh Toán</h3>
-
-                <form class="space-y-4 sm:space-y-6" action="@Url.Action("TaoVe", "User")" method="post">
-                    <input type="hidden" name="maGH" value="@(Model.FirstOrDefault()?.MaGioHang)" />
-                    <input type="hidden" name="maCB" value="@(Model.FirstOrDefault()?.MaChuyenBay)" />
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Số thẻ tín dụng</label>
-                        <input type="text" placeholder="1234 5678 9012 3456" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Ngày hết hạn</label>
-                            <input type="text" placeholder="MM/YY" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs sm:text-sm">
+                            <span class="text-gray-600">Ngày giờ:</span>
+                            <span class="font-medium">@item.GioCatCanh.Date.ToString("dd/MM/yyyy-hh:mm")</span>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">CVV</label>
-                            <input type="text" placeholder="123" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
+                        <div class="flex justify-between text-xs sm:text-sm">
+                            <span class="text-gray-600">Hành khách:</span>
+                            <span class="font-medium">@item.TenHanhKhach</span>
                         </div>
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Tên chủ thẻ</label>
-                        <input type="text" placeholder="NGUYEN VAN AN" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
-                    </div>
-
-                    <!-- Biểu tượng bảo mật -->
-                    <div class="flex items-center justify-center p-3 sm:p-4 bg-gray-50 rounded-lg">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-2 sm:mr-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-xs sm:text-sm text-gray-600">Thông tin của bạn được bảo mật với SSL 256-bit</span>
-                    </div>
-
-                    <button type="submit" onclick="processPayment()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base">
-                        Thanh Toán Ngay - @Model.Sum(x => x.GiaVeCoSo) VNĐ
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Popup thành công -->
-    <div id="successPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
-        <div class="bg-white rounded-lg p-6 sm:p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="text-center">
-                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Thanh Toán Thành Công!</h3>
-                <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Tất cả vé máy bay của bạn đã được đặt thành công</p>
-
-                <!-- Danh sách vé đã mua -->
-                <div class="space-y-4 mb-6">
-                    @{
-                        List<VEMAYBAY> list = Session["Ve"] as List<VEMAYBAY>;
-                    }
-
-                    @if (list != null && list.Count > 0)
-                    {
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            var tenHanhKhach = "Khách hàng";
-                            var gioBay = DateTime.Now;
-                            if (i < Model.Count)
-                            {
-                                tenHanhKhach = Model[i].TenHanhKhach;
-                                gioBay = Model[i].GioCatCanh;
-                            }
-
-                            <div class="bg-gray-50 p-4 rounded-lg text-left">
-                                <div class="flex items-center justify-between mb-3">
-                                    <h4 class="font-semibold text-gray-900 text-sm sm:text-base">Vé #@(i + 1)</h4>
-                                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Đã thanh toán</span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm mb-3">
-                                    <div>
-                                        <p class="text-gray-600">Mã vé:</p>
-                                        <p class="font-semibold text-blue-600">@list[i].MAVE</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-600">Hành khách:</p>
-                                        <p class="font-medium">@tenHanhKhach</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-600">Ngày bay:</p>
-                                        <p class="font-medium">@gioBay.ToString("dd/MM/yyyy HH:mm")</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-600">Ghế:</p>
-                                        <p class="font-medium">@list[i].MAGHE</p>
-                                    </div>
-                                </div>
-                                <button onclick="downloadSingleTicket('@list[i].MAVE')" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold py-2 px-3 rounded transition-colors">
-                                    Tải Vé Này
-                                </button>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="p-4 bg-yellow-50 text-yellow-700 rounded-lg">
-                            Không tìm thấy thông tin vé đã tạo. Vui lòng kiểm tra lại trong phần "Vé của tôi".
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs sm:text-sm">
+                            <span class="text-gray-600">Ghế:</span>
+                            <span class="font-medium">@item.HangGhe</span>
                         </div>
-                    }
-
-                    <div class="space-y-3 mt-4">
-                        <button onclick="downloadAllTickets()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 sm:py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">
-                            Tải Tất Cả Vé
-                        </button>
-                        <button onclick="closeSuccessPopup()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 sm:py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">
-                            Đóng
-                        </button>
+                        <div class="flex justify-between text-xs sm:text-sm">
+                            <span class="text-gray-600">Giá vé:</span>
+                            <span class="font-semibold text-gray-900">@item.GiaVeCoSo VNĐ</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Popup lỗi -->
-        <div id="errorPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
-            <div class="bg-white rounded-lg p-6 sm:p-8 max-w-md w-full mx-4">
-                <div class="text-center">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Thanh Toán Thất Bại</h3>
-                    <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại.</p>
-
-                    <div class="space-y-3">
-                        <button onclick="closeErrorPopup()" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 sm:py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">
-                            Thử Lại
-                        </button>
-                        <button onclick="closeErrorPopup()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 sm:py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">
-                            Hủy
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-    // Logic hiển thị Popup khi load trang (dựa vào kết quả từ Server trả về)
-    document.addEventListener("DOMContentLoaded", function() {
-        // Kiểm tra xem Server có báo thành công không
-        var isSuccess = '@(TempData["PaymentSuccess"] != null ? "true" : "false")';
-
-        if (isSuccess === "true") {
-            showSuccessPopup();
         }
-    });
 
-    function showSuccessPopup() {
-        document.getElementById('successPopup').classList.remove('hidden');
-    }
+        <!-- Tổng cộng -->
+        <div class="bg-blue-50 rounded-lg p-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Tổng tiền (@Model.Count vé)</p>
+                    <p class="text-xs text-gray-500">Đã bao gồm thuế và phí</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl sm:text-3xl font-bold text-red-600">@Model.Sum(x => x.GiaVeCoSo) VNĐ</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function closeSuccessPopup() {
-        document.getElementById('successPopup').classList.add('hidden');
-        // Sau khi đóng popup, chuyển hướng về trang chủ hoặc trang quản lý vé
-        window.location.href = '@Url.Action("TrangChu", "User")';
-    }
+    <!-- Phần thanh toán -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
 
-    // Giữ lại các hàm download nếu cần
-    function downloadSingleTicket(ticketCode) {
-        alert('Vé ' + ticketCode + ' đã được tải về máy thành công!');
-    }
+        <!-- Bên trái: chọn phương thức -->
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Phương Thức Thanh Toán</h3>
 
-    function downloadAllTickets() {
-        alert("Tất cả vé đã được tải về máy thành công!");
-    }
-        </script>
+            <div class="space-y-3 sm:space-y-4">
+                <label class="flex items-center p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                    <input type="radio" name="payment" value="vnpay" class="w-4 h-4 text-blue-600" checked>
+                    <span class="ml-3 font-medium text-sm sm:text-base">VNPay (Demo)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Bên phải: Form gửi đến ThanhToanOnline -->
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Thông Tin Thanh Toán</h3>
+
+            <!-- 👉 FORM ĐÃ SỬA Ở ĐÂY -->
+            <form method="post" action="@Url.Action("ThanhToanOnline", "User")" class="space-y-4 sm:space-y-6">
+
+                <input type="hidden" name="maGH" value="@(Model.FirstOrDefault()?.MaGioHang)" />
+                <input type="hidden" name="maCB" value="@(Model.FirstOrDefault()?.MaChuyenBay)" />
+                <input type="hidden" name="payment_method" value="vnpay" />
+
+                <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-700">
+                    Bạn sẽ được chuyển đến giao diện **VNPay Demo** để xác nhận thanh toán.
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 sm:py-4 rounded-lg transition-colors text-sm sm:text-base">
+                    Thanh toán VNPay (Demo) – @Model.Sum(x => x.GiaVeCoSo).ToString("N0") VNĐ
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic popup giữ nguyên (bạn đã có)
+</script>

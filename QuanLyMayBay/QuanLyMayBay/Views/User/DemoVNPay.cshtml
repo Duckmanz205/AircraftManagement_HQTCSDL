@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>VNPay Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+
+        <h2 class="text-center text-2xl font-bold text-blue-600 mb-4">
+            Cổng thanh toán VNPay (Demo)
+        </h2>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <p><strong>Mã giỏ hàng:</strong> @ViewBag.MaGH</p>
+            <p><strong>Mã chuyến bay:</strong> @ViewBag.MaCB</p>
+            <p><strong>Khách hàng:</strong> @ViewBag.TenKhachHang</p>
+            <p>
+                <strong>Tổng tiền:</strong>
+                <span class="text-red-600 font-bold">@ViewBag.TongTien VNĐ</span>
+            </p>
+        </div>
+
+        <div class="text-yellow-700 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-6">
+            Đây là giao diện mô phỏng VNPay dùng cho demo đồ án. Không có thanh toán thật.
+        </div>
+
+        <form method="post" action="@Url.Action("XacNhanThanhToanDemo", "User")">
+
+            <input type="hidden" name="maGH" value="@ViewBag.MaGH" />
+            <input type="hidden" name="maCB" value="@ViewBag.MaCB" />
+
+            <button type="submit" name="result" value="success"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-4">
+                Xác nhận thanh toán thành công
+            </button>
+
+            <button type="submit" name="result" value="fail"
+                    class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 rounded-lg">
+                Hủy giao dịch
+            </button>
+
+        </form>
+    </div>
+
+</body>
+</html>

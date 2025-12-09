@@ -383,6 +383,9 @@
     <Content Include="Views\User\XemTheLenMayBay.cshtml" />
     <Content Include="Views\Admin\SuaNhanVien.cshtml" />
     <Content Include="Views\Admin\BaoCaoPDF.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\User\DemoVNPay.cshtml" />
     <Content Include="Views\Admin\ApiFlight.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using QuanLyMayBay.Models;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
-using System.IO;
-using System.Data.Entity.Migrations;
-
-using Microsoft.Ajax.Utilities;
-using QuanLyMayBay.Models;
 using System.Web.UI.WebControls;
-using System.Collections;
 
 
 namespace QuanLyMayBay.Controllers
@@ -150,7 +150,7 @@ namespace QuanLyMayBay.Controllers
             db.Entry(kh).State = EntityState.Modified;
             db.SaveChanges();
 
-            if (ModelState.IsValid && Image !=null)
+            if (ModelState.IsValid && Image != null)
             {
                 string virtualPath = "~/Content/Images/User";
                 string DirPath = Server.MapPath(virtualPath);
@@ -1572,6 +1572,52 @@ namespace QuanLyMayBay.Controllers
         public ActionResult Ve()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult ThanhToanOnline(string maGH, string maCB, string payment_method)
+        {
+            var khachHang = Session["UserName"] as KHACHHANG;
+            if (khachHang == null)
+                return RedirectToAction("DangNhap");
+
+            var tongTien = db.Database.SqlQuery<decimal>(
+                "SELECT dbo.FN_TinhTongTien(@maGH, @maCB)",
+                new SqlParameter("@maGH", maGH),
+                new SqlParameter("@maCB", maCB)
+            ).FirstOrDefault();
+
+
+            ViewBag.MaGH = maGH;
+            ViewBag.MaCB = maCB;
+            ViewBag.TongTien = tongTien.ToString("N0");
+            ViewBag.TenKhachHang = khachHang.TENKH;
+
+            return View("DemoVNPay");
+        }
+        [HttpPost]
+        public ActionResult XacNhanThanhToanDemo(string maGH, string maCB, string result)
+        {
+            var khachHang = Session["UserName"] as KHACHHANG;
+            if (khachHang == null)
+                return RedirectToAction("DangNhap");
+
+            if (result == "success")
+            {
+                TaoVe(maGH, maCB);
+                db.Database.ExecuteSqlCommand("EXEC SP_ThanhToanGioHang @p0", maGH);
+
+
+                TempData["PaymentSuccess"] = true;
+                TempData["PaymentMethod"] = "VNPay (Demo)";
+                TempData["TransactionNo"] = "DEMO" + DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                return RedirectToAction("VeCuaToi");
+            }
+            else
+            {
+                TempData["Error"] = "Bạn đã hủy giao dịch";
+                return RedirectToAction("ThanhToan", new { ids = maGH, cb = maCB });
+            }
         }
 
     }
