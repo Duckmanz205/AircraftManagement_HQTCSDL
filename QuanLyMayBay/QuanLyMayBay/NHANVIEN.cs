@@ -25,6 +25,7 @@ namespace QuanLyMayBay
         public string TENNV { get; set; }
         public string SDT { get; set; }
         public string MACV { get; set; }
+        public string MATKHAU { get; set; }
     
         public virtual CHUCVU CHUCVU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

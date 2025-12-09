@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="696ae63b28e44306bbb43a50fe4fe887" Name="Diagram1">
+      <Diagram DiagramId="dc25c0f86e1541ea8f1e3564c4c2195b" Name="Diagram1">
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.CAUHINH_GHE" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.CHECKIN" Width="1.5" PointX="5.25" PointY="15" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.CHITIETVE" Width="1.5" PointX="9.75" PointY="19.875" IsExpanded="true" />
@@ -20,7 +20,7 @@
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.LOG_TRUYCAP" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.LOTRINH" Width="1.5" PointX="5.25" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.MAYBAY" Width="1.5" PointX="0.75" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLYMAYBAYModel.NHANVIEN" Width="1.5" PointX="5.25" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.NHANVIEN" Width="1.5" PointX="5.25" PointY="34.625" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.PHIEUDATVE" Width="1.5" PointX="7.5" PointY="23.5" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.SANBAY" Width="1.5" PointX="3" PointY="23.375" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLYMAYBAYModel.THONGKE_DOANHTHU" Width="1.5" PointX="5.25" PointY="31.375" IsExpanded="true" />

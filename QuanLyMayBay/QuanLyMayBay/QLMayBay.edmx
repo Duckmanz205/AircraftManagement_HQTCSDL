@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="QUANLYMAYBAYModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="QUANLYMAYBAYModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CAUHINH_GHE">
           <Key>
             <PropertyRef Name="MACG" />
@@ -170,6 +170,7 @@
           <Property Name="TENNV" Type="nvarchar" MaxLength="50" />
           <Property Name="SDT" Type="varchar" MaxLength="15" />
           <Property Name="MACV" Type="char" MaxLength="10" />
+          <Property Name="MATKHAU" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PHIEUDATVE">
           <Key>
@@ -547,6 +548,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_CheckAdminPermission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="MaNV" Type="char" Mode="In" />
+        </Function>
+        <Function Name="FN_TinhTongTien" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="money">
+          <Parameter Name="MaGH" Type="char" Mode="In" />
+          <Parameter Name="MaCB" Type="char" Mode="In" />
+        </Function>
+        <Function Name="sp_BackupDatabase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DuongDanFile" Type="nvarchar" Mode="In" />
+          <Parameter Name="LoaiBackup" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_ThanhToanGioHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MAGH" Type="char" Mode="In" />
+        </Function>
         <EntityContainer Name="QUANLYMAYBAYModelStoreContainer">
           <EntitySet Name="CAUHINH_GHE" EntityType="Self.CAUHINH_GHE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CHECKIN" EntityType="Self.CHECKIN" Schema="dbo" store:Type="Tables" />
@@ -681,7 +696,8 @@
             <End Role="VEMAYBAY" EntitySet="VEMAYBAY" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QUANLYMAYBAYModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -889,6 +905,7 @@
           <Property Name="TENNV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SDT" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="MACV" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="MATKHAU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CHUCVU" Relationship="Self.FK_NV_CV" FromRole="NHANVIEN" ToRole="CHUCVU" />
           <NavigationProperty Name="PHIEUDATVEs" Relationship="Self.FK_PDV_NV" FromRole="NHANVIEN" ToRole="PHIEUDATVE" />
           <NavigationProperty Name="VEMAYBAYs" Relationship="Self.FK_VMB_NV" FromRole="NHANVIEN" ToRole="VEMAYBAY" />
@@ -1416,6 +1433,13 @@
             <End Role="NHANVIEN" EntitySet="NHANVIENs" />
             <End Role="VEMAYBAY" EntitySet="VEMAYBAYs" />
           </AssociationSet>
+          <FunctionImport Name="sp_BackupDatabase">
+            <Parameter Name="DuongDanFile" Mode="In" Type="String" />
+            <Parameter Name="LoaiBackup" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ThanhToanGioHang">
+            <Parameter Name="MAGH" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -1600,6 +1624,7 @@
                 <ScalarProperty Name="TENNV" ColumnName="TENNV" />
                 <ScalarProperty Name="SDT" ColumnName="SDT" />
                 <ScalarProperty Name="MACV" ColumnName="MACV" />
+                <ScalarProperty Name="MATKHAU" ColumnName="MATKHAU" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1646,6 +1671,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_BackupDatabase" FunctionName="QUANLYMAYBAYModel.Store.sp_BackupDatabase" />
+          <FunctionImportMapping FunctionImportName="SP_ThanhToanGioHang" FunctionName="QUANLYMAYBAYModel.Store.SP_ThanhToanGioHang" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -30,23 +30,23 @@ namespace QuanLyMayBay.Controllers
 
             // 2. Tìm Nhân viên theo MANV (username)
             // .Trim() để loại bỏ khoảng trắng dư thừa trong chuỗi
-            var nhanVien = db.NHANVIENs.FirstOrDefault(nv => nv.MANV.Trim() == username);
+            NHANVIEN nhanVien = db.NHANVIENs.FirstOrDefault(nv => nv.MANV.Trim() == username);
 
             // 3. Kiểm tra thông tin đăng nhập
             if (nhanVien == null)
             {
                 // Không tìm thấy nhân viên
                 Session["AdminError"] = "Mã nhân viên không tồn tại.";
-                return RedirectToAction("DangNhap","User");
+                return RedirectToAction("DangNhap", "User");
             }
 
             // Kiểm tra mật khẩu (SDT)
             // .Trim() cho cả hai để đảm bảo khớp chính xác
-            if (nhanVien.SDT.Trim() != password)
+            if (nhanVien.MATKHAU.Trim() != password)
             {
                 // Mật khẩu (SDT) không đúng
                 Session["AdminError"] = "Mật khẩu (SĐT) không chính xác.";
-                return RedirectToAction("DangNhap","User");
+                return RedirectToAction("DangNhap", "User");
             }
 
             // 4. Đăng nhập thành công
@@ -133,7 +133,8 @@ namespace QuanLyMayBay.Controllers
             // BƯỚC 2: Xử lý tính toán GroupBy trên RAM (C#) - Nhanh hơn và không bao giờ Timeout
             var revenueData = rawData
                 .GroupBy(x => x.NGAYDAT)
-                .Select(g => new {
+                .Select(g => new
+                {
                     Ngay = g.Key,
                     // Lúc này dữ liệu đã ở trên RAM, tính toán thoải mái không lo lỗi SQL
                     TongTien = g.Sum(x => (decimal?)x.GIATIEN) ?? 0
@@ -462,75 +463,95 @@ namespace QuanLyMayBay.Controllers
                 return View("QLChuyenBay", new List<CHUYENBAY>());
             }
         }
-        [HttpPost]
-        public ActionResult SuaChuyenBay(string MACB, string MAMB, string TRANGTHAI, DateTime GIOCATCANH, DateTime GIOHACANH, string SBDI, string SBDEN)
+        public ActionResult SuaChuyenBay(string MACB, string MAMB, string TRANGTHAI, string GIOCATCANH, string GIOHACANH, string SBDI, string SBDEN)
         {
-    if (string.IsNullOrEmpty(MACB))
-    {
-        ViewBag.Error = "Mã chuyến bay không hợp lệ";
-        return RedirectToAction("QLChuyenBay");
-    }
-
-    using (var transaction = db.Database.BeginTransaction())
-    {
-        try
-        {
-            // 1. Cập nhật bảng CHUYENBAY (Máy bay, Trạng thái)
-            var cb = db.CHUYENBAYs.FirstOrDefault(x => x.MACB == MACB);
-            if (cb != null)
+            if (string.IsNullOrEmpty(MACB))
             {
-                cb.MAMB = MAMB;
-                cb.TRANGTHAI = TRANGTHAI;
-                
-                // === BỔ SUNG THEO YÊU CẦU ===
-                db.Entry(cb).State = EntityState.Modified; 
-            }
-            else
-            {
-                ViewBag.Error = "Không tìm thấy chuyến bay!";
+                ViewBag.Error = "Mã chuyến bay không hợp lệ";
                 return RedirectToAction("QLChuyenBay");
             }
 
-            // 2. Cập nhật bảng LOTRINH (Giờ cất cánh, hạ cánh)
-            var lt = db.LOTRINHs.FirstOrDefault(x => x.MACB == MACB);
-            if (lt != null)
+            using (var transaction = db.Database.BeginTransaction())
             {
-                lt.GIOCATCANH = GIOCATCANH;
-                lt.GIOHACANH = GIOHACANH;
+                try
+                {
+                    // 1. Cập nhật bảng CHUYENBAY
+                    var cb = db.CHUYENBAYs.FirstOrDefault(x => x.MACB == MACB);
+                    if (cb != null)
+                    {
+                        cb.MAMB = MAMB;
+                        cb.TRANGTHAI = TRANGTHAI;
+                        db.Entry(cb).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        ViewBag.Error = "Không tìm thấy chuyến bay!";
+                        return RedirectToAction("QLChuyenBay");
+                    }
+
+                    // 2. Cập nhật bảng LOTRINH
+                    var lt = db.LOTRINHs.FirstOrDefault(x => x.MACB == MACB);
+
+                    // Ép kiểu chuỗi ngày giờ từ Form về DateTime an toàn
+                    DateTime dtCatCanh = DateTime.Parse(GIOCATCANH);
+                    DateTime dtHaCanh = DateTime.Parse(GIOHACANH);
+
+                    if (lt != null)
+                    {
+                        lt.GIOCATCANH = dtCatCanh;
+                        lt.GIOHACANH = dtHaCanh;
+
                         if (!string.IsNullOrEmpty(SBDI)) lt.SBDI = SBDI;
                         if (!string.IsNullOrEmpty(SBDEN)) lt.SBDEN = SBDEN;
-                        // === BỔ SUNG THEO YÊU CẦU ===
+
                         db.Entry(lt).State = EntityState.Modified;
-            }
-            else
-            {
-                // Trường hợp chưa có lộ trình thì tạo mới
-                var newLt = new LOTRINH
+                    }
+                    else
+                    {
+                        // Tạo lộ trình mới nếu chưa có
+                        var newLt = new LOTRINH
+                        {
+                            MALT = "LT" + DateTime.Now.Ticks.ToString().Substring(12),
+                            MACB = MACB,
+                            GIOCATCANH = dtCatCanh,
+                            GIOHACANH = dtHaCanh,
+                            SBDI = SBDI,
+                            SBDEN = SBDEN
+                        };
+                        db.LOTRINHs.Add(newLt);
+                    }
+
+                    db.SaveChanges();
+                    transaction.Commit();
+                    TempData["Success"] = "Cập nhật chuyến bay thành công!";
+                }
+                catch (Exception ex)
                 {
-                    MALT = "LT" + DateTime.Now.Ticks.ToString().Substring(12),
-                    MACB = MACB,
-                    GIOCATCANH = GIOCATCANH,
-                    GIOHACANH = GIOHACANH,
-                    SBDI = SBDI,
-                    SBDEN = SBDEN
-                };
-                db.LOTRINHs.Add(newLt);
-                // Với Add thì không cần EntityState.Modified vì trạng thái nó là Added rồi
+                    transaction.Rollback();
+                    TempData["Error"] = "Lỗi cập nhật: " + ex.Message;
+                }
             }
 
-            db.SaveChanges();
-            transaction.Commit();
-            TempData["Success"] = "Cập nhật chuyến bay thành công!";
+            return RedirectToAction("QLChuyenBay");
         }
-        catch (Exception ex)
+        [PhanQuyenAdmin("CV09", "CV05")]
+        public ActionResult CapNhatTrangThaiBay()
         {
-            transaction.Rollback();
-            TempData["Error"] = "Lỗi cập nhật: " + ex.Message;
-        }
-    }
+            try
+            {
+                // Gọi Cursor cập nhật
+                var rowsAffected = db.Database.SqlQuery<int>("EXEC sp_UpdateFlightStatus_Cursor").FirstOrDefault();
 
-    return RedirectToAction("QLChuyenBay");
-}
+                TempData["Success"] = $"Đã cập nhật trạng thái cho {rowsAffected} chuyến bay dựa trên giờ thực tế!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Lỗi cập nhật: " + ex.Message;
+            }
+
+            // Quay lại trang quản lý chuyến bay để thấy kết quả ngay
+            return RedirectToAction("QLChuyenBay");
+        }
         public ActionResult XoaChuyenBay(string id)
         {
             // 1. Tìm chuyến bay
@@ -634,7 +655,7 @@ namespace QuanLyMayBay.Controllers
                                                     .Where(h => h.MAGH == pdv.MAGH
                                                              && h.MACB == ve.MACB
                                                              && h.SOGHE == ghe.TENGHE)
-                                                    .Select(h => new { h.TENHANHKHACH, h.EMAIL,h.SDT })
+                                                    .Select(h => new { h.TENHANHKHACH, h.EMAIL, h.SDT })
                                                     .FirstOrDefault()
                                select new QuanLyVe
                                {
@@ -813,7 +834,7 @@ namespace QuanLyMayBay.Controllers
                              MAPHIEU = x.MAPHIEU,
                              TENKH = x.PHIEUDATVE.KHACHHANG.TENKH,
                              EMAIL = x.PHIEUDATVE.KHACHHANG.EMAIL,
-                             TENNV = x.PHIEUDATVE.NHANVIEN.TENNV,    
+                             TENNV = x.PHIEUDATVE.NHANVIEN.TENNV,
                              GIATIEN = x.GIATIEN.HasValue ? (int)x.GIATIEN.Value : 0,
                              NGAYDAT = x.NGAYDAT,
                              TRANGTHAI = x.PHIEUDATVE.TRANGTHAI.ToString(),
@@ -879,7 +900,7 @@ namespace QuanLyMayBay.Controllers
                                            TrangThai = pdv.TRANGTHAI,
 
                                            // Lấy dữ liệu gốc để format sau
-                                            _NgayDatGoc= pdv.NGLAP,
+                                           _NgayDatGoc = pdv.NGLAP,
                                            _NgayBayGoc = lt.GIOCATCANH
                                        }).ToList();
 
@@ -908,17 +929,17 @@ namespace QuanLyMayBay.Controllers
         {
             ViewBag.KhachHang = db.KHACHHANGs.ToList();
 
-    
+
             var member = db.NHANVIENs.Where(nv => nv.MANV == manv).ToList();
 
             if (member.Any())
             {
-               ViewBag.NhanVien = member;  
+                ViewBag.NhanVien = member;
             }
             else
             {
-               ViewBag.NhanVien = new List<NHANVIEN>(); 
-               ViewBag.Message = "Không tìm thấy nhân viên với mã: " + manv;
+                ViewBag.NhanVien = new List<NHANVIEN>();
+                ViewBag.Message = "Không tìm thấy nhân viên với mã: " + manv;
             }
 
             return View("QLPerson");
@@ -938,14 +959,21 @@ namespace QuanLyMayBay.Controllers
         [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult XoaNhanVien(string manv)
         {
-            var nv = db.NHANVIENs.Find(manv);
-            if (nv == null)
+            try
             {
-                return HttpNotFound();
-            }
+                var adminUser = Session["AdminUser"] as NHANVIEN;
+                string currentAdminId = adminUser.MANV;
+                // Logic: Chuyển toàn bộ vé của nhân viên bị xóa sang cho Admin đang đăng nhập
+                string sql = "EXEC sp_DeleteEmployee_SafeTransaction @p0, @p1";
 
-            db.NHANVIENs.Remove(nv);
-            db.SaveChanges();
+                db.Database.ExecuteSqlCommand(sql, manv, currentAdminId);
+
+                TempData["Success"] = $"Đã xóa nhân viên {manv} và chuyển giao dữ liệu thành công!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Lỗi xóa: " + ex.Message;
+            }
 
             return RedirectToAction("QLPerson");
         }
@@ -966,26 +994,37 @@ namespace QuanLyMayBay.Controllers
         [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult SuaNhanVien(NHANVIEN model)
         {
+            ViewBag.ChucVu = db.CHUCVUs.ToList(); // Load lại dropdown nếu lỗi
+
             if (ModelState.IsValid)
             {
-                var nv = db.NHANVIENs.Find(model.MANV);
-                if (nv == null)
+                try
                 {
-                    return HttpNotFound();
+                    // Sử dụng câu lệnh SQL trực tiếp để kích hoạt Trigger và bắt lỗi Exception chuẩn nhất
+                    // (Giống hệt cách hoạt động của hàm Xóa bạn đã làm)
+                    string sql = "UPDATE NHANVIEN SET TENNV = @p0, SDT = @p1, MACV = @p2 WHERE MANV = @p3";
+
+                    // Thực thi lệnh
+                    db.Database.ExecuteSqlCommand(sql,
+                        model.TENNV,
+                        model.SDT,
+                        model.MACV,
+                        model.MANV
+                    );
+
+                    TempData["Success"] = $"Cập nhật nhân viên {model.MANV} thành công!";
+                    return RedirectToAction("QLPerson");
                 }
-
-                nv.TENNV = model.TENNV;
-                nv.SDT = model.SDT;
-                nv.MACV = model.MACV;
-
-                db.SaveChanges();
-                return RedirectToAction("QLPerson");
+                catch (Exception ex)
+                {
+                    // Bắt lỗi từ RAISERROR trong Trigger
+                    // ex.Message sẽ chứa dòng: "LỖI: Không thể xóa hoặc giáng chức Giám đốc..."
+                    TempData["Error"] = "Lỗi cập nhật: " + ex.Message;
+                }
             }
 
-            ViewBag.ChucVu = db.CHUCVUs.ToList();
             return View(model);
         }
-
         // Trang Backup/Restore
         [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult CaiDat()
@@ -1004,7 +1043,7 @@ namespace QuanLyMayBay.Controllers
 
                 if (!Directory.Exists(folderPath))
                 {
-                   Directory.CreateDirectory(folderPath);
+                    Directory.CreateDirectory(folderPath);
                 }
 
                 // 2. Chuẩn bị thông số file
@@ -1049,12 +1088,7 @@ namespace QuanLyMayBay.Controllers
                 db.Database.CommandTimeout = 300;
 
                 // Thực thi lệnh
-                db.Database.ExecuteSqlCommand(
-                    TransactionalBehavior.DoNotEnsureTransaction,
-                    sqlCommand,
-                    fullPath,   // @p0: Đường dẫn file
-                    backupType  // @p1: Loại backup ('full', 'diff', 'log')
-                );
+                db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sqlCommand, fullPath, backupType);
 
                 TempData["Message"] = $"Sao lưu {messageType} thành công!\nFile lưu tại: {fullPath}";
             }

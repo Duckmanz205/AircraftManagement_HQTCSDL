@@ -16,6 +16,10 @@
                             <i class="fas fa-images mr-2"></i> Quản Lý Logo Hãng
                         </button>
 
+                        <a href="@Url.Action("CapNhatTrangThaiBay", "Admin")" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors shadow-sm" title="Tự động cập nhật trạng thái dựa trên giờ hiện tại">
+                            <i class="fas fa-sync-alt mr-2 animate-hover-spin"></i> Cập nhật trạng thái
+                        </a>
+
                         <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
                             <i class="fas fa-file-excel mr-2"></i> Xuất Excel
                         </button>
@@ -68,7 +72,6 @@
                         <tbody class="bg-white divide-y divide-gray-200" id="flightTableBody">
                             @foreach (var item in Model)
                             {
-                                // Ánh xạ trạng thái từ Model (dựa trên ảnh: Đúng giờ, Chậm trễ, Đang bay, Hủy)
                                 string normalizedStatus = "";
                                 string displayStatus = item.TRANGTHAI;
                                 string bgColor = "bg-gray-100";
@@ -93,7 +96,7 @@
                                         bgColor = "bg-red-100";
                                         textColor = "text-red-800";
                                         break;
-                                    case "Sắp khởi hành":
+                                    case "Đang bay":
                                         normalizedStatus = "landed";
                                         bgColor = "bg-blue-100";
                                         textColor = "text-blue-800";
@@ -124,15 +127,15 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <div class="flex space-x-2">
-                                            <button onclick="openEditModal(
+                                            <button onclick="event.stopPropagation(); openEditModal(
                                                     '@item.MACB',
                                                     '@item.MAMB',
-                                                    '@(loTrinh != null ? loTrinh.GIOCATCANH.ToString("yyyy-MM-ddTHH:mm") : "")',
-                                                    '@(loTrinh != null ? loTrinh.GIOHACANH.ToString("yyyy-MM-ddTHH:mm") : "")',
+                                                    '@(loTrinh != null ? loTrinh.GIOCATCANH.ToString("yyyy-MM-dd\\THH:mm") : "")',
+                                                    '@(loTrinh != null ? loTrinh.GIOHACANH.ToString("yyyy-MM-dd\\THH:mm") : "")', 
                                                     '@item.TRANGTHAI',
-                                                    '@(loTrinh != null ? loTrinh.SBDI : "")', 
-                                                    '@(loTrinh != null ? loTrinh.SBDEN : "")' 
-                                                )" class="text-blue-600 hover:text-blue-900 hidden edit-btn">
+                                                    '@(loTrinh != null ? loTrinh.SBDI : "")',
+                                                    '@(loTrinh != null ? loTrinh.SBDEN : "")'
+                                                )" class="text-blue-600 hover:text-blue-900 bg-blue-50 p-2 rounded hover:bg-blue-100" title="Sửa">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button onclick="confirmDelete('@item.MACB')" class="text-red-600 hover:text-red-900 hidden delete-btn">
@@ -202,6 +205,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Mã chuyến</label>
                         <input type="text" id="flightCode" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
                                placeholder="Tự động sinh mã (VD: CB001)" disabled>
+                        <input type="hidden" name="MACB" id="hiddenFlightCode">
                     </div>
 
                     <div>
@@ -351,9 +355,38 @@
             </div>
         </div>
     </div>
+    @if (TempData["Success"] != null || TempData["Error"] != null)
+    {
+        var isSuccess = TempData["Success"] != null;
+        var message = isSuccess ? TempData["Success"] : TempData["Error"];
+        var bgClass = isSuccess ? "bg-green-100 border-green-500 text-green-700" : "bg-red-100 border-red-500 text-red-700";
+        var icon = isSuccess ? "fa-check-circle" : "fa-exclamation-circle";
+
+        <div id="toast-notification" class="fixed bottom-5 right-5 border-l-4 p-4 rounded shadow-lg z-50 flex items-center @bgClass transition-all duration-500 transform translate-y-0 opacity-100">
+            <i class="fas @icon mr-3 text-xl"></i>
+            <div>
+                <p class="font-bold">@(isSuccess ? "Thành công" : "Lỗi")</p>
+                <p class="text-sm">@message</p>
+            </div>
+            <button onclick="document.getElementById('toast-notification').remove()" class="ml-6 text-gray-500 hover:text-gray-800 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <script>
+            // Tự động ẩn sau 5 giây
+            setTimeout(function () {
+                var toast = document.getElementById('toast-notification');
+                if (toast) {
+                    toast.classList.add('opacity-0', 'translate-y-10');
+                    setTimeout(function () { toast.remove(); }, 500);
+                }
+            }, 5000);
+        </script>
+    }
 
     @* Khối Script đã sửa đổi/hoàn thiện *@
-    <script>
+<script>
         let selectedRow = null;
         let currentFlightCode = null;
         let isEditing = false;
@@ -504,34 +537,28 @@
         }
 
         function openEditModal(code, aircraft, departure, arrival, status, sbDi, sbDen) {
-        // 1. Đổi tiêu đề
-        document.getElementById('modalTitle').textContent = 'Sửa Chuyến Bay';
+    document.getElementById('modalTitle').textContent = 'Sửa Chuyến Bay';
+    document.getElementById('flightForm').action = '@Url.Action("SuaChuyenBay", "Admin")';
 
-        // 2. Đổi Action của Form sang 'SuaChuyenBay'
-        document.getElementById('flightForm').action = '@Url.Action("SuaChuyenBay", "Admin")';
+    // Điền dữ liệu
+    document.getElementById('flightCode').value = code;
 
-        // 3. Điền dữ liệu cũ vào Form
-        const codeInput = document.getElementById('flightCode');
-        codeInput.value = code;
-        codeInput.disabled = false;
-        codeInput.readOnly = true;
-        codeInput.classList.add('bg-gray-200');
+    // QUAN TRỌNG: Gán giá trị cho input ẩn để Controller nhận được
+    document.getElementById('hiddenFlightCode').value = code;
 
-        document.getElementById('aircraftSelect').value = aircraft;
-        document.getElementById('departureTime').value = departure;
-        document.getElementById('arrivalTime').value = arrival;
-        document.getElementById('statusSelect').value = status;
-        document.getElementById('departureAirport').value = sbDi;
-        document.getElementById('arrivalAirport').value = sbDen;
+    document.getElementById('aircraftSelect').value = aircraft;
+    document.getElementById('departureTime').value = departure;
+    document.getElementById('arrivalTime').value = arrival;
+    document.getElementById('statusSelect').value = status;
 
-            const depSelect = document.querySelector('select[name="SBDI"]');
-            const arrSelect = document.querySelector('select[name="SBDEN"]');
+    // Xử lý Select Sân bay
+    const depSelect = document.querySelector('select[name="SBDI"]');
+    const arrSelect = document.querySelector('select[name="SBDEN"]');
+    if(depSelect) depSelect.value = sbDi;
+    if(arrSelect) arrSelect.value = sbDen;
 
-            if (depSelect) depSelect.value = sbDi;
-            if (arrSelect) arrSelect.value = sbDen;
-        // 4. Hiện Modal
-        document.getElementById('flightModal').classList.remove('hidden');
-    }
+    document.getElementById('flightModal').classList.remove('hidden');
+}
 
     function closeModal() {
         document.getElementById('flightModal').classList.add('hidden');
@@ -761,5 +788,5 @@
             // Reset lại mã chuyến bay đang chọn xóa để an toàn
             currentFlightCode = null;
         }
-    </script>
+</script>
 </body>

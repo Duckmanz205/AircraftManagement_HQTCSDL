@@ -268,7 +268,35 @@
         </form>
     </div>
 </div>
+@if (TempData["Success"] != null || TempData["Error"] != null || !ViewData.ModelState.IsValid)
+{
+    var isSuccess = TempData["Success"] != null;
+    var message = isSuccess ? TempData["Success"] : (TempData["Error"] ?? string.Join("; ", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+    var bgClass = isSuccess ? "bg-green-100 border-green-500 text-green-700" : "bg-red-100 border-red-500 text-red-700";
+    var icon = isSuccess ? "fa-check-circle" : "fa-exclamation-circle";
 
+    <div id="toast-notification" class="fixed bottom-5 right-5 border-l-4 p-4 rounded shadow-lg z-[60] flex items-center @bgClass transition-all duration-500 transform translate-y-0 opacity-100">
+        <i class="fas @icon mr-3 text-xl"></i>
+        <div>
+            <p class="font-bold">@(isSuccess ? "Thành công" : "Lỗi")</p>
+            <p class="text-sm">@Html.Raw(message)</p>
+        </div>
+        <button onclick="document.getElementById('toast-notification').remove()" class="ml-6 text-gray-500 hover:text-gray-800 focus:outline-none">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script>
+        // Tự động ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            var toast = document.getElementById('toast-notification');
+            if (toast) {
+                toast.classList.add('opacity-0', 'translate-y-10');
+                setTimeout(function () { toast.remove(); }, 500);
+            }
+        }, 5000);
+    </script>
+}
 <script>
     // ==========================================
     // 1. TỰ ĐỘNG CHUYỂN TAB VÀ MỞ MODAL LỊCH SỬ KHI RELOAD
@@ -323,7 +351,7 @@
     const cancelBtn = document.getElementById('cancel-btn');
 
     // Mở Modal Thêm NV
-    if(addBtn) {
+    if (addBtn) {
         addBtn.addEventListener('click', () => {
             employeeModal.classList.remove('hidden');
             employeeModal.classList.add('flex');
@@ -331,7 +359,7 @@
     }
 
     // Đóng Modal Thêm NV (Nút Hủy)
-    if(cancelBtn) {
+    if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             closeEmployeeModal();
         });

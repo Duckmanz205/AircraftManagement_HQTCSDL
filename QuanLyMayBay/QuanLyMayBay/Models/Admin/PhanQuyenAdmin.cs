@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using QuanLyMayBay.Models; // Đảm bảo đã using namespace chứa DbContext
 
 namespace QuanLyMayBay.Models.Admin
 {
-    public class PhanQuyenAdmin: ActionFilterAttribute
+    public class PhanQuyenAdmin : ActionFilterAttribute
     {
+
         private readonly string[] _allowedRoles;
 
         public PhanQuyenAdmin(params string[] roles)
@@ -28,31 +30,31 @@ namespace QuanLyMayBay.Models.Admin
                 );
                 return;
             }
-
-            // 3. Kiểm tra quyền
-            // Nếu danh sách roles rỗng -> Cho phép tất cả nhân viên đăng nhập
-            // Nếu có roles -> Kiểm tra MACV của nhân viên có nằm trong danh sách cho phép không
             bool coQuyen = false;
-            if (_allowedRoles.Length == 0)
+
+            using (var db = new QUANLYMAYBAYEntities())
             {
-                coQuyen = true;
-            }
-            else
-            {
-                foreach (var role in _allowedRoles)
+                try
                 {
-                    if (nhanVien.MACV.Trim() == role)
+                    bool isPermissionGranted = db.Database.SqlQuery<bool>(
+                        "SELECT dbo.fn_CheckAdminPermission(@p0)",
+                        nhanVien.MANV
+                    ).FirstOrDefault();
+
+                    if (isPermissionGranted)
                     {
                         coQuyen = true;
-                        break;
                     }
                 }
+                catch (Exception)
+                {
+                    coQuyen = false;
+                }
             }
-
-            // 4. Nếu không có quyền -> Chuyển hướng về trang báo lỗi hoặc trang chủ
             if (!coQuyen)
             {
-                filterContext.Controller.TempData["Error"] = "Bạn không có quyền truy cập chức năng này!";
+                filterContext.Controller.TempData["Error"] = "Bạn không có quyền quản trị cấp cao (Admin) để truy cập!";
+
                 filterContext.Result = new RedirectToRouteResult(
                     new System.Web.Routing.RouteValueDictionary(new { controller = "Admin", action = "TrangChu" })
                 );
