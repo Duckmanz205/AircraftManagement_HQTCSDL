@@ -12,6 +12,8 @@ namespace QuanLyMayBay
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class QUANLYMAYBAYEntities : DbContext
     {
@@ -45,5 +47,27 @@ namespace QuanLyMayBay
         public virtual DbSet<SANBAY> SANBAYs { get; set; }
         public virtual DbSet<THONGKE_DOANHTHU> THONGKE_DOANHTHU { get; set; }
         public virtual DbSet<VEMAYBAY> VEMAYBAYs { get; set; }
+    
+        public virtual int sp_BackupDatabase(string duongDanFile, string loaiBackup)
+        {
+            var duongDanFileParameter = duongDanFile != null ?
+                new ObjectParameter("DuongDanFile", duongDanFile) :
+                new ObjectParameter("DuongDanFile", typeof(string));
+    
+            var loaiBackupParameter = loaiBackup != null ?
+                new ObjectParameter("LoaiBackup", loaiBackup) :
+                new ObjectParameter("LoaiBackup", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_BackupDatabase", duongDanFileParameter, loaiBackupParameter);
+        }
+    
+        public virtual int SP_ThanhToanGioHang(string mAGH)
+        {
+            var mAGHParameter = mAGH != null ?
+                new ObjectParameter("MAGH", mAGH) :
+                new ObjectParameter("MAGH", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ThanhToanGioHang", mAGHParameter);
+        }
     }
 }

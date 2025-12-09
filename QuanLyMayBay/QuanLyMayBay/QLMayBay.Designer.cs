@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Cac_Mon_Hoc\300_bai_code_thieu_nhi\Do_An_Tren_Lop\QL_MayBay\QuanLyMayBay\QuanLyMayBay\QLMAYBAY.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\Cac_Mon_Hoc\300_bai_code_thieu_nhi\Do_An_Tren_Lop\HQTCSDL\AircraftManagement-main\QuanLyMayBay\QuanLyMayBay\QLMAYBAY.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
