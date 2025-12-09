@@ -242,6 +242,7 @@
     <Compile Include="Models\Admin\DashboardViewModel.cs" />
     <Compile Include="Models\Admin\KhachHangViewModel.cs" />
     <Compile Include="Models\Admin\LichSuVeDTO.cs" />
+    <Compile Include="Models\Admin\PhanQuyenAdmin.cs" />
     <Compile Include="Models\Admin\QLPersonViewModel.cs" />
     <Compile Include="Models\Admin\QLVeViewModel.cs" />
     <Compile Include="Models\Admin\TicketDetailAdminViewModel.cs" />

@@ -827,7 +827,7 @@ namespace QuanLyMayBay.Controllers
             return View("QLVe", vemb);
         }
 
-
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult QLPerson(string selectedMakh = null)
         {
             var model = new QLPersonViewModel();
@@ -924,6 +924,7 @@ namespace QuanLyMayBay.Controllers
             return View("QLPerson");
         }
         [HttpPost]
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult ThemNhanVien(NHANVIEN nv)
         {
             if (ModelState.IsValid)
@@ -934,6 +935,7 @@ namespace QuanLyMayBay.Controllers
 
             return RedirectToAction("QLPerson");
         }
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult XoaNhanVien(string manv)
         {
             var nv = db.NHANVIENs.Find(manv);
@@ -947,6 +949,7 @@ namespace QuanLyMayBay.Controllers
 
             return RedirectToAction("QLPerson");
         }
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult SuaNhanVien(string manv)
         {
             var nv = db.NHANVIENs.Find(manv);
@@ -960,6 +963,7 @@ namespace QuanLyMayBay.Controllers
             return View(nv);
         }
         [HttpPost]
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult SuaNhanVien(NHANVIEN model)
         {
             if (ModelState.IsValid)
@@ -983,56 +987,89 @@ namespace QuanLyMayBay.Controllers
         }
 
         // Trang Backup/Restore
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult CaiDat()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult BackupDatabase(string backupName)
+        // Chỉ cho phép Giám đốc (CV09) và Quản lý cấp cao (CV05) thực hiện sao lưu
+        [PhanQuyenAdmin("CV09", "CV05")]
+        public ActionResult BackupDatabase(string backupName, string backupType)
         {
             try
             {
-                string dbName = "QUANLYMAYBAY";
-
-                string fileName = string.IsNullOrEmpty(backupName)
-                    ? $"{dbName}_{DateTime.Now:yyyyMMdd_HHmm}.bak"
-                    : $"QLMayBay_{backupName}.bak";
-
-                // Xác định thư mục lưu
-                string virtualPath = "~/App_Data/";
-                string folderPath = Server.MapPath(virtualPath);
+                string folderPath = @"D:\Backups_QLMayBay\";
 
                 if (!Directory.Exists(folderPath))
                 {
-                    Directory.CreateDirectory(folderPath);
+                   Directory.CreateDirectory(folderPath);
                 }
 
-                if (!System.IO.Directory.Exists(folderPath))
+                // 2. Chuẩn bị thông số file
+                string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string suffix = "";
+                string extension = ".bak";
+                string messageType = "";
+
+                // Xử lý loại backup dựa trên input từ View
+                switch (backupType)
                 {
-                    System.IO.Directory.CreateDirectory(folderPath);
+                    case "full":
+                        suffix = "FULL";
+                        messageType = "Toàn bộ (Full)";
+                        break;
+                    case "diff":
+                        suffix = "DIFF";
+                        messageType = "Khác biệt (Diff)";
+                        break;
+                    case "log":
+                        suffix = "LOG";
+                        extension = ".trn"; // File log thường dùng đuôi .trn
+                        messageType = "Nhật ký (Log)";
+                        break;
+                    default:
+                        // Mặc định là Full nếu không chọn gì
+                        suffix = "FULL";
+                        backupType = "full";
+                        messageType = "Toàn bộ (Full)";
+                        break;
                 }
 
-                // 3. Ghép đường dẫn file
+                // 3. Tạo tên file hoàn chỉnh
+                // VD: QLMayBay_FULL_GhiChu_20251208.bak
+                string customName = string.IsNullOrEmpty(backupName) ? timeStamp : backupName + "_" + timeStamp;
+                string fileName = $"QLMayBay_{suffix}_{customName}{extension}";
                 string fullPath = System.IO.Path.Combine(folderPath, fileName);
 
-                string query = $"BACKUP DATABASE [{dbName}] TO DISK = '{fullPath}'";
+                string sqlCommand = "EXEC sp_BackupDatabase @p0, @p1";
 
-                // 4. Thực thi
-                db.Database.ExecuteSqlCommand(System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction, query);
+                // Tăng thời gian chờ (Timeout) lên 300s (5 phút) vì backup file lớn có thể lâu
+                db.Database.CommandTimeout = 300;
 
-                TempData["Message"] = $"Sao lưu thành công! File lưu tại: {fullPath}";
+                // Thực thi lệnh
+                db.Database.ExecuteSqlCommand(
+                    TransactionalBehavior.DoNotEnsureTransaction,
+                    sqlCommand,
+                    fullPath,   // @p0: Đường dẫn file
+                    backupType  // @p1: Loại backup ('full', 'diff', 'log')
+                );
+
+                TempData["Message"] = $"Sao lưu {messageType} thành công!\nFile lưu tại: {fullPath}";
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Lỗi sao lưu: " + ex.Message;
+                TempData["Error"] = "Lỗi khi sao lưu: " + ex.Message;
             }
 
+            // Quay lại trang Cài đặt
             return RedirectToAction("CaiDat");
         }
 
         // Action: RESTORE DATABASE
         [HttpPost]
+        [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult RestoreDatabase(HttpPostedFileBase backupFile)
         {
             if (backupFile != null && backupFile.ContentLength > 0)
