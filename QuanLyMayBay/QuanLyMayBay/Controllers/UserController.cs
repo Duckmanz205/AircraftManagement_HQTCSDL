@@ -1220,6 +1220,25 @@ namespace QuanLyMayBay.Controllers
                 var sbDen = db.SANBAYs.FirstOrDefault(s => s.MASB == loTrinh.SBDEN);
                 var ghe = db.GHEs.FirstOrDefault(g => g.MAGHE == ve.MAGHE);
                 var hangGheGia = db.HANGGHE_GIA.FirstOrDefault(hg => hg.MAHG == ve.MAHG);
+                var trangThai = db.Database.SqlQuery<string>(
+                    "EXEC sp_KiemTraTrangThaiChuyenBay @MACB",
+                    new SqlParameter("@MACB", ve.MACB)
+                    ).FirstOrDefault();
+
+                // KIỂM TRA ĐÚNG VỚI GIÁ TRỊ TRẢ VỀ TỪ PROCEDURE
+                if (trangThai == "ĐÃ HẠ CÁNH")
+                {
+                    ViewBag.Notify = "Bạn không thể check-in vì máy bay đã hạ cánh.";
+                }
+                else if (trangThai == "ĐANG BAY")
+                {
+                    ViewBag.Notify = "Bạn không thể check-in vì máy bay đang bay.";
+                }
+                else if (trangThai == "CHƯA CẤT CÁNH")
+                {
+                    ViewBag.Notify = "Bạn có thể check-in nếu đã tới giờ.";
+                }
+
 
                 // Lấy thông tin check-in
                 var checkIn = db.CHECKINs.FirstOrDefault(ci => ci.MAVE == ve.MAVE);
@@ -1236,10 +1255,8 @@ namespace QuanLyMayBay.Controllers
                 var thoiGianBay = timeSpan.Hours > 0
                     ? $"{timeSpan.Hours}h {timeSpan.Minutes:D2}m"
                     : $"{timeSpan.Minutes}m";
-                var trangThai = db.Database.SqlQuery<string>(
-                    "sp_KiemTraTrangThaiChuyenBay @MACB",
-                    new SqlParameter("@MACB", ve.MACB)
-                    ).FirstOrDefault();
+                
+               
 
                 // Kiểm tra có thể check-in (từ 24h trước đến 1h trước giờ bay)
                 //var now = DateTime.Now;
@@ -1289,6 +1306,7 @@ namespace QuanLyMayBay.Controllers
                     GioCatCanh = loTrinh.GIOCATCANH,
                     GioHaCanh = loTrinh.GIOHACANH,
                     ThoiGianBay = thoiGianBay,
+                    TrangThaiChuyenBay = trangThai,
 
                     TenHanhKhach = ghk?.TENHANHKHACH ?? khachHang.TENKH,
                     GioiTinh = ghk?.GIOITINH ?? khachHang.GTINH,
@@ -1413,6 +1431,7 @@ namespace QuanLyMayBay.Controllers
                 GioCatCanh = loTrinh.GIOCATCANH,
                 GioHaCanh = loTrinh.GIOHACANH,
                 ThoiGianBay = thoiGianBay,
+
 
                 TenHanhKhach = ghk?.TENHANHKHACH ?? khachHang.TENKH,
                 GioiTinh = ghk?.GIOITINH ?? khachHang.GTINH,

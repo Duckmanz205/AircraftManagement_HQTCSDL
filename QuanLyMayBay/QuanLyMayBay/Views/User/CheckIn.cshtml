@@ -296,7 +296,21 @@
                                 </div>
                             }
                         </div>
-
+                        @{
+                            string colorClass = "text-blue-600"; // default
+                            if (ve.TrangThaiChuyenBay == "ĐÃ HẠ CÁNH")
+                            {
+                                colorClass = "text-red-600 font-semibold";
+                            }
+                            else if (ve.TrangThaiChuyenBay == "ĐANG BAY")
+                            {
+                                colorClass = "text-orange-600 font-semibold";
+                            }
+                            else if (ve.TrangThaiChuyenBay == "CHƯA CẤT CÁNH")
+                            {
+                                colorClass = "text-green-600 font-semibold";
+                            }
+                        }
                         <div class="border-t border-blue-100 pt-3 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs text-gray-500">Hành khách</span>
@@ -313,6 +327,12 @@
                             <div class="flex items-center justify-between">
                                 <span class="text-xs text-gray-500">Thời gian bay</span>
                                 <span class="text-sm font-semibold text-gray-900">@(ve.ThoiGianBay ?? "N/A")</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Trạng thái chuyến bay</span>
+                                <span class="text-sm font-semibold @colorClass">
+                                    @ve.TrangThaiChuyenBay
+                                </span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-xs text-gray-500">Ghế hiện tại</span>
