@@ -1045,13 +1045,10 @@ namespace QuanLyMayBay.Controllers
                 {
                     Directory.CreateDirectory(folderPath);
                 }
-
-                // 2. Chuẩn bị thông số file
                 string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 string suffix = "";
                 string extension = ".bak";
                 string messageType = "";
-
                 // Xử lý loại backup dựa trên input từ View
                 switch (backupType)
                 {
@@ -1065,7 +1062,7 @@ namespace QuanLyMayBay.Controllers
                         break;
                     case "log":
                         suffix = "LOG";
-                        extension = ".trn"; // File log thường dùng đuôi .trn
+                        extension = ".trn";
                         messageType = "Nhật ký (Log)";
                         break;
                     default:
@@ -1075,28 +1072,20 @@ namespace QuanLyMayBay.Controllers
                         messageType = "Toàn bộ (Full)";
                         break;
                 }
-
                 // 3. Tạo tên file hoàn chỉnh
-                // VD: QLMayBay_FULL_GhiChu_20251208.bak
                 string customName = string.IsNullOrEmpty(backupName) ? timeStamp : backupName + "_" + timeStamp;
                 string fileName = $"QLMayBay_{suffix}_{customName}{extension}";
-                string fullPath = System.IO.Path.Combine(folderPath, fileName);
-
+                string fullPath = Path.Combine(folderPath, fileName);
                 string sqlCommand = "EXEC sp_BackupDatabase @p0, @p1";
-
-                // Tăng thời gian chờ (Timeout) lên 300s (5 phút) vì backup file lớn có thể lâu
                 db.Database.CommandTimeout = 300;
-
                 // Thực thi lệnh
                 db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sqlCommand, fullPath, backupType);
-
                 TempData["Message"] = $"Sao lưu {messageType} thành công!\nFile lưu tại: {fullPath}";
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Lỗi khi sao lưu: " + ex.Message;
             }
-
             // Quay lại trang Cài đặt
             return RedirectToAction("CaiDat");
         }
