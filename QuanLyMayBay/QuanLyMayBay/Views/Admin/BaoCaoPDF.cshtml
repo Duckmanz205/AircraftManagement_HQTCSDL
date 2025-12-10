@@ -1,0 +1,94 @@
+﻿@model List<QuanLyMayBay.Models.ChiTietDoanhThuModel>
+@{
+    // KHÔNG SỬ DỤNG LAYOUT CỦA TRANG CHÍNH KHI XUẤT PDF
+    Layout = null;
+
+    // Định dạng lại các hàm định dạng tiền tệ và ngày tháng
+    Func<decimal, string> FormatCurrency = (amount) => String.Format("{0:N0} VND", amount);
+    Func<int, string> FormatTickets = (count) => String.Format("{0:N0}", count);
+    Func<DateTime, string> FormatDate = (date) => date.ToString("dd/MM/yyyy");
+
+    DateTime startDate = (DateTime)ViewBag.StartDate;
+    DateTime endDate = (DateTime)ViewBag.EndDate;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Báo Cáo Doanh Thu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 10pt;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 16pt;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>BÁO CÁO DOANH THU CHI TIẾT</h1>
+    <div class="info">
+        Từ ngày: @FormatDate(startDate) đến ngày: @FormatDate(endDate)
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã Chuyến Bay</th>
+                    <th>Ngày Bay</th>
+                    <th>Số Vé</th>
+                    <th>Doanh Thu</th>
+                    <th>Giá Trung Bình</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.MaChuyenBay</td>
+                        <td>@FormatDate(item.NgayBay)</td>
+                        <td>@FormatTickets(item.SoVe)</td>
+                        <td>@FormatCurrency(item.DoanhThu)</td>
+                        <td>@FormatCurrency(item.GiaTrungBinh)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p style="text-align:center;">Không có dữ liệu phù hợp với bộ lọc.</p>
+    }
+</body>
+</html>

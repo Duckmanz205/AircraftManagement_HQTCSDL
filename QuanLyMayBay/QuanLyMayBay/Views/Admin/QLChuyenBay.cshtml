@@ -1,0 +1,792 @@
+﻿@model IEnumerable<QuanLyMayBay.CHUYENBAY>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<body class="bg-gray-50">
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <main class="flex-1 overflow-auto p-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="openAddModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+                            <i class="fas fa-plus mr-2"></i> Thêm chuyến
+                        </button>
+
+                        <button onclick="openAirlineModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+                            <i class="fas fa-images mr-2"></i> Quản Lý Logo Hãng
+                        </button>
+
+                        <a href="@Url.Action("CapNhatTrangThaiBay", "Admin")" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors shadow-sm" title="Tự động cập nhật trạng thái dựa trên giờ hiện tại">
+                            <i class="fas fa-sync-alt mr-2 animate-hover-spin"></i> Cập nhật trạng thái
+                        </a>
+
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+                            <i class="fas fa-file-excel mr-2"></i> Xuất Excel
+                        </button>
+                    </div>
+                    @using (Html.BeginForm("TimTheoMACB", "Admin", FormMethod.Get))
+                    {
+                        <div class="flex items-center space-x-3 w-full sm:w-auto">
+                            <div class="relative flex-1 sm:flex-none">
+                                <input type="text" name="macb" placeholder="Tìm kiếm chuyến bay..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-80">
+                                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                <button type="submit" class="hidden">Tìm kiếm</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="text-gray-700 font-medium">Lọc theo trạng thái:</span>
+                    <select id="statusFilterSelect" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="all">Tất cả</option>
+                        <option value="scheduled">Đúng giờ</option>
+                        <option value="delayed">Chậm trễ</option>
+                        <option value="landed">Đang Bay</option>
+                        <option value="cancelled">Hủy</option>
+                    </select>
+                    <button onclick="filterFlights()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors">
+                        Áp dụng
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <input type="checkbox" class="rounded border-gray-300">
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã chuyến</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã máy bay</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giờ cất cánh</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giờ hạ cánh</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="flightTableBody">
+                            @foreach (var item in Model)
+                            {
+                                string normalizedStatus = "";
+                                string displayStatus = item.TRANGTHAI;
+                                string bgColor = "bg-gray-100";
+                                string textColor = "text-gray-800";
+
+                                switch (item.TRANGTHAI)
+                                {
+                                    case "Đúng giờ":
+
+                                        normalizedStatus = "scheduled";
+                                        bgColor = "bg-green-100";
+                                        textColor = "text-green-800";
+                                        break;
+                                    case "Chậm trễ":
+                                    case "Delayed":
+                                        normalizedStatus = "delayed";
+                                        bgColor = "bg-yellow-100";
+                                        textColor = "text-yellow-800";
+                                        break;
+                                    case "Hủy":
+                                        normalizedStatus = "cancelled";
+                                        bgColor = "bg-red-100";
+                                        textColor = "text-red-800";
+                                        break;
+                                    case "Đang bay":
+                                        normalizedStatus = "landed";
+                                        bgColor = "bg-blue-100";
+                                        textColor = "text-blue-800";
+                                        break;
+                                    default:
+                                        normalizedStatus = item.TRANGTHAI.ToLower();
+                                        break;
+                                }
+
+                                <tr class="hover:bg-gray-50 cursor-pointer" onclick="selectRow(this, '@item.MACB')" data-status-row="@normalizedStatus">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <input type="checkbox" class="rounded border-gray-300">
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.MACB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@item.MAMB</td>
+                                    @{
+                                        QUANLYMAYBAYEntities db = new QUANLYMAYBAYEntities();
+                                        var loTrinh = db.LOTRINHs.FirstOrDefault(lt => lt.MACB == item.MACB);
+                                    }
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @(loTrinh != null ? loTrinh.GIOCATCANH.ToString("HH:mm") : "--:--")
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @(loTrinh != null ? loTrinh.GIOHACANH.ToString("HH:mm") : "--:--")
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap" data-status="@normalizedStatus">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @bgColor @textColor">@displayStatus</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex space-x-2">
+                                            <button onclick="event.stopPropagation(); openEditModal(
+                                                    '@item.MACB',
+                                                    '@item.MAMB',
+                                                    '@(loTrinh != null ? loTrinh.GIOCATCANH.ToString("yyyy-MM-dd\\THH:mm") : "")',
+                                                    '@(loTrinh != null ? loTrinh.GIOHACANH.ToString("yyyy-MM-dd\\THH:mm") : "")', 
+                                                    '@item.TRANGTHAI',
+                                                    '@(loTrinh != null ? loTrinh.SBDI : "")',
+                                                    '@(loTrinh != null ? loTrinh.SBDEN : "")'
+                                                )" class="text-blue-600 hover:text-blue-900 bg-blue-50 p-2 rounded hover:bg-blue-100" title="Sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="confirmDelete('@item.MACB')" class="text-red-600 hover:text-red-900 hidden delete-btn">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-6 rounded-lg shadow-sm">
+                    <div class="flex-1 flex justify-between sm:hidden">
+                        <button onclick="changePage(currentPage - 1)" id="btnPrevMobile" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Trước
+                        </button>
+                        <button onclick="changePage(currentPage + 1)" id="btnNextMobile" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Sau
+                        </button>
+                    </div>
+
+                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                        <div>
+                            <p class="text-sm text-gray-700">
+                                Hiển thị <span class="font-medium" id="pageStart">0</span> đến <span class="font-medium" id="pageEnd">0</span>
+                                của <span class="font-medium" id="totalRows">0</span> kết quả
+                            </p>
+                        </div>
+                        <div>
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                <button onclick="changePage(currentPage - 1)" id="btnPrev" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Trước</span>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+
+                                <div id="paginationNumbers" class="flex"></div>
+
+                                <button onclick="changePage(currentPage + 1)" id="btnNext" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Sau</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <div id="flightModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Thêm Chuyến Bay</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="flightForm" class="space-y-4" action="@Url.Action("ThemChuyenBay", "Admin")" method="post" enctype="multipart/form-data">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mã chuyến</label>
+                        <input type="text" id="flightCode" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                               placeholder="Tự động sinh mã (VD: CB001)" disabled>
+                        <input type="hidden" name="MACB" id="hiddenFlightCode">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Máy bay</label>
+                        <select name="MAMB" id="aircraftSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            <option value="" disabled selected>Chọn máy bay</option>
+                            @if (ViewBag.ListMayBay != null)
+                            {
+                                foreach (var mb in (List<QuanLyMayBay.MAYBAY>)ViewBag.ListMayBay)
+                                {
+                                    <option value="@mb.MAMB">@mb.TENMB (@mb.MAMB)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sân bay đi</label>
+                            <select name="SBDI" id="departureAirport" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="" disabled>Chọn sân bay đi</option>
+                                @if (ViewBag.ListSanBay != null)
+                                {
+                                    foreach (var sb in (List<QuanLyMayBay.SANBAY>)ViewBag.ListSanBay)
+                                    {
+                                        <option value="@sb.MASB">@sb.THANHPHO (@sb.MASB)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sân bay đến</label>
+                            <select name="SBDEN" id="arrivalAirport" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="" disabled>Chọn sân bay đến</option>
+                                @if (ViewBag.ListSanBay != null)
+                                {
+                                    foreach (var sb in (List<QuanLyMayBay.SANBAY>)ViewBag.ListSanBay)
+                                    {
+                                        <option value="@sb.MASB">@sb.THANHPHO (@sb.MASB)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giờ cất cánh</label>
+                            <input type="datetime-local" name="GIOCATCANH" id="departureTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giờ hạ cánh</label>
+                            <input type="datetime-local" name="GIOHACANH" id="arrivalTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
+                        <select name="TRANGTHAI" id="statusSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            <option value="Đúng giờ">Đúng giờ</option>
+                            <option value="Chậm trễ">Chậm Trễ</option>
+                            <option value="Đang bay">Đang Bay</option>
+                            <option value="Hủy">Hủy</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">Hủy</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="airlineModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Cập Nhật Logo Hãng</h3>
+                    <button onclick="closeAirlineModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="airlineForm" class="space-y-4" action="@Url.Action("CapNhatLogoHang", "Admin")" method="post" enctype="multipart/form-data">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Chọn Hãng Hàng Không</label>
+                        <select name="tenHang" id="airlineSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent" required onchange="previewCurrentLogo()">
+                            <option value="" disabled selected>-- Chọn hãng --</option>
+                            @if (ViewBag.ListMayBay != null)
+                            {
+                                // Lấy danh sách các hãng duy nhất từ list máy bay
+                                var hangList = ((List<QuanLyMayBay.MAYBAY>)ViewBag.ListMayBay)
+                                                .Select(m => m.HANG).Distinct().ToList();
+
+                                foreach (var hang in hangList)
+                                {
+                                    <option value="@hang">@hang</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p class="text-xs text-gray-500 mb-2">Logo hiện tại</p>
+                        <img id="currentLogoPreview" src="/Content/Images/Airline/default.png" class="h-16 mx-auto object-contain" alt="Logo Hãng">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tải lên Logo Mới</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="logoInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-2xl mb-2"></i>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click để chọn ảnh</span></p>
+                                    <p class="text-xs text-gray-500">PNG, JPG (Max. 2MB)</p>
+                                </div>
+                                <input id="logoInput" name="logoFile" type="file" class="hidden" accept="image/*" required onchange="previewNewLogo(event)" />
+                            </label>
+                        </div>
+                        <div id="newLogoContainer" class="hidden mt-3 text-center">
+                            <p class="text-xs text-green-600 mb-1">Ảnh mới chọn:</p>
+                            <img id="newLogoPreview" class="h-16 mx-auto object-contain border border-green-200 rounded p-1">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="closeAirlineModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">Hủy</button>
+                        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">Cập Nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Xác nhận xóa</h3>
+                <p class="text-sm text-gray-500 mb-4">Bạn có chắc chắn muốn xóa chuyến bay <span id="deleteFlightCode" class="font-medium"></span>? Hành động này không thể hoàn tác.</p>
+                <div class="flex justify-center space-x-3">
+                    <button onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">Hủy</button>
+                    <button onclick="deleteFlight()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (TempData["Success"] != null || TempData["Error"] != null)
+    {
+        var isSuccess = TempData["Success"] != null;
+        var message = isSuccess ? TempData["Success"] : TempData["Error"];
+        var bgClass = isSuccess ? "bg-green-100 border-green-500 text-green-700" : "bg-red-100 border-red-500 text-red-700";
+        var icon = isSuccess ? "fa-check-circle" : "fa-exclamation-circle";
+
+        <div id="toast-notification" class="fixed bottom-5 right-5 border-l-4 p-4 rounded shadow-lg z-50 flex items-center @bgClass transition-all duration-500 transform translate-y-0 opacity-100">
+            <i class="fas @icon mr-3 text-xl"></i>
+            <div>
+                <p class="font-bold">@(isSuccess ? "Thành công" : "Lỗi")</p>
+                <p class="text-sm">@message</p>
+            </div>
+            <button onclick="document.getElementById('toast-notification').remove()" class="ml-6 text-gray-500 hover:text-gray-800 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <script>
+            // Tự động ẩn sau 5 giây
+            setTimeout(function () {
+                var toast = document.getElementById('toast-notification');
+                if (toast) {
+                    toast.classList.add('opacity-0', 'translate-y-10');
+                    setTimeout(function () { toast.remove(); }, 500);
+                }
+            }, 5000);
+        </script>
+    }
+
+    @* Khối Script đã sửa đổi/hoàn thiện *@
+<script>
+        let selectedRow = null;
+        let currentFlightCode = null;
+        let isEditing = false;
+        let initialRowCount = 0; // Biến lưu tổng số hàng ban đầu
+
+        // Hàm ánh xạ giá trị trạng thái chuẩn hóa sang tên hiển thị
+        function getDisplayStatusText(normalizedStatus) {
+            switch (normalizedStatus.toLowerCase()) {
+                case 'scheduled':
+                    return 'Đúng giờ';
+                case 'delayed':
+                    return 'Chậm Trễ';
+                case 'landed':
+                    return 'Đang Bay';
+                case 'cancelled':
+                    return 'Hủy';
+                default:
+                    return normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1);
+            }
+        }
+
+        // Hàm tiện ích để nhận màu sắc và tên trạng thái
+        function getStatusDetails(statusValue) {
+            switch (statusValue.toLowerCase()) {
+                case 'scheduled':
+                    return { text: getDisplayStatusText('scheduled'), bg: 'bg-green-100', color: 'text-green-800' };
+                case 'delayed':
+                    return { text: getDisplayStatusText('delayed'), bg: 'bg-yellow-100', color: 'text-yellow-800' };
+                case 'landed':
+                    return { text: getDisplayStatusText('landed'), bg: 'bg-blue-100', color: 'text-blue-800' };
+                case 'cancelled':
+                    return { text: getDisplayStatusText('cancelled'), bg: 'bg-red-100', color: 'text-red-800' };
+                default:
+                    return { text: statusValue, bg: 'bg-gray-100', color: 'text-gray-800' };
+            }
+        }
+
+        // Hàm tạo cấu trúc HTML cho hàng mới
+        function createFlightRowHTML(flight) {
+            const statusDetails = getStatusDetails(flight.status);
+            // THÊM data-status-row vào thẻ <tr> để dễ dàng lọc
+            return `
+                        <tr class="hover:bg-gray-50 cursor-pointer" onclick="selectRow(this, '${flight.code}')" data-status-row="${flight.status}">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input type="checkbox" class="rounded border-gray-300">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${flight.code}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${flight.aircraft}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${flight.departure}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${flight.arrival}</td>
+                            <td class="px-6 py-4 whitespace-nowrap" data-status="${flight.status}">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusDetails.bg} ${statusDetails.color}">${statusDetails.text}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <div class="flex space-x-2">
+                                    <button onclick="openEditModal('${flight.code}', '${flight.aircraft}', '${flight.departure}', '${flight.arrival}', '${flight.status}')" class="text-blue-600 hover:text-blue-900 hidden edit-btn">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="confirmDelete('${flight.code}')" class="text-red-600 hover:text-red-900 hidden delete-btn">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+        }
+
+        // Cập nhật hàm initTable để lấy dữ liệu ban đầu
+        function initTable() {
+            const tableBody = document.getElementById('flightTableBody');
+            const allRows = Array.from(tableBody.children);
+            initialRowCount = allRows.length; // Lưu tổng số hàng ban đầu
+            updateResultCount(initialRowCount);
+        }
+
+        // Cập nhật lại số lượng kết quả hiển thị
+        function updateResultCount(count) {
+            const resultTextElement = document.getElementById('resultCountText');
+            if (resultTextElement) {
+                // Đặt số lượng hiển thị và tổng số hàng
+                resultTextElement.innerHTML = `Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">${count}</span> của <span class="font-medium">${initialRowCount}</span> kết quả`;
+            }
+        }
+
+
+        // ******************** LOGIC LỌC TRẠNG THÁI CHUYẾN BAY ********************
+        function filterFlights() {
+            const selectedStatus = document.getElementById('statusFilterSelect').value;
+            const tableBody = document.getElementById('flightTableBody');
+            // Lấy tất cả các hàng, sử dụng data-status-row để lấy trạng thái
+            const rows = tableBody.querySelectorAll('tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                // Lấy trạng thái chuẩn hóa từ thuộc tính data-status-row của thẻ <tr>
+                const rowStatus = row.getAttribute('data-status-row');
+
+                // Nếu chọn "all" (Tất cả) hoặc trạng thái của hàng khớp với trạng thái chọn
+                if (selectedStatus === 'all' || rowStatus === selectedStatus) {
+                    row.classList.remove('hidden'); // Hiển thị hàng
+                    visibleCount++;
+                } else {
+                    row.classList.add('hidden'); // Ẩn hàng
+                    // Đảm bảo hàng bị ẩn không còn được chọn
+                    row.classList.remove('bg-blue-50');
+                    row.querySelectorAll('.edit-btn, .delete-btn').forEach(btn => btn.classList.add('hidden'));
+                }
+            });
+
+            // Cập nhật số lượng kết quả hiển thị
+            updateResultCount(visibleCount);
+        }
+
+        // ******************** Các hàm khác (Đã điều chỉnh nhỏ) ********************
+
+        function selectRow(row, flightCode) {
+            // Chỉ xử lý nếu hàng không bị ẩn
+            if (row.classList.contains('hidden')) {
+                return;
+            }
+
+            // Loại bỏ chọn từ tất cả các hàng không bị ẩn
+            document.querySelectorAll('tbody tr:not(.hidden)').forEach(r => {
+                r.classList.remove('bg-blue-50');
+                r.querySelectorAll('.edit-btn, .delete-btn').forEach(btn => btn.classList.add('hidden'));
+            });
+
+            // Thêm chọn vào hàng hiện tại
+            row.classList.add('bg-blue-50');
+            row.querySelectorAll('.edit-btn, .delete-btn').forEach(btn => btn.classList.remove('hidden'));
+
+            selectedRow = row;
+            currentFlightCode = flightCode;
+        }
+
+        function openAddModal() {
+            // Reset Form
+            document.getElementById('modalTitle').textContent = 'Thêm Chuyến Bay';
+
+            // Reset các giá trị input
+            document.getElementById('aircraftSelect').selectedIndex = 0;
+            document.getElementById('departureTime').value = '';
+            document.getElementById('arrivalTime').value = '';
+            document.getElementById('statusSelect').value = 'Đúng giờ';
+
+            // Hiện modal
+            document.getElementById('flightModal').classList.remove('hidden');
+        }
+
+        function openEditModal(code, aircraft, departure, arrival, status, sbDi, sbDen) {
+    document.getElementById('modalTitle').textContent = 'Sửa Chuyến Bay';
+    document.getElementById('flightForm').action = '@Url.Action("SuaChuyenBay", "Admin")';
+
+    // Điền dữ liệu
+    document.getElementById('flightCode').value = code;
+
+    // QUAN TRỌNG: Gán giá trị cho input ẩn để Controller nhận được
+    document.getElementById('hiddenFlightCode').value = code;
+
+    document.getElementById('aircraftSelect').value = aircraft;
+    document.getElementById('departureTime').value = departure;
+    document.getElementById('arrivalTime').value = arrival;
+    document.getElementById('statusSelect').value = status;
+
+    // Xử lý Select Sân bay
+    const depSelect = document.querySelector('select[name="SBDI"]');
+    const arrSelect = document.querySelector('select[name="SBDEN"]');
+    if(depSelect) depSelect.value = sbDi;
+    if(arrSelect) arrSelect.value = sbDen;
+
+    document.getElementById('flightModal').classList.remove('hidden');
+}
+
+    function closeModal() {
+        document.getElementById('flightModal').classList.add('hidden');
+        // Reset lại style cho ô FlightCode phòng trường hợp mở lại modal thêm
+        const codeInput = document.getElementById('flightCode');
+        codeInput.classList.remove('bg-gray-200');
+        codeInput.readOnly = false;
+    }
+
+        // ******************** LOGIC CHỈNH SỬA CHUYẾN BAY ********************
+        function editFlight() {
+            const flightCodeToEdit = document.getElementById('flightCode').value;
+            const newAircraft = document.getElementById('aircraftSelect').value;
+            const newDeparture = document.getElementById('departureTime').value;
+            const newArrival = document.getElementById('arrivalTime').value;
+            const newStatus = document.getElementById('statusSelect').value;
+
+            const tableBody = document.getElementById('flightTableBody');
+            let rowToUpdate = null;
+            Array.from(tableBody.children).forEach(row => {
+                if (row.querySelector('td:nth-child(2)').textContent === flightCodeToEdit) {
+                    rowToUpdate = row;
+                }
+            });
+
+            if (rowToUpdate) {
+                const newFlight = {
+                    code: flightCodeToEdit,
+                    aircraft: newAircraft,
+                    departure: newDeparture,
+                    arrival: newArrival,
+                    status: newStatus
+                };
+
+                const updatedRowHtml = createFlightRowHTML(newFlight);
+
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = updatedRowHtml.trim();
+                const newRow = tempDiv.firstChild;
+
+                rowToUpdate.replaceWith(newRow);
+
+                selectRow(newRow, flightCodeToEdit);
+                filterFlights(); // Áp dụng lại bộ lọc nếu trạng thái đã thay đổi
+            } else {
+                console.error("Không tìm thấy hàng để cập nhật:", flightCodeToEdit);
+            }
+
+            closeModal();
+            console.log('Đã sửa chuyến bay:', flightCodeToEdit);
+        }
+
+
+        function confirmDelete(flightCode) {
+            // Hiển thị mã chuyến bay lên modal
+            document.getElementById('deleteFlightCode').textContent = flightCode;
+            // Lưu mã vào biến toàn cục để dùng khi bấm nút Xóa thật
+            currentFlightCode = flightCode;
+            // Hiện Modal
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function deleteFlight() {
+            if (currentFlightCode) {
+                // Gọi đường dẫn Xóa bên Controller
+                // Sử dụng window.location.href để chuyển hướng GET
+                window.location.href = '/Admin/XoaChuyenBay/' + currentFlightCode;
+            }
+            currentFlightCode = null;
+            closeDeleteModal();
+        }
+
+        // Gọi khi tải trang để thiết lập số lượng ban đầu và cập nhật giao diện
+        document.addEventListener('DOMContentLoaded', () => {
+            initTable();
+            // Đảm bảo nút Áp dụng được thêm icon
+            const filterButton = document.querySelector('button[onclick="filterFlights()"]');
+            if (filterButton && !filterButton.querySelector('.fa-filter')) {
+                filterButton.innerHTML = '<i class="fas fa-filter mr-2"></i>Áp dụng';
+            }
+        });
+        // === CẤU HÌNH PHÂN TRANG ===
+        const ROWS_PER_PAGE = 10;
+        let currentPage = 1;
+        let allRows = []; // Lưu trữ tất cả các dòng dữ liệu gốc
+
+        // Hàm khởi tạo phân trang
+        function initPagination() {
+            const tableBody = document.getElementById('flightTableBody');
+            // Lấy tất cả các dòng tr trong bảng (trừ các dòng bị ẩn do filter nếu có)
+            allRows = Array.from(tableBody.querySelectorAll('tr'));
+
+            // Cập nhật tổng số dòng
+            document.getElementById('totalRows').textContent = allRows.length;
+
+            // Hiển thị trang đầu tiên
+            changePage(1);
+        }
+
+        // Hàm chuyển trang
+        function changePage(page) {
+            const totalPages = Math.ceil(allRows.length / ROWS_PER_PAGE);
+
+            // Kiểm tra giới hạn trang
+            if (page < 1) page = 1;
+            if (page > totalPages && totalPages > 0) page = totalPages;
+
+            currentPage = page;
+
+            // 1. Ẩn tất cả các dòng
+            allRows.forEach(row => row.style.display = 'none');
+
+            // 2. Tính toán dòng bắt đầu và kết thúc
+            const start = (currentPage - 1) * ROWS_PER_PAGE;
+            const end = start + ROWS_PER_PAGE;
+
+            // 3. Hiển thị các dòng trong phạm vi trang hiện tại
+            const rowsToShow = allRows.slice(start, end);
+            rowsToShow.forEach(row => row.style.display = '');
+
+            // 4. Cập nhật thông tin hiển thị "Từ ... đến ..."
+            document.getElementById('pageStart').textContent = allRows.length > 0 ? start + 1 : 0;
+            document.getElementById('pageEnd').textContent = Math.min(end, allRows.length);
+
+            // 5. Cập nhật trạng thái nút Bấm
+            updatePaginationButtons(totalPages);
+        }
+
+        // Hàm vẽ lại các nút số trang (1, 2, 3...)
+        function updatePaginationButtons(totalPages) {
+            const container = document.getElementById('paginationNumbers');
+            container.innerHTML = ''; // Xóa nút cũ
+
+            // Nút Trước/Sau (Enable/Disable)
+            document.getElementById('btnPrev').disabled = currentPage === 1;
+            document.getElementById('btnNext').disabled = currentPage === totalPages || totalPages === 0;
+
+            // Mobile buttons
+            const btnPrevMobile = document.getElementById('btnPrevMobile');
+            const btnNextMobile = document.getElementById('btnNextMobile');
+            if (btnPrevMobile) btnPrevMobile.disabled = currentPage === 1;
+            if (btnNextMobile) btnNextMobile.disabled = currentPage === totalPages;
+
+            // Tạo các nút số trang
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.onclick = () => changePage(i);
+
+                // Style cơ bản cho nút
+                btn.className = "relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors focus:z-10";
+
+                // Style nút Active (Trang hiện tại) vs Nút thường
+                if (i === currentPage) {
+                    btn.classList.add('z-10', 'bg-blue-50', 'border-blue-500', 'text-blue-600');
+                } else {
+                    btn.classList.add('bg-white', 'border-gray-300', 'text-gray-500', 'hover:bg-gray-50');
+                }
+
+                container.appendChild(btn);
+            }
+        }
+
+        // === KÍCH HOẠT KHI LOAD TRANG ===
+        document.addEventListener('DOMContentLoaded', () => {
+            // Các hàm khởi tạo cũ của bạn (nếu có)
+            if (typeof initTable === 'function') initTable();
+
+            // Kích hoạt phân trang
+            initPagination();
+        });
+        // --- LOGIC MODAL QUẢN LÝ HÃNG ---
+        function openAirlineModal() {
+            document.getElementById('airlineModal').classList.remove('hidden');
+        }
+
+        function closeAirlineModal() {
+            document.getElementById('airlineModal').classList.add('hidden');
+            // Reset form
+            document.getElementById('airlineForm').reset();
+            document.getElementById('newLogoContainer').classList.add('hidden');
+            document.getElementById('currentLogoPreview').src = '/Content/Images/Airline/default.png';
+        }
+
+        // Xem trước logo hiện tại khi chọn hãng trong Dropdown
+        function previewCurrentLogo() {
+            const airlineName = document.getElementById('airlineSelect').value;
+            if (airlineName) {
+                // Tạo đường dẫn giả định (tên hãng bỏ khoảng trắng + .jpg hoặc .png)
+                // Lưu ý: Đây chỉ là dự đoán client-side. Tốt nhất là server trả về URL chính xác.
+                // Ở đây ta dùng tạm logic đặt tên chuẩn: "Vietnam Airlines" -> "VietnamAirlines.png"
+
+                const cleanName = airlineName.replace(/\s+/g, '');
+                // Thử load ảnh .png trước (hoặc .jpg tùy quy ước của bạn)
+                const imgPath = `/Content/Images/Airline/${cleanName}.png`;
+
+                const img = document.getElementById('currentLogoPreview');
+                img.src = imgPath;
+
+                // Nếu ảnh lỗi (không tồn tại), fallback về default
+                img.onerror = function () {
+                    // Thử tiếp .jpg
+                    if (this.src.endsWith('.png')) {
+                        this.src = `/Content/Images/Airline/${cleanName}.jpg`;
+                    } else {
+                        this.src = '/Content/Images/Airline/default.png';
+                    }
+                };
+            }
+        }
+
+        // Xem trước ảnh mới khi user chọn file
+        function previewNewLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('newLogoPreview');
+                    preview.src = e.target.result;
+                    document.getElementById('newLogoContainer').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            // Reset lại mã chuyến bay đang chọn xóa để an toàn
+            currentFlightCode = null;
+        }
+</script>
+</body>

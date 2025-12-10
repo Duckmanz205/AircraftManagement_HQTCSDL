@@ -1,0 +1,214 @@
+﻿@using QuanLyMayBay.Models
+@{
+    // 1. LẤY THÔNG TIN NGƯỜI DÙNG TỪ SESSION
+    var adminUser = Session["AdminUser"] as NHANVIEN;
+
+    // 2. XÁC ĐỊNH QUYỀN HẠN (Logic: Chỉ CV09 - Giám đốc và CV05 - Quản lý cấp cao là Admin)
+    bool isAdmin = false;
+    string tenHienThi = "Admin User";
+    string chucVuHienThi = "Nhân viên";
+
+    if (adminUser != null)
+    {
+        tenHienThi = adminUser.TENNV;
+        // Trim() để xóa khoảng trắng thừa trong CSDL SQL (Char/Nchar)
+        string maCV = adminUser.MACV.Trim();
+
+        if (maCV == "CV09" || maCV == "CV05")
+        {
+            isAdmin = true;
+            chucVuHienThi = (maCV == "CV09") ? "Giám đốc" : "Quản lý cấp cao";
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Vé Máy Bay</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Custom Scrollbar cho đẹp */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+
+        .sidebar-item.active {
+            background-color: #eff6ff; /* blue-50 */
+            color: #2563eb; /* blue-600 */
+            border-right: 4px solid #2563eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+    <header class="bg-white border-b border-gray-200 px-4 py-3 lg:px-6 fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div class="flex items-center justify-between">
+
+            <div class="flex items-center space-x-4">
+                <button id="mobileToggle" class="lg:hidden p-2 text-gray-600 hover:text-blue-900 hover:bg-gray-100 rounded-lg transition-colors">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+
+                <a href="@Url.Action("TrangChu", "Admin")" class="flex items-center space-x-2 group">
+                    <div class="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center group-hover:bg-blue-800 transition-colors shadow-md">
+                        <i class="fas fa-plane text-white text-lg"></i>
+                    </div>
+                    <div class="hidden sm:block">
+                        <span class="text-lg font-bold text-blue-900 block leading-tight">FlightManager</span>
+                        <span class="text-xs text-gray-500 font-medium">Admin Portal</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 border border-blue-200">
+                        <i class="fas fa-user-tie text-sm"></i>
+                    </div>
+                    <div class="hidden sm:block text-right mr-1">
+                        <p class="text-sm font-bold text-gray-800">@tenHienThi</p>
+                        <p class="text-xs text-blue-600 font-semibold">@chucVuHienThi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-16">
+
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden glass-effect"></div>
+
+        <aside id="sidebar" class="bg-white border-r border-gray-200 h-screen w-64 fixed left-0 top-16 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto pb-20">
+            <nav class="mt-6 px-3">
+                <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Chức năng chính</p>
+                <ul class="space-y-1">
+
+                    <li>
+                        <a href="@Url.Action("TrangChu", "Admin")" class="sidebar-item flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-all group">
+                            <i class="fas fa-th-large w-6 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="@Url.Action("QLChuyenBay", "Admin")" class="sidebar-item flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-all group">
+                            <i class="fas fa-plane-departure w-6 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Quản lý Chuyến bay</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="@Url.Action("QLVe", "Admin")" class="sidebar-item flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-all group">
+                            <i class="fas fa-ticket-alt w-6 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Quản lý Vé & Đặt chỗ</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="@Url.Action("ThongKe", "Admin")" class="sidebar-item flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-all group">
+                            <i class="fas fa-chart-pie w-6 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Báo cáo Doanh thu</span>
+                        </a>
+                    </li>
+                </ul>
+
+                @if (isAdmin)
+                {
+                    <div class="mt-6 mb-2 px-4 border-t border-gray-100 pt-4">
+                        <p class="text-xs font-semibold text-red-500 uppercase tracking-wider">Quản trị hệ thống</p>
+                    </div>
+                    <ul class="space-y-1">
+
+                        <li>
+                            <a href="@Url.Action("QLPerson", "Admin")" class="sidebar-item flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all group">
+                                <i class="fas fa-users-cog w-6 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-medium">Quản lý Nhân sự</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("CaiDat", "Admin")" class="sidebar-item flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all group">
+                                <i class="fas fa-database w-6 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-medium">Sao lưu & Phục hồi</span>
+                            </a>
+                        </li>
+                    </ul>
+                }
+
+                <div class="mt-6 mb-2 px-4 border-t border-gray-100 pt-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tài khoản</p>
+                </div>
+                <ul class="space-y-1 pb-6">
+                    <li>
+                        <a href="@Url.Action("DangXuat", "Admin")" onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class="flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-all group">
+                            <i class="fas fa-sign-out-alt w-6 text-gray-400 group-hover:text-gray-600"></i>
+                            <span class="font-medium">Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="flex-1 lg:ml-64 bg-gray-100 p-4 lg:p-8 min-h-screen">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script>
+        // 1. Mobile Sidebar Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', toggleSidebar);
+        }
+
+        // 2. Active Menu Highlighter (Tự động bôi đậm menu đang chọn dựa trên URL)
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentPath = window.location.pathname.toLowerCase();
+            const menuItems = document.querySelectorAll('.sidebar-item');
+
+            menuItems.forEach(item => {
+                const href = item.getAttribute('href').toLowerCase();
+                // Kiểm tra nếu URL hiện tại chứa href của menu (nhưng trừ trang chủ /Admin/TrangChu)
+                if (href !== '/admin/trangchu' && currentPath.includes(href)) {
+                    item.classList.add('active');
+                }
+                // Xử lý riêng cho trang chủ để không bị active nhầm
+                else if (href === '/admin/trangchu' && (currentPath === '/admin/trangchu' || currentPath === '/admin')) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+﻿@model QuanLyMayBay.Models.Admin.QLVeViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<body class="bg-gray-50 min-h-screen">
+    <!-- Main Content -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-plane text-blue-600 text-2xl"></i>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Quản Lý Vé Máy Bay</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <label class="text-sm font-medium text-gray-700">Lọc theo trạng thái:</label>
+                    <div class="flex space-x-2">
+                        <button class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors" data-status="tất cả">
+                            Tất cả
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-700 hover:bg-green-200 transition-colors" data-status="đã thanh toán">
+                            <i class="fas fa-check-circle mr-1"></i>Đã thanh toán
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition-colors" data-status="xử lý">
+                            <i class="fas fa-clock mr-1"></i>Đang xử lý
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors" data-status="hết hạn/hủy">
+                            <i class="fas fa-trash mr-1"></i>Hủy
+                        </button>
+
+                    </div>
+                </div>
+                @using (Html.BeginForm("TimTheoMAVE", "Admin", FormMethod.Get))
+                {
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <div class="relative flex-1 sm:flex-none">
+                            <input type="text" name="mave" placeholder="Tìm kiếm theo mã vé" class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-80">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <button type="submit" class="hidden">Tìm kiếm</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Tickets Table -->
+        <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã Vé</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã Phiếu</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Khách Hàng</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Nhân Viên</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá Tiền</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Ngày Đặt</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng Thái</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Check-in</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="ticketTableBody" class="bg-white divide-y divide-gray-200">
+                        @if (Model.DanhSachVe != null)
+                        {
+                            foreach (var item in Model.DanhSachVe)
+                            {
+                                // Xác định màu sắc trạng thái
+                                string statusColor = "";
+                                if (item.TRANGTHAI == "Đã thanh toán") { statusColor = "bg-green-100 text-green-800"; }
+                                else if (item.TRANGTHAI == "Chờ xử lý") { statusColor = "bg-yellow-100 text-yellow-800"; }
+                                else { statusColor = "bg-red-100 text-red-800"; }
+
+                                // Kiểm tra xem dòng này có phải vé thật không (để cho phép click xem chi tiết)
+                                // Vé chưa thanh toán có MAVE = "---" nên sẽ không click được
+                                bool isRealTicket = item.MAVE != "---";
+                                string clickEvent = isRealTicket ? $"window.location.href='{Url.Action("QLVe", "Admin", new { selectedId = item.MAVE })}'" : "";
+                                string cursorClass = isRealTicket ? "cursor-pointer hover:bg-blue-50" : "cursor-default bg-gray-50";
+
+                                <tr  data-status="@item.TRANGTHAI.ToLower()" class="ticket-row  @cursorClass transition-colors" onclick="@clickEvent">
+
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                                        @item.MAVE
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        @item.MAPHIEU
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">@item.TENKH</div>
+                                        <div class="text-sm text-gray-500">@item.EMAIL</div>
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 hidden sm:table-cell">
+                                        @item.TENNV
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        @string.Format("{0:N0}", item.GIATIEN)
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                                        @item.NGAYDAT
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full @statusColor">
+                                            @item.TRANGTHAI
+                                        </span>
+                                    </td>
+
+                                    <td class="px-4 py-4 whitespace-nowrap hidden lg:table-cell">
+                                        @if (isRealTicket)
+                                        {
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium @(item.TRANGTHAIVE == "Đã check-in" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800")">
+                                                <i class="fas fa-plane mr-1"></i>@item.TRANGTHAIVE
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-400 text-xs">-</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-6 rounded-lg shadow-sm">
+            <div class="flex-1 flex justify-between sm:hidden">
+                <button onclick="changePage(currentPage - 1)" id="btnPrevMobile" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Trước
+                </button>
+                <button onclick="changePage(currentPage + 1)" id="btnNextMobile" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Sau
+                </button>
+            </div>
+
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Hiển thị <span class="font-medium" id="pageStart">0</span> đến <span class="font-medium" id="pageEnd">0</span>
+                        trong tổng số <span class="font-medium" id="totalRows">0</span> vé
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <button onclick="changePage(currentPage - 1)" id="btnPrev" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Trước</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+
+                        <div id="paginationNumbers" class="flex"></div>
+
+                        <button onclick="changePage(currentPage + 1)" id="btnNext" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Sau</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Detail Modal -->
+    @{
+        var showModal = Model.VeDangChon != null ? "" : "hidden";
+        var detail = Model.VeDangChon;
+    }
+
+    <div id="ticketModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 @showModal">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900">
+                    Chi Tiết Vé: <span class="text-blue-600">@(detail?.MaVe)</span>
+                </h3>
+                <a href="@Url.Action("QLVe", "Admin")" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </a>
+            </div>
+
+            @if (detail != null)
+            {
+                <div class="space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-user mr-2 text-blue-600"></i>Thông Tin Khách Hàng
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="text-sm font-medium text-gray-500">Họ tên:</label><p class="text-gray-900 font-medium">@detail.TenKhach</p></div>
+                            <div><label class="text-sm font-medium text-gray-500">Email:</label><p class="text-gray-900">@detail.Email</p></div>
+                            <div><label class="text-sm font-medium text-gray-500">SĐT:</label><p class="text-gray-900">@detail.Sdt</p></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-plane mr-2 text-blue-600"></i>Thông Tin Chuyến Bay
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="text-sm font-medium text-gray-500">Mã CB:</label><p class="text-gray-900 font-medium">@detail.MaCB</p></div>
+                            <div><label class="text-sm font-medium text-gray-500">Hãng:</label><p class="text-gray-900">@detail.HangBay</p></div>
+                            <div><label class="text-sm font-medium text-gray-500">Hành trình:</label><p class="text-gray-900">@detail.SanBayDi &rarr; @detail.SanBayDen</p></div>
+                            <div><label class="text-sm font-medium text-gray-500">Ngày giờ:</label><p class="text-gray-900">@detail.NgayBay (@detail.GioBay)</p></div>
+                            <div><label class="text-sm font-medium text-gray-500">Số ghế:</label><p class="text-xl font-bold text-blue-600">@detail.SoGhe</p></div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Trạng thái:</label>
+                                <p class="font-bold @(detail.TrangThaiCheckIn == "Đã check-in" ? "text-green-600" : "text-yellow-600")">
+                                    @detail.TrangThaiCheckIn
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t flex gap-4">
+                        <a href="@Url.Action("ToggleCheckIn", "Admin", new { id = detail.MaVe })"
+                           class="flex-1 py-3 rounded-lg font-bold text-center text-white transition-colors shadow-md
+                       @(detail.TrangThaiCheckIn == "Đã check-in" ? "bg-orange-500 hover:bg-orange-600" : "bg-green-600 hover:bg-green-700")">
+
+                            @if (detail.TrangThaiCheckIn == "Đã check-in")
+                            {
+                                <span><i class="fas fa-undo mr-2"></i>Hủy Check-in</span>
+                            }
+                            else
+                            {
+                                <span><i class="fas fa-check-double mr-2"></i>Xác nhận Check-in</span>
+                            }
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script>
+    // === CẤU HÌNH ===
+    const ROWS_PER_PAGE = 10;
+    let currentPage = 1;
+    let allRows = [];       // Lưu tất cả các dòng tr trong bảng
+    let filteredRows = [];  // Lưu các dòng sau khi lọc (mặc định là tất cả)
+
+    // 1. KHỞI TẠO KHI LOAD TRANG
+    document.addEventListener('DOMContentLoaded', () => {
+        const tableBody = document.getElementById('ticketTableBody');
+        if (tableBody) {
+            // Lấy tất cả các dòng ticket-row
+            allRows = Array.from(tableBody.querySelectorAll('tr.ticket-row'));
+            filteredRows = allRows; // Ban đầu chưa lọc gì cả
+
+            // Khởi tạo phân trang lần đầu
+            updateTotalCount(); // Cập nhật số lượng tổng
+            changePage(1);      // Vào trang 1
+        }
+    });
+
+    // 2. XỬ LÝ SỰ KIỆN LỌC (FILTER)
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            // UI: Đổi màu nút đang chọn
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'bg-blue-100', 'text-blue-700'));
+            this.classList.add('active', 'bg-blue-100', 'text-blue-700');
+
+            const status = this.dataset.status;
+
+            // LOGIC LỌC: Cập nhật biến filteredRows
+            if (status === 'tất cả') {
+                filteredRows = allRows;
+            } else {
+                filteredRows = allRows.filter(row => {
+                    // Lấy status từ attribute data-status của tr
+                    const rowStatus = row.dataset.status;
+                    return rowStatus === status;
+                });
+            }
+
+            // Sau khi lọc xong, quay về trang 1 và vẽ lại bảng
+            updateTotalCount();
+            changePage(1);
+        });
+    });
+
+    // 3. HÀM CHUYỂN TRANG (CORE LOGIC)
+    function changePage(page) {
+        const totalPages = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+
+        // Validate số trang (Tránh lỗi khi lọc ra 0 kết quả)
+        if (totalPages === 0) {
+            page = 1;
+        } else {
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+        }
+
+        currentPage = page;
+
+        // BƯỚC QUAN TRỌNG:
+        // 1. Ẩn TẤT CẢ các dòng (cả dòng thỏa mãn và không thỏa mãn lọc)
+        allRows.forEach(row => row.style.display = 'none');
+
+        // 2. Tính toán dòng cần hiện của trang hiện tại (trên danh sách ĐÃ LỌC)
+        const start = (currentPage - 1) * ROWS_PER_PAGE;
+        const end = start + ROWS_PER_PAGE;
+        const rowsToShow = filteredRows.slice(start, end);
+
+        // 3. Chỉ hiện các dòng này
+        rowsToShow.forEach(row => row.style.display = '');
+
+        // 4. Cập nhật thông tin hiển thị text "Hiển thị 1-10..."
+        const startDisplay = filteredRows.length > 0 ? start + 1 : 0;
+        const endDisplay = Math.min(end, filteredRows.length);
+
+        document.getElementById('pageStart').textContent = startDisplay;
+        document.getElementById('pageEnd').textContent = endDisplay;
+
+        // 5. Vẽ lại nút phân trang
+        renderPaginationButtons(totalPages);
+    }
+
+    // Hàm cập nhật tổng số dòng (khi lọc)
+    function updateTotalCount() {
+        document.getElementById('totalRows').textContent = filteredRows.length;
+    }
+
+    // 4. HÀM VẼ NÚT PHÂN TRANG (GIỮ NGUYÊN LOGIC CŨ, CHỈ SỬA LẠI ID CHO CHUẨN)
+    function renderPaginationButtons(totalPages) {
+        const container = document.getElementById('paginationNumbers');
+        container.innerHTML = '';
+
+        // Disable nút Prev/Next
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const btnPrevMob = document.getElementById('btnPrevMobile');
+        const btnNextMob = document.getElementById('btnNextMobile');
+
+        if(btnPrev) btnPrev.disabled = currentPage === 1 || totalPages === 0;
+        if(btnNext) btnNext.disabled = currentPage === totalPages || totalPages === 0;
+        if(btnPrevMob) btnPrevMob.disabled = currentPage === 1 || totalPages === 0;
+        if(btnNextMob) btnNextMob.disabled = currentPage === totalPages || totalPages === 0;
+
+        // Logic vẽ nút số (Rút gọn: chỉ hiện tối đa 5 nút)
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            btn.onclick = () => changePage(i);
+
+            // Style nút
+            btn.className = "relative inline-flex items-center px-4 py-2 border text-sm font-medium focus:z-10 ";
+            if (i === currentPage) {
+                btn.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-600', 'z-10');
+            } else {
+                btn.classList.add('bg-white', 'border-gray-300', 'text-gray-500', 'hover:bg-gray-50');
+            }
+
+            container.appendChild(btn);
+        }
+    }
+
+    // 5. LOGIC MODAL (GIỮ NGUYÊN)
+    const ticketModal = document.getElementById('ticketModal');
+    const closeModal = document.getElementById('closeModal');
+
+    if(ticketModal) {
+        // Đóng modal
+        closeModal.addEventListener('click', function () {
+            // Khi đóng modal server-side, ta cần xóa tham số URL để tránh hiện lại khi F5
+            // Chuyển hướng về trang gốc không có query string
+            window.location.href = '@Url.Action("QLVe", "Admin")';
+        });
+
+        // Đóng khi click ra ngoài
+        window.addEventListener('click', function (e) {
+            if (e.target === ticketModal) {
+                window.location.href = '@Url.Action("QLVe", "Admin")';
+            }
+        });
+    }
+    </script>
+</body>

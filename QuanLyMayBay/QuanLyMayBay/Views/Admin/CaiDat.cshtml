@@ -1,0 +1,225 @@
+﻿@model QuanLyMayBay.Models.Admin.QLPersonViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Sao lưu & Phục hồi";
+}
+
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="mb-8 border-b border-gray-200 pb-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+            <i class="fas fa-database text-blue-600 mr-3"></i>
+            Quản Trị Cơ Sở Dữ Liệu
+        </h1>
+        <p class="text-gray-600">Thực hiện chiến lược sao lưu định kỳ và phục hồi dữ liệu khi có sự cố.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div class="p-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                        <i class="fas fa-save text-xl"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-gray-800">Sao Lưu (Backup)</h2>
+                </div>
+                <span class="text-xs font-semibold bg-green-100 text-green-800 py-1 px-3 rounded-full">Server Local</span>
+            </div>
+
+            <div class="p-6">
+                <form action="@Url.Action("BackupDatabase", "Admin")" method="post" id="backupForm">
+
+                    <label class="block text-sm font-bold text-gray-700 mb-3">1. Chọn loại sao lưu:</label>
+                    <div class="grid grid-cols-1 gap-3 mb-6">
+
+                        <label class="relative flex items-start p-4 cursor-pointer rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-all group">
+                            <div class="flex items-center h-5">
+                                <input id="type_full" name="backupType" value="full" type="radio" checked
+                                       class="focus:ring-green-500 h-5 w-5 text-green-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-gray-900 block group-hover:text-green-700">
+                                    Sao lưu Toàn bộ (Full Backup)
+                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Khuyên dùng</span>
+                                </span>
+                                <span class="text-gray-500 block mt-1">Sao lưu tất cả dữ liệu. File lớn nhưng an toàn nhất. Nên chạy hàng tuần.</span>
+                            </div>
+                        </label>
+
+                        <label class="relative flex items-start p-4 cursor-pointer rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all group">
+                            <div class="flex items-center h-5">
+                                <input id="type_diff" name="backupType" value="diff" type="radio"
+                                       class="focus:ring-blue-500 h-5 w-5 text-blue-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-gray-900 block group-hover:text-blue-700">Sao lưu Khác biệt (Differential)</span>
+                                <span class="text-gray-500 block mt-1">Chỉ lưu dữ liệu thay đổi so với lần Full gần nhất. Nhanh và nhẹ. Nên chạy hàng ngày.</span>
+                            </div>
+                        </label>
+
+                        <label class="relative flex items-start p-4 cursor-pointer rounded-lg border border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition-all group">
+                            <div class="flex items-center h-5">
+                                <input id="type_log" name="backupType" value="log" type="radio"
+                                       class="focus:ring-orange-500 h-5 w-5 text-orange-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-gray-900 block group-hover:text-orange-700">Sao lưu Nhật ký (Transaction Log)</span>
+                                <span class="text-gray-500 block mt-1">Sao lưu các giao dịch tức thời. Dùng để phục hồi tại thời điểm cụ thể.</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">2. Tên file gợi nhớ (Tùy chọn):</label>
+                        <div class="flex rounded-md shadow-sm">
+                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                                QLMayBay_
+                            </span>
+                            <input type="text" name="backupName" id="backupName"
+                                   class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                   placeholder="@DateTime.Now.ToString("yyyyMMdd_HHmm")">
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500 flex items-center">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Hệ thống sẽ tự động thêm hậu tố loại backup và phần mở rộng (.bak/.trn)
+                        </p>
+                    </div>
+
+                    <button type="submit" class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-bold rounded-lg shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all transform hover:scale-[1.02]">
+                        <i class="fas fa-cloud-download-alt mr-2"></i> TIẾN HÀNH SAO LƯU
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div class="p-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                        <i class="fas fa-history text-xl"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-gray-800">Phục Hồi (Restore)</h2>
+                </div>
+                <span class="text-xs font-semibold bg-red-100 text-red-800 py-1 px-3 rounded-full">Nguy Hiểm</span>
+            </div>
+
+            <div class="p-6">
+                <div class="rounded-md bg-red-50 p-4 mb-6 border-l-4 border-red-500">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-red-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">Cảnh báo quan trọng</h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Dữ liệu hiện tại sẽ bị <strong>xóa hoàn toàn</strong>.</li>
+                                    <li>Hệ thống sẽ ngắt kết nối với mọi người dùng.</li>
+                                    <li>Chỉ phục hồi khi hệ thống gặp sự cố nghiêm trọng.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="@Url.Action("RestoreDatabase", "Admin")" method="post" enctype="multipart/form-data">
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Chọn file Backup (.bak)</label>
+
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer relative group">
+                            <div class="space-y-1 text-center">
+                                <div class="mx-auto h-12 w-12 text-gray-400 group-hover:text-blue-500 transition-colors">
+                                    <i class="fas fa-file-upload text-3xl"></i>
+                                </div>
+                                <div class="flex text-sm text-gray-600 justify-center">
+                                    <label for="file-upload" class="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                                        <span>Click để tải file lên</span>
+                                        <input id="file-upload" name="backupFile" type="file" class="sr-only" accept=".bak,.trn" required onchange="updateFileName(this)">
+                                    </label>
+                                </div>
+                                <p class="text-xs text-gray-500">hoặc kéo thả file vào đây</p>
+                            </div>
+                        </div>
+
+                        <div id="file-info" class="hidden mt-3 bg-blue-50 p-3 rounded-md border border-blue-100 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-blue-700 font-medium">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span id="file-name-display">filename.bak</span>
+                            </div>
+                            <button type="button" onclick="clearFile()" class="text-gray-400 hover:text-red-500">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" onclick="return confirm('CẢNH BÁO CUỐI CÙNG: \n\nBạn sắp xóa toàn bộ dữ liệu hiện tại để thay thế bằng bản backup này. \n\nBạn có chắc chắn muốn tiếp tục?')"
+                            class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-bold rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                        <i class="fas fa-undo-alt mr-2"></i> TIẾN HÀNH PHỤC HỒI
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Message"] != null || TempData["Error"] != null)
+    {
+        bool isError = TempData["Error"] != null;
+        string msg = isError ? TempData["Error"].ToString() : TempData["Message"].ToString();
+        string bgClass = isError ? "bg-red-800" : "bg-gray-800";
+        string iconClass = isError ? "fa-exclamation-circle text-red-400" : "fa-check-circle text-green-400";
+
+        <div id="notification" class="fixed bottom-4 right-4 @bgClass text-white px-6 py-4 rounded-lg shadow-2xl z-50 animate-bounce-in flex items-center max-w-md">
+            <i class="fas @iconClass mr-4 text-xl"></i>
+            <div>
+                <h4 class="font-bold text-sm mb-1">@(isError ? "Đã xảy ra lỗi" : "Thông báo hệ thống")</h4>
+                <p class="text-sm text-gray-200">@Html.Raw(msg.Replace("\n", "<br/>"))</p>
+            </div>
+            <button onclick="this.parentElement.style.display='none'" class="ml-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+</div>
+
+<style>
+    /* Animation nhẹ cho Toast */
+    @@keyframes slideIn {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-bounce-in {
+        animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+</style>
+
+<script>
+    function updateFileName(input) {
+        const fileInfo = document.getElementById('file-info');
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        if (input.files && input.files.length > 0) {
+            fileNameDisplay.textContent = input.files[0].name;
+            fileInfo.classList.remove('hidden');
+        } else {
+            fileInfo.classList.add('hidden');
+        }
+    }
+
+    function clearFile() {
+        const input = document.getElementById('file-upload');
+        input.value = ''; // Reset input
+        updateFileName(input);
+    }
+
+    // Tự động ẩn thông báo sau 6s
+    setTimeout(function () {
+        const noti = document.getElementById('notification');
+        if (noti) {
+            noti.style.opacity = '0';
+            noti.style.transform = 'translateY(100%)';
+            noti.style.transition = 'all 0.5s ease';
+            setTimeout(() => noti.style.display = 'none', 500);
+        }
+    }, 6000);
+</script>

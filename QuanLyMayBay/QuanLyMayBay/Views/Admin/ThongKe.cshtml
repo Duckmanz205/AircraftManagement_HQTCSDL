@@ -1,0 +1,366 @@
+﻿@model QuanLyMayBay.Models.AdminThongKeViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    // Định dạng tiền tệ
+    Func<decimal, string> FormatCurrency = (amount) => String.Format("{0:N0} VND", amount);
+    // Định dạng số lượng vé
+    Func<int, string> FormatTickets = (count) => String.Format("{0:N0}", count);
+    // Định dạng ngày
+    Func<DateTime, string> FormatDate = (date) => date.ToString("dd/MM/yyyy");
+
+    DateTime startDate = ViewBag.StartDate ?? DateTime.Today.AddMonths(-1);
+    DateTime endDate = ViewBag.EndDate ?? DateTime.Today;
+}
+
+<!-- Main Content -->
+<main class="flex-1 p-4 lg:p-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Thống kê doanh thu</h2>
+        <p class="text-gray-600">Tổng quan doanh thu và hiệu suất bán vé</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Tổng doanh thu</p>
+                    <p class="text-2xl font-bold text-gray-900">@FormatCurrency(Model.TongDoanhThu)</p>
+                    <p class="text-sm text-gray-500">+12% so với tháng trước</p>
+                </div>
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 15h2c0 1.08 1.37 2 3 2s3-.92 3-2c0-1.1-1.04-1.5-3.24-2.03C9.64 12.44 7 11.78 7 9c0-1.79 1.47-3.31 3.5-3.82V3h3v2.18C15.53 5.69 17 7.21 17 9h-2c0-1.08-1.37-2-3-2s-3 .92-3 2c0 1.1 1.04 1.5 3.24 2.03C14.36 11.56 17 12.22 17 15c0 1.79-1.47 3.31-3.5 3.82V21h-3v-2.18C8.47 18.31 7 16.79 7 15z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Tổng số vé bán</p>
+                    <p class="text-2xl font-bold text-gray-900">@FormatTickets(Model.TongSoVeBan)</p>
+                    <p class="text-sm text-gray-500">+8% so với tháng trước</p>
+                </div>
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M22 10v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6c0-1.11.89-2 2-2h16a2 2 0 0 1 2 2zm-2 0H4v6h16v-6zM2 6h20v2H2V6z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Số chuyến bay</p>
+                    <p class="text-2xl font-bold text-gray-900">@FormatTickets(Model.TongSoChuyenBay)</p>
+                    <p class="text-sm text-gray-500">+5% so với tháng trước</p>
+                </div>
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Giá vé trung bình</p>
+                    <p class="text-2xl font-bold text-gray-900">@FormatCurrency(Model.GiaVeTrungBinh)</p>
+                    <p class="text-sm text-gray-500">+3% so với tháng trước</p>
+                </div>
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 11H7v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9h-2m-7 0V9a3 3 0 0 1 6 0v2M9 11h6" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Chart Section -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 lg:mb-0">Biểu đồ doanh thu theo tháng</h3>
+            <form method="get" action="@Url.Action("ThongKe", "Admin")">
+                <div class="flex flex-col sm:flex-row gap-4 items-center">
+
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                        <option>2025</option>
+                        <option>2024</option>
+                        <option>2023</option>
+                    </select>
+
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                        <option>Tất cả tuyến bay</option>
+                        <option>HCM - HN</option>
+                        <option>HN - DN</option>
+                    </select>
+
+                    <div class="flex gap-2">
+                        <input type="date"
+                               name="startDate"
+                               class="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                               placeholder="Từ ngày"
+                               value="@startDate.ToString("yyyy-MM-dd")">
+
+                        <input type="date"
+                               name="endDate"
+                               class="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                               placeholder="Đến ngày"
+                               value="@endDate.ToString("yyyy-MM-dd")">
+                    </div>
+
+                    <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition duration-200">
+                        <i class="fas fa-search mr-1"></i> Lọc
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Chart Container -->
+<div class="h-80 bg-gray-50 rounded-lg border border-gray-200 p-4 overflow-hidden">
+    <div class="h-full">
+        <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+
+
+<!-- Data Table Section -->
+<div class="bg-white rounded-lg border border-gray-200">
+    <div class="p-6 border-b border-gray-200">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 lg:mb-0">Dữ liệu chi tiết chuyến bay</h3>
+            <form method="get" action="@Url.Action("ThongKe", "Admin")" class="flex items-center gap-2">
+
+                <div class="relative w-full sm:w-64">
+                    <input type="text"
+                           name="searchQuery"
+                           placeholder="Tìm kiếm mã chuyến bay..."
+                           class="pl-3 pr-4 py-2 border border-gray-300 rounded-lg text-sm w-full"
+                           value="@ViewBag.SearchQuery">
+                </div>
+
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-blue-700">
+                    <i class="fas fa-search"></i> Tìm
+                </button>
+
+
+                <input type="hidden" name="startDate" value="@ViewBag.StartDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="endDate" value="@ViewBag.EndDate.ToString("yyyy-MM-dd")" />
+
+            </form>
+
+            <div class="flex gap-2">
+                <button type="button" onclick="exportToExcel()" class="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm flex items-center gap-2">
+                    <i class="fas fa-file-excel"></i> Xuất Excel
+                </button>
+                <button type="button" onclick="exportToPdf()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm flex items-center gap-2">
+                    <i class="fas fa-file-pdf"></i> Xuất PDF
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã chuyến bay</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày bay</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số vé</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doanh thu</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá trung bình</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @if (Model.ChiTietDoanhThu.Any())
+                {
+                    foreach (var item in Model.ChiTietDoanhThu)
+                    {
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.MaChuyenBay</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@FormatDate(item.NgayBay)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@FormatTickets(item.SoVe)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@FormatCurrency(item.DoanhThu)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@FormatCurrency(item.GiaTrungBinh)</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Không có dữ liệu doanh thu trong tháng này.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="px-6 py-4 border-t border-gray-200">
+        <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-700">
+                Hiển thị <span class="font-medium">@Model.ChiTietDoanhThu.Count()</span> dòng
+                trong tổng số <span class="font-medium">@ViewBag.TotalRows</span> dòng dữ liệu
+                (Tổng số vé bán: @Model.TongSoVeBan)
+            </p>
+
+            <div class="flex space-x-2">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <a href="@Url.Action("ThongKe", new { page = ViewBag.CurrentPage - 1, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate, searchQuery = ViewBag.SearchQuery })"
+                       class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-500 flex items-center gap-1 hover:bg-gray-50">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                        </svg>
+                        Trước
+                    </a>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 2 && i <= ViewBag.CurrentPage + 2))
+                    {
+                        string activeClass = (i == ViewBag.CurrentPage) ? "bg-gray-900 text-white" : "border border-gray-300 text-gray-700 hover:bg-gray-50";
+
+                        <a href="@Url.Action("ThongKe", new { page = i, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate, searchQuery = ViewBag.SearchQuery })"
+                           class="px-3 py-1 rounded text-sm @activeClass">
+                            @i
+                        </a>
+                    }
+                    else if (i == ViewBag.CurrentPage - 3 || i == ViewBag.CurrentPage + 3)
+                    {
+                        <span class="px-2 text-gray-500">...</span>
+                    }
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <a href="@Url.Action("ThongKe", new { page = ViewBag.CurrentPage + 1, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate, searchQuery = ViewBag.SearchQuery })"
+                       class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 flex items-center gap-1 hover:bg-gray-50">
+                        Sau
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                        </svg>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    const rawData = @Html.Raw(Json.Encode(Model.ChiTietDoanhThu ?? new List<QuanLyMayBay.Models.ChiTietDoanhThuModel>()));
+    const monthlyRevenue = {};
+    for (let i = 1; i <= 12; i++) {
+        monthlyRevenue[i] = 0;
+    }
+
+    rawData.forEach(item => {
+
+        const dateString = item.NgayBay;
+        let date;
+
+
+        if (dateString && dateString.startsWith('/Date')) {
+            const timestamp = parseInt(dateString.match(/\d+/)[0]);
+            date = new Date(timestamp);
+        } else if (dateString) {
+            date = new Date(dateString);
+        } else {
+            return;
+        }
+
+        if (date && !isNaN(date)) {
+            const month = date.getMonth() + 1;
+
+            // Xử lý doanh thu (Giữ nguyên logic loại bỏ ký tự)
+            let revenueString = String(item.DoanhThu).replace(/,/g, '');
+            const revenue = parseFloat(revenueString);
+
+            if (!isNaN(revenue)) {
+                monthlyRevenue[month] += revenue;
+            }
+        }
+    });
+
+    // 3. Chuẩn bị dữ liệu cho Chart.js
+    const labels = [
+        'T1', 'T2', 'T3', 'T4', 'T5', 'T6',
+        'T7', 'T8', 'T9', 'T10', 'T11', 'T12'
+    ];
+
+    // Lấy doanh thu từ object đã tổng hợp
+    const dataPoints = labels.map((_, index) => monthlyRevenue[index + 1] / 1000000); // Chia 1M để hiển thị dễ nhìn (VD: 300M)
+
+    // 4. Cấu hình và Vẽ biểu đồ
+    const ctx = document.getElementById('revenueChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh thu (Triệu VND)',
+                    data: dataPoints,
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 20,
+                        title: {
+                            display: true,
+                            text: 'Doanh thu (Triệu VND)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    function exportToExcel() {
+        // Lấy các tham số lọc hiện tại
+        const startDate = document.querySelector('input[name="startDate"]').value;
+        const endDate = document.querySelector('input[name="endDate"]').value;
+        const searchQuery = document.querySelector('input[name="searchQuery"]').value;
+
+        // Xây dựng URL và chuyển hướng đến Action ExportExcel
+        const url = '@Url.Action("ExportExcel", "Admin")' +
+                    '?startDate=' + startDate +
+                    '&endDate=' + endDate +
+                    '&searchQuery=' + searchQuery;
+
+        window.location.href = url;
+    }
+
+    function exportToPdf() {
+        // Tương tự, gọi Action ExportPDF
+        const startDate = document.querySelector('input[name="startDate"]').value;
+        const endDate = document.querySelector('input[name="endDate"]').value;
+        const searchQuery = document.querySelector('input[name="searchQuery"]').value;
+
+        const url = '@Url.Action("ExportPDF", "Admin")' +
+            '?startDate=' + startDate +
+            '&endDate=' + endDate +
+            '&searchQuery=' + searchQuery;
+
+        window.location.href = url;
+    }
+
+</script>
