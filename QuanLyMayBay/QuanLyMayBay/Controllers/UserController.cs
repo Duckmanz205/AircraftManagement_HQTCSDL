@@ -1236,6 +1236,10 @@ namespace QuanLyMayBay.Controllers
                 var thoiGianBay = timeSpan.Hours > 0
                     ? $"{timeSpan.Hours}h {timeSpan.Minutes:D2}m"
                     : $"{timeSpan.Minutes}m";
+                var trangThai = db.Database.SqlQuery<string>(
+                    "sp_KiemTraTrangThaiChuyenBay @MACB",
+                    new SqlParameter("@MACB", ve.MACB)
+                    ).FirstOrDefault();
 
                 // Kiểm tra có thể check-in (từ 24h trước đến 1h trước giờ bay)
                 //var now = DateTime.Now;
