@@ -1,0 +1,378 @@
+﻿@model QuanLyMayBay.Models.Admin.QLPersonViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+            <i class="fas fa-users-cog text-blue-600 mr-3"></i>
+            Quản Lý Nhân Viên & Khách Hàng
+        </h1>
+        <p class="text-gray-600">Quản lý thông tin nhân viên và khách hàng của hệ thống</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="mb-6">
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8">
+                <button id="tab-nhanvien" class="tab-button active py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600 whitespace-nowrap flex items-center">
+                    <i class="fas fa-user-tie mr-2"></i>
+                    Nhân Viên
+                </button>
+                <button id="tab-khachhang" class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap flex items-center">
+                    <i class="fas fa-users mr-2"></i>
+                    Khách Hàng
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="content-nhanvien" class="tab-content">
+        <!-- Nhân Viên Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <!-- Header with Add Button -->
+            <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <h2 class="text-xl font-semibold text-gray-800 flex items-center mb-4 sm:mb-0">
+                    <i class="fas fa-user-tie text-blue-600 mr-2"></i>
+                    Danh Sách Nhân Viên
+                </h2>
+                @using (Html.BeginForm("TimTheoMANV", "Admin", FormMethod.Get))
+                {
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <div class="relative flex-1 sm:flex-none">
+                            <input type="text" name="manv" placeholder="Tìm kiếm nhân viên..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-80">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <button type="submit" class="hidden">Tìm kiếm</button>
+                        </div>
+                    </div>
+                }
+                <button id="btn-add-employee" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+                    <i class="fas fa-plus mr-2"></i>
+                    Thêm Nhân Viên
+                </button>
+            </div>
+
+            <!-- Employee Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã NV</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Họ Tên</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SĐT</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chức Vụ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach (var item in Model.ListNhanVien)
+                        {
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.MANV</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.TENNV</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.SDT</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.MACV</td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="/Admin/SuaNhanVien?manv=@item.MANV" class="text-blue-600 hover:text-blue-900 mr-3">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a href="/Admin/XoaNhanVien?manv=@item.MANV"
+                                       onclick="return confirm('Bạn có chắc muốn xóa nhân viên @item.MANV không?')"
+                                       class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="content-khachhang" class="tab-content hidden">
+        <!-- Khách Hàng Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                    <i class="fas fa-users text-green-600 mr-2"></i>
+                    Danh Sách Khách Hàng
+                </h2>
+            </div>
+
+            <!-- Customer Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã KH</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Họ Tên</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quốc Gia</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số Vé Đã Đặt</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach (var item in Model.ListKhachHang)
+                        {
+                            <tr class="hover:bg-gray-50 cursor-pointer">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@item.MAKH</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.TENKH</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.EMAIL</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <span class="flex items-center">
+                                        @item.QUOCGIA
+
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">@item.SoVeDaDat vé</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="window.location.href='@Url.Action("QLPerson", "Admin", new { selectedMakh = item.MAKH })'"
+                                            class="text-blue-600 hover:text-blue-900 flex items-center">
+                                        <i class="fas fa-history mr-1"></i>
+                                        Lịch sử vé
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @{
+        var showHistory = Model.SelectedHistory != null ? "" : "hidden";
+        var history = Model.SelectedHistory;
+    }
+
+    <div id="historyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex items-center justify-center @showHistory">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[80vh] flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-800">
+                    Lịch Sử Đặt Vé: <span class="text-blue-600">@(history?.TenKhachHang)</span>
+                </h3>
+                <a href="@Url.Action("QLPerson", "Admin")" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </a>
+            </div>
+
+            <div class="p-6 overflow-y-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mã Vé</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ngày Đặt</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Chuyến Bay</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hành Trình</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ngày Bay</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Giá Vé</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @if (history != null && history.DanhSachVe.Any())
+                        {
+                            foreach (var ve in history.DanhSachVe)
+                            {
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium text-blue-600">@ve.MaVe</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">@ve.NgayDat</td>
+                                    <td class="px-4 py-3 text-sm text-gray-900">@ve.MaCB</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">@ve.HanhTrinh</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">@ve.NgayBay</td>
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-900">@string.Format("{0:N0}đ", ve.GiaTien)</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                        @(ve.TrangThai.Contains("thanh toán") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
+                                            @ve.TrangThai
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                                    Khách hàng này chưa có lịch sử đặt vé nào.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="px-6 py-4 border-t bg-gray-50 rounded-b-lg flex justify-end">
+                <a href="@Url.Action("QLPerson", "Admin")" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Đóng</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div id="employee-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                <i class="fas fa-user-plus text-blue-600 mr-2"></i>
+                Thêm Nhân Viên Mới
+            </h3>
+        </div>
+        <form action="/Admin/ThemNhanVien" method="post" class="px-6 py-4">
+            <div class="space-y-4">
+                <div>
+                    <label>Mã Nhân Viên</label>
+                    <input name="MANV" type="text" class="w-full px-3 py-2 border" placeholder="NV004">
+                </div>
+
+                <div>
+                    <label>Họ và Tên</label>
+                    <input name="TENNV" type="text" class="w-full px-3 py-2 border" placeholder="Nhập họ và tên">
+                </div>
+
+                <div>
+                    <label>Số Điện Thoại</label>
+                    <input name="SDT" type="text" class="w-full px-3 py-2 border" placeholder="0901234567">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Chức Vụ</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Chọn chức vụ</option>
+                        <option value="nhanvien">Nhân viên</option>
+                        <option value="truongphong">Trưởng phòng</option>
+                        <option value="quanly">Quản lý</option>
+                        <option value="giamdoc">Giám đốc</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button type="button" id="cancel-btn" class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors">
+                    Hủy
+                </button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
+                    Thêm Nhân Viên
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // 1. TỰ ĐỘNG CHUYỂN TAB VÀ MỞ MODAL LỊCH SỬ KHI RELOAD
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Nếu URL có tham số ?selectedMakh -> Tự động chuyển sang tab Khách Hàng
+        if (urlParams.has('selectedMakh')) {
+            const tabKhachHang = document.getElementById('tab-khachhang');
+            if (tabKhachHang) tabKhachHang.click();
+
+            // Hiện Modal Lịch Sử (Server-side rendered)
+            const historyModal = document.getElementById('historyModal');
+            if (historyModal && !historyModal.classList.contains('hidden')) {
+                historyModal.classList.add('flex'); // Thêm flex để căn giữa
+            }
+        }
+    });
+
+    // ==========================================
+    // 2. XỬ LÝ CHUYỂN TAB (NHÂN VIÊN / KHÁCH HÀNG)
+    // ==========================================
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.id.replace('tab-', 'content-');
+
+            // Reset trạng thái tất cả các tab
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active', 'border-blue-500', 'text-blue-600');
+                btn.classList.add('border-transparent', 'text-gray-500');
+            });
+
+            // Active tab được chọn
+            button.classList.add('active', 'border-blue-500', 'text-blue-600');
+            button.classList.remove('border-transparent', 'text-gray-500');
+
+            // Ẩn tất cả nội dung, hiện nội dung được chọn
+            tabContents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        });
+    });
+
+    // ==========================================
+    // 3. XỬ LÝ MODAL THÊM NHÂN VIÊN (CLIENT-SIDE)
+    // ==========================================
+    const employeeModal = document.getElementById('employee-modal');
+    const addBtn = document.getElementById('btn-add-employee');
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    // Mở Modal Thêm NV
+    if(addBtn) {
+        addBtn.addEventListener('click', () => {
+            employeeModal.classList.remove('hidden');
+            employeeModal.classList.add('flex');
+        });
+    }
+
+    // Đóng Modal Thêm NV (Nút Hủy)
+    if(cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            closeEmployeeModal();
+        });
+    }
+
+    function closeEmployeeModal() {
+        employeeModal.classList.add('hidden');
+        employeeModal.classList.remove('flex');
+    }
+
+    // ==========================================
+    // 4. XỬ LÝ MODAL LỊCH SỬ (SERVER-SIDE)
+    // ==========================================
+    // Hàm đóng lịch sử: Phải reload trang để xóa tham số URL
+    function closeHistoryModal() {
+        // 1. Ẩn Modal ngay lập tức bằng CSS
+        const historyModal = document.getElementById('historyModal');
+        if (historyModal) {
+            historyModal.classList.add('hidden');
+            historyModal.classList.remove('flex');
+        }
+
+        // 2. Xóa tham số ?selectedMakh khỏi URL để nếu user F5 thì không hiện lại modal
+        // Dùng history.pushState để thay đổi URL mà KHÔNG reload trang
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    // ==========================================
+    // 5. SỰ KIỆN CLICK RA NGOÀI ĐỂ ĐÓNG MODAL
+    // ==========================================
+    window.addEventListener('click', (e) => {
+        // Đóng Modal Nhân viên
+        if (e.target === employeeModal) {
+            closeEmployeeModal();
+        }
+
+        // Đóng Modal Lịch sử
+        const historyModal = document.getElementById('historyModal');
+        if (historyModal && e.target === historyModal) {
+            closeHistoryModal();
+        }
+    });
+</script>

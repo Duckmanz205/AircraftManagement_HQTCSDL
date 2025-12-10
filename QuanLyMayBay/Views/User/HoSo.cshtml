@@ -1,0 +1,366 @@
+﻿
+@{
+    ViewBag.Title = "HoSo";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    ViewBag.QuocGiaList = new string[] { "Việt Nam", "Mỹ", "Nhật Bản", "Hàn Quốc", "Thái Lan", "Singapore", "Malaysia", "Trung Quốc" };
+    var Image = Session["Image"];
+}
+@model KHACHHANG
+<!-- Profile Header Section -->
+<div class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+            <!-- Avatar Section -->
+            <div class="relative">
+                <img id="avatarPreview"
+                     class="h-32 w-32 rounded-full object-cover border-4 border-white shadow-2xl"
+                     src="@(Image==null?
+                           "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+                           :Url.Content("~/Content/Images/User/"+Image))"
+                     alt="Profile Avatar">
+                <button type="button" id="changeAvatarBtn"
+                        class="absolute bottom-0 right-0 bg-white text-blue-900 p-3 rounded-full shadow-lg hover:bg-blue-50 transition-all duration-200">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+
+            <!-- Header Text -->
+            <div class="text-center md:text-left flex-1">
+                <h1 class="text-4xl font-bold mb-2">Hồ sơ cá nhân của bạn</h1>
+                <p class="text-blue-100 text-lg">Cập nhật thông tin để thuận tiện khi đặt vé và check-in online.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 md:p-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">
+                <i class="fas fa-user-edit text-blue-900 mr-2"></i>Thông tin cá nhân
+            </h2>
+            <button onclick="openPasswordModal()" class="bg-blue-100 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors duration-200 font-medium">
+                <i class="fas fa-lock mr-2"></i>Đổi mật khẩu
+            </button>
+        </div>
+
+        <form id="profileForm" class="space-y-6" method="post" action="@Url.Action("CapNhatHoSo","User")" enctype="multipart/form-data">
+            <input type="file" id="avatarInput" name="Image" accept="image/*" class="hidden" />
+            <!-- Row 1: Full Name & Email -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-user text-blue-900 mr-2"></i>Họ và tên *
+                    </label>
+                    <input type="text" id="fullName" name="fullName" value="@Model.TENKH"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    <div id="fullNameError" class="text-red-500 text-xs mt-1 hidden">Vui lòng nhập họ và tên</div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-envelope text-blue-900 mr-2"></i>Email
+                    </label>
+                    <input type="email" value="@Model.EMAIL" readonly
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed">
+                    <p class="text-xs text-gray-500 mt-1">Email không thể thay đổi</p>
+                </div>
+            </div>
+
+            <!-- Row 2: Phone & Birth Date -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-phone text-blue-900 mr-2"></i>Số điện thoại *
+                    </label>
+                    <input type="tel" id="phone" name="phone" value="@Model.SDT"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    <div id="phoneError" class="text-red-500 text-xs mt-1 hidden">Số điện thoại không hợp lệ</div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-calendar text-blue-900 mr-2"></i>Ngày sinh
+                    </label>
+                    <input type="date" id="birthDate" name="birthDate" value="@((Model.NGSINH.HasValue) ? Model.NGSINH.Value.ToString("yyyy-MM-dd") : "")"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                </div>
+            </div>
+
+            <!-- Row 3: Gender & Country -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-venus-mars text-blue-900 mr-2"></i>Giới tính
+                    </label>
+                    <div class="flex space-x-6">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="gender" value="Nam" @(Model.GTINH == "Nam" ? "checked" : "") class="w-4 h-4 text-blue-900 focus:ring-blue-500">
+                            <span class="ml-2 text-gray-700">Nam</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="gender" value="Nữ" @(Model.GTINH == "Nữ" ? "checked" : "") class="w-4 h-4 text-blue-900 focus:ring-blue-500">
+                            <span class="ml-2 text-gray-700">Nữ</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="gender" value="Khác" @(Model.GTINH == "Khác" ? "checked" : "") class="w-4 h-4 text-blue-900 focus:ring-blue-500">
+                            <span class="ml-2 text-gray-700">Khác</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-globe text-blue-900 mr-2"></i>Quốc gia
+                    </label>
+                    <select id="country" name="country" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                        <option value="" selected>--Vui lòng chọn quốc gia--</option>
+                        @foreach (var item in ViewBag.QuocGiaList)
+                        {
+                            <option value="@item" @(Model.QUOCGIA == item ? "selected" : "")>@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 4: Address -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-map-marker-alt text-blue-900 mr-2"></i>Địa chỉ
+                </label>
+                <textarea id="address" rows="3" name="address"
+                          class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">@Model.DIACHI</textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button type="submit" class="flex-1 bg-blue-900 text-white py-4 px-6 rounded-xl hover:bg-blue-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <i class="fas fa-save mr-2"></i>Lưu thay đổi
+                </button>
+                <button type="button" onclick="cancelChanges()" class="flex-1 bg-gray-200 text-gray-700 py-4 px-6 rounded-xl hover:bg-gray-300 transition-all duration-200 font-semibold">
+                    <i class="fas fa-times mr-2"></i>Hủy
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Password Change Modal -->
+<div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 transform transition-all">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">
+                <i class="fas fa-lock text-blue-900 mr-2"></i>Đổi mật khẩu
+            </h3>
+            <button type="button" onclick="closePasswordModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Form đổi mật khẩu -->
+        <form id="passwordForm" class="space-y-5" method="post" action="@Url.Action("ChangePassword", "User")">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu hiện tại *</label>
+                <input type="password" id="currentPassword" name="currentPassword"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                <div id="currentPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu mới *</label>
+                <input type="password" id="newPassword" name="newPassword"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                <div id="newPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Xác nhận mật khẩu mới *</label>
+                <input type="password" id="confirmPassword" name="confirmPassword"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                <div id="confirmPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+
+            <!-- Lỗi/Thông báo từ server -->
+            @if (ViewBag.PasswordError != null)
+            {
+                <p class="text-red-600 text-sm mt-2">@ViewBag.PasswordError</p>
+            }
+            @if (ViewBag.PasswordSuccess != null)
+            {
+                <p class="text-green-600 text-sm mt-2">@ViewBag.PasswordSuccess</p>
+            }
+
+            <div class="flex gap-4 pt-4">
+                <button type="submit"
+                        class="flex-1 bg-blue-900 text-white py-3 px-4 rounded-xl hover:bg-blue-800 transition-all duration-200 font-semibold shadow-lg">
+                    <i class="fas fa-check mr-2"></i>Xác nhận
+                </button>
+                <button type="button" onclick="closePasswordModal()"
+                        class="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-300 transition-all duration-200 font-semibold">
+                    Hủy
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div id="successMessage" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+        <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+        <p id="successText" class="text-gray-800 font-semibold text-center"></p>
+    </div>
+</div>
+
+<!-- Success Notification -->
+<div id="successMessage" class="fixed top-6 right-6 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl hidden items-center z-50 transform transition-all">
+    <i class="fas fa-check-circle text-2xl mr-3"></i>
+    <span id="successText" class="font-semibold">Cập nhật thông tin thành công ✅</span>
+</div>
+
+<script>
+    // Form validation and submission
+    document.getElementById('profileForm').addEventListener('submit', function (e) {
+        let isValid = true;
+
+        // Validate full name
+        const fullName = document.getElementById('fullName').value.trim();
+        if (!fullName) {
+            showError('fullNameError', 'Vui lòng nhập họ và tên');
+            isValid = false;
+        } else {
+            hideError('fullNameError');
+        }
+
+        // Validate phone
+        const phone = document.getElementById('phone').value.trim();
+        const phoneRegex = /^(0|\+84)[0-9]{9,10}$/;
+        if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+            showError('phoneError', 'Số điện thoại không hợp lệ');
+            isValid = false;
+        } else {
+            hideError('phoneError');
+        }
+
+        if (isValid) {
+            showSuccessMessage('Cập nhật thông tin thành công ✅');
+        }
+    });
+
+    // Password form
+    // Hiển thị lỗi
+function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+function hideError(id) {
+    document.getElementById(id).classList.add('hidden');
+}
+
+// Success message
+    function showSuccessMessage(message) {
+        const successMessage = document.getElementById('successMessage');
+        const successText = document.getElementById('successText');
+        successText.textContent = message;
+        successMessage.classList.remove('hidden');
+        successMessage.classList.add('flex');
+
+        setTimeout(() => {
+            successMessage.classList.add('hidden');
+            successMessage.classList.remove('flex');
+        }, 3000);
+    }
+
+// Modal
+function openPasswordModal() {
+    const modal = document.getElementById('passwordModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+function closePasswordModal() {
+    const modal = document.getElementById('passwordModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.getElementById('passwordForm').reset();
+    hideError('currentPasswordError');
+    hideError('newPasswordError');
+    hideError('confirmPasswordError');
+}
+
+// Mở modal nếu server báo lỗi
+document.addEventListener("DOMContentLoaded", function() {
+    @* Razor mở modal khi có lỗi *@
+    @if (ViewBag.ShowPasswordModal != null && (bool)ViewBag.ShowPasswordModal)
+    {
+        <text>openPasswordModal();</text>
+    }
+
+    @if (ViewBag.PasswordSuccess != null)
+    {
+        <text>showSuccessMessage("Đổi mật khẩu thành công");</text>
+    }
+});
+
+// Password form validation
+document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    let isValid = true;
+    const current = document.getElementById('currentPassword').value.trim();
+    const newP = document.getElementById('newPassword').value.trim();
+    const confirm = document.getElementById('confirmPassword').value.trim();
+
+    hideError('currentPasswordError');
+    hideError('newPasswordError');
+    hideError('confirmPasswordError');
+
+    if (!current) { showError('currentPasswordError', 'Vui lòng nhập mật khẩu hiện tại'); isValid=false; }
+    if (newP.length<6){ showError('newPasswordError','Mật khẩu phải ít nhất 6 ký tự'); isValid=false; }
+    if (newP !== confirm){ showError('confirmPasswordError','Mật khẩu xác nhận không khớp'); isValid=false; }
+
+    if (!isValid) e.preventDefault();
+});
+
+    // Hoàn tác lại thông tin đăng nhập trước đó
+    function cancelChanges() {
+        document.getElementById('fullName').value = 'Nguyễn Văn An';
+        document.getElementById('phone').value = '0123456789';
+        document.getElementById('birthDate').value = '1990-01-15';
+        document.querySelector('input[name="gender"][value="male"]').checked = true;
+        document.getElementById('country').value = 'VN';
+        document.getElementById('address').value = '123 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh';
+
+        hideError('fullNameError');
+        hideError('phoneError');
+
+        showSuccessMessage('Đã hủy các thay đổi');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('passwordModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closePasswordModal();
+        }
+    });
+
+    // Khi click nút camera -> mở input file
+    document.getElementById('changeAvatarBtn').addEventListener('click', function () {
+        document.getElementById('avatarInput').click();
+    });
+
+    // Khi người dùng chọn ảnh -> hiển thị preview
+    document.getElementById('avatarInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('avatarPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+</script>
+
+

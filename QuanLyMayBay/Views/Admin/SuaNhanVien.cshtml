@@ -1,0 +1,41 @@
+﻿@model NHANVIEN
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="max-w-xl mx-auto bg-white border shadow rounded-lg p-6 mt-6">
+    <h2 class="text-xl font-bold mb-4">Sửa Thông Tin Nhân Viên</h2>
+
+    <form method="post">
+        <div class="mb-4">
+            <label>Mã Nhân Viên</label>
+            <input type="text" name="MANV" class="w-full border px-3 py-2" value="@Model.MANV" readonly>
+        </div>
+
+        <div class="mb-4">
+            <label>Họ và Tên</label>
+            <input type="text" name="TENNV" class="w-full border px-3 py-2" value="@Model.TENNV">
+        </div>
+
+        <div class="mb-4">
+            <label>Số Điện Thoại</label>
+            <input type="text" name="SDT" class="w-full border px-3 py-2" value="@Model.SDT">
+        </div>
+
+        <div class="mb-4">
+            <label>Chức Vụ</label>
+            <select name="MACV" class="w-full border px-3 py-2">
+                @foreach (var cv in (List<CHUCVU>)ViewBag.ChucVu)
+                {
+                    <option value="@cv.MACV" @(cv.MACV == Model.MACV ? "selected" : "")>
+                        @cv.TENCV
+                    </option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded mr-3">Lưu</button>
+
+        <a href="/Admin/QLPerson" class="bg-gray-400 text-white px-4 py-2 rounded">Huỷ</a>
+    </form>
+</div>

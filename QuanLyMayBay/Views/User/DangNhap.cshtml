@@ -1,0 +1,303 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var ErrorEmail = Session["ErrorEmail"];
+    var Email = Session["Email"];
+    var ErrorPassword = Session["ErrorPassword"];
+
+}
+
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-md">
+        <!-- Logo và Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
+                <i class="fas fa-plane text-white text-2xl"></i>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Chào Mừng Trở Lại</h1>
+            <p class="text-gray-600">Đăng nhập vào hệ thống quản lý máy bay</p>
+        </div>
+
+        <!-- Login Type Selection -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-4">
+            <div class="flex bg-gray-100 rounded-lg p-1 mb-6">
+                <button type="button"
+                        id="userLoginTab"
+                        onclick="switchLoginType('user')"
+                        class="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 bg-white text-gray-800 shadow-sm">
+                    <i class="fas fa-user mr-2"></i>
+                    Người dùng
+                </button>
+                <button type="button"
+                        id="adminLoginTab"
+                        onclick="switchLoginType('admin')"
+                        class="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-user-shield mr-2"></i>
+                    Quản trị viên
+                </button>
+            </div>
+
+            <!-- User Login Form -->
+            <form id="userLoginForm" class="space-y-6" action="@Url.Action("DangNhapThanhCong","User")" method="post">
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email đăng nhập
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               required
+                               class="w-full pl-10 pr-4 py-3 border @(ErrorEmail==null? "border-gray-300":"border-red-900") rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
+                               placeholder="Nhập email của bạn" value="@Email">
+                    </div>
+                    <div class="text-red-600 text-sm mt-3">@ErrorEmail</div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mật khẩu
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               required
+                               class="w-full pl-10 pr-4 py-3 border @(ErrorPassword==null? "border-gray-300":"border-red-900") rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
+                               placeholder="Nhập mật khẩu">
+                        <button type="button"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onclick="togglePassword('password')">
+                            <i id="toggleIcon" class="fas fa-eye-slash text-gray-400 hover:text-gray-600 transition-colors duration-200"></i>
+                        </button>
+                    </div>
+                    <div class="text-red-600 text-sm mt-3">@ErrorPassword</div>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me"
+                               name="remember-me"
+                               type="checkbox"
+                               class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Ghi nhớ tôi
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-gray-600 hover:text-gray-500 transition-colors duration-200">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <div>
+                    <button type="submit"
+                            class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Đăng nhập
+                    </button>
+                </div>
+            </form>
+
+            <!-- Admin Login Form -->
+            <form id="adminLoginForm" class="space-y-6 hidden" action="@Url.Action("DangNhapThanhCong","Admin")" method="post">
+                <!-- Admin ID Field -->
+                <div>
+                    <label for="adminId" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mã quản trị viên
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-id-badge text-gray-400"></i>
+                        </div>
+                        <input type="text"
+                               id="adminId"
+                               name="adminId"
+                               required
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
+                               placeholder="Nhập mã quản trị viên">
+                    </div>
+                </div>
+
+                <!-- Admin Password Field -->
+                <div>
+                    <label for="adminPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mật khẩu quản trị
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-shield-alt text-gray-400"></i>
+                        </div>
+                        <input type="password"
+                               id="adminPassword"
+                               name="adminPassword"
+                               required
+                               class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
+                               placeholder="Nhập mật khẩu quản trị">
+                        <button type="button"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onclick="togglePassword('adminPassword')">
+                            <i id="adminToggleIcon" class="fas fa-eye-slash text-gray-400 hover:text-gray-600 transition-colors duration-200"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Login Button -->
+                <div>
+                    <button type="submit"
+                            class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition-all duration-200">
+                        <i class="fas fa-user-shield mr-2"></i>
+                        Đăng nhập quản trị
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="mt-6" id="userDivider">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">hoặc</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Link -->
+            <div class="mt-6 text-center" id="userRegister">
+                <p class="text-sm text-gray-600">
+                    Chưa có tài khoản?
+                    <a href="@Url.Action("DangKy","User")" class="font-medium text-gray-600 hover:text-gray-500 transition-colors duration-200 ml-1">
+                        Đăng ký ngay
+                    </a>
+                </p>
+            </div>
+
+            <!-- Admin Help -->
+            <div class="mt-6 text-center hidden" id="adminHelp">
+                <p class="text-sm text-gray-600">
+                    Cần hỗ trợ đăng nhập quản trị?
+                    <a href="#" class="font-medium text-gray-600 hover:text-gray-500 transition-colors duration-200 ml-1">
+                        Liên hệ IT Support
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="mt-8 text-center">
+            <p class="text-xs text-gray-500" id="footerText">
+                Sau khi đăng nhập, bạn có thể tra cứu chuyến bay, đặt vé và quản lý thông tin cá nhân
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentLoginType = 'user';
+
+    function switchLoginType(type) {
+        const userTab = document.getElementById('userLoginTab');
+        const adminTab = document.getElementById('adminLoginTab');
+        const userForm = document.getElementById('userLoginForm');
+        const adminForm = document.getElementById('adminLoginForm');
+        const userDivider = document.getElementById('userDivider');
+        const userRegister = document.getElementById('userRegister');
+        const adminHelp = document.getElementById('adminHelp');
+        const footerText = document.getElementById('footerText');
+
+        currentLoginType = type;
+
+        if (type === 'user') {
+            // Switch to user login
+            userTab.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+            userTab.classList.remove('text-gray-600', 'hover:text-gray-800');
+            adminTab.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+            adminTab.classList.add('text-gray-600', 'hover:text-gray-800');
+
+            userForm.classList.remove('hidden');
+            adminForm.classList.add('hidden');
+            userDivider.classList.remove('hidden');
+            userRegister.classList.remove('hidden');
+            adminHelp.classList.add('hidden');
+
+            footerText.textContent = 'Sau khi đăng nhập, bạn có thể tra cứu chuyến bay, đặt vé và quản lý thông tin cá nhân';
+        } else {
+            // Switch to admin login
+            adminTab.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+            adminTab.classList.remove('text-gray-600', 'hover:text-gray-800');
+            userTab.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+            userTab.classList.add('text-gray-600', 'hover:text-gray-800');
+
+            adminForm.classList.remove('hidden');
+            userForm.classList.add('hidden');
+            userDivider.classList.add('hidden');
+            userRegister.classList.add('hidden');
+            adminHelp.classList.remove('hidden');
+
+            footerText.textContent = 'Truy cập quản trị hệ thống với quyền hạn cao nhất. Vui lòng bảo mật thông tin đăng nhập.';
+        }
+    }
+
+    function togglePassword(fieldId) {
+        const passwordInput = document.getElementById(fieldId);
+        const toggleIcon = fieldId === 'password' ? document.getElementById('toggleIcon') : document.getElementById('adminToggleIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        }
+    }
+
+    // Form submission handlers
+    document.getElementById('userLoginForm').addEventListener('submit', function (e) {
+        handleFormSubmission(e, 'Đăng nhập', 'Đang đăng nhập...',"Đăng nhập thành công");
+    });
+
+    document.getElementById('adminLoginForm').addEventListener('submit', function (e) {
+        handleFormSubmission(e, 'Đăng nhập quản trị', 'Đang xác thực...');
+    });
+
+    function handleFormSubmission(e, originalText, loadingText, successText) {
+
+        const button = e.target.querySelector('button[type="submit"]');
+        const originalHTML = button.innerHTML;
+
+        button.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>${loadingText}`;
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.innerHTML = `<i class="fas fa-check mr-2"></i>${successText}`;
+            button.classList.remove('bg-gray-600', 'hover:bg-gray-700', 'bg-gray-800', 'hover:bg-gray-900');
+            button.classList.add('bg-gray-700');
+
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+                button.classList.remove('bg-gray-700');
+                if (currentLoginType === 'user') {
+                    button.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                } else {
+                    button.classList.add('bg-gray-800', 'hover:bg-gray-900');
+                }
+            }, 1500);
+        }, 2000);
+    }
+
+</script>
