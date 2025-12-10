@@ -20,7 +20,9 @@ namespace QuanLyMayBay.Models
         public DateTime GioCatCanh { get; set; }
         public DateTime GioHaCanh { get; set; }
         public string ThoiGianBay { get; set; }
-        
+        public string TrangThaiChuyenBay { get; set; }
+
+
         // Thông tin hành khách
         public string TenHanhKhach { get; set; }
         public string GioiTinh { get; set; }
@@ -42,6 +44,7 @@ namespace QuanLyMayBay.Models
         // Hành lý
         public int? HangLyXachTay { get; set; }
         public int? HangLyKyGui { get; set; }
+
     }
 }
 
