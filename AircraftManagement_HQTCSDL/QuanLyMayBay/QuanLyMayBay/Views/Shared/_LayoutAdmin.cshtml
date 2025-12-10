@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar với Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 px-4 py-3 lg:px-6 fixed top-0 left-0 right-0 z-50">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Menu Button -->
+                <button id="mobileToggle" class="lg:hidden p-2 text-gray-600 hover:text-blue-900 hover:bg-gray-100 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-blue-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                    </div>
+                    <span class="text-lg font-bold text-blue-900 hidden sm:block">AirAdmin</span>
+                </div>
+                <div class="relative hidden md:block">
+                    <input type="text" placeholder="Tìm kiếm..." class="w-64 lg:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600 text-sm"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700 hidden sm:block">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-white shadow-lg h-screen w-64 fixed left-0 top-16 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto">
+            <!-- Navigation Menu -->
+            <nav class="mt-6 px-4">
+                <ul class="space-y-2">
+                    <!-- Dashboard -->
+                    <li>
+                        <a href="@Url.Action("TrangChu","Admin")" onclick="setActiveMenu(this)" class="sidebar-item active flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
+                            <span class="font-medium">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <!-- Quản lý chuyến bay -->
+                    <li>
+                        <a href="@Url.Action("QLChuyenBay","Admin")" onclick="setActiveMenu(this)" class="sidebar-item flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fas fa-plane-departure w-5 h-5 mr-3"></i>
+                            <span class="font-medium">Quản lý chuyến bay</span>
+                        </a>
+                    </li>
+
+                    <!-- Quản lý vé -->
+                    <li>
+                        <a href="@Url.Action("QLVe","Admin")" onclick="setActiveMenu(this)" class="sidebar-item flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fas fa-ticket-alt w-5 h-5 mr-3"></i>
+                            <span class="font-medium">Quản lý vé</span>
+                        </a>
+                    </li>
+
+                    <!-- Quản lý khách hàng & nhân viên -->
+                    <li>
+                        <div class="sidebar-item">
+                            <button onclick="window.location.href='@Url.Action("QLPerson","Admin")'" class="flex items-center justify-between w-full px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                                <div class="flex items-center">
+                                    <i class="fas fa-users w-5 h-5 mr-3"></i>
+                                    <span class="font-medium">Quản lý người dùng</span>
+                                </div>
+                            </button>
+                            <ul id="people-submenu" class="hidden mt-2 ml-8 space-y-1">
+                                <li>
+                                    <a href="#customers" onclick="setActiveMenu(this)" class="sidebar-subitem flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                                        <i class="fas fa-user-friends w-4 h-4 mr-3"></i>
+                                        <span>Khách hàng</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#employees" onclick="setActiveMenu(this)" class="sidebar-subitem flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                                        <i class="fas fa-user-tie w-4 h-4 mr-3"></i>
+                                        <span>Nhân viên</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Quản lý doanh thu -->
+                    <li>
+                        <a href="@Url.Action("ThongKe","Admin")" onclick="setActiveMenu(this)" class="sidebar-item flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
+                            <span class="font-medium">Thống kê doanh thu</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Divider -->
+                <div class="border-t border-gray-200 my-6"></div>
+
+                <!-- Additional Menu Items -->
+                <ul class="space-y-2">
+                    <li>
+                        <a href="@Url.Action("CaiDat","Admin")" onclick="setActiveMenu(this)" class="sidebar-item flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fas fa-cog w-5 h-5 mr-3"></i>
+                            <span class="font-medium">Cài đặt</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DangXuat", "Admin")" onclick="setActiveMenu(this)" class="sidebar-item flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                            <i class="fas fa-file-alt w-5 h-5 mr-3"></i>
+                            <span class="font-medium">Đăng Xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 bg-gray-300 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900">@Session["AdminName"]</p>
+                        <p class="text-xs text-gray-500">admin@airline.com</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Main Content Area -->
+        <div class="flex-1 lg:ml-64">
+            <div class="p-6 lg:p-8">
+                <!-- Sample Content -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        mobileToggle.addEventListener('click', openSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // Set active menu item
+        function setActiveMenu(element) {
+            // Remove active class from all items
+            document.querySelectorAll('.sidebar-item, .sidebar-subitem').forEach(item => {
+                item.classList.remove('active', 'bg-blue-50', 'text-blue-600');
+            });
+
+            // Add active class to clicked item
+            element.classList.add('active', 'bg-blue-50', 'text-blue-600');
+
+            // Update page title based on menu
+            const pageTitle = document.getElementById('pageTitle');
+            const pageDescription = document.getElementById('pageDescription');
+            const menuText = element.querySelector('span').textContent;
+
+            const menuTitles = {
+                'Dashboard': {
+                    title: 'Dashboard',
+                    description: 'Tổng quan hệ thống quản lý hàng không'
+                },
+                'Quản lý chuyến bay': {
+                    title: 'Quản lý chuyến bay',
+                    description: 'Quản lý lịch trình và thông tin chuyến bay'
+                },
+                'Quản lý vé': {
+                    title: 'Quản lý vé',
+                    description: 'Quản lý đặt vé và thông tin hành khách'
+                },
+                'Khách hàng': {
+                    title: 'Quản lý khách hàng',
+                    description: 'Quản lý thông tin và lịch sử khách hàng'
+                },
+                'Nhân viên': {
+                    title: 'Quản lý nhân viên',
+                    description: 'Quản lý thông tin và phân quyền nhân viên'
+                },
+                'Thống kê doanh thu': {
+                    title: 'Thống kê doanh thu',
+                    description: 'Báo cáo và phân tích doanh thu'
+                },
+                'Cài đặt': {
+                    title: 'Cài đặt hệ thống',
+                    description: 'Cấu hình và tùy chỉnh hệ thống'
+                },
+                'Báo cáo': {
+                    title: 'Báo cáo',
+                    description: 'Tạo và xem các báo cáo chi tiết'
+                }
+            };
+
+            if (menuTitles[menuText]) {
+                pageTitle.textContent = menuTitles[menuText].title;
+                pageDescription.textContent = menuTitles[menuText].description;
+            }
+
+            // Close sidebar on mobile after selection
+            if (window.innerWidth < 1024) {
+                closeSidebar();
+            }
+        }
+
+        // Toggle submenu
+        function toggleSubmenu(submenuId) {
+            const submenu = document.getElementById(submenuId);
+            const icon = document.getElementById(submenuId + '-icon');
+
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                submenu.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // Initialize sidebar state on mobile
+        function initializeSidebar() {
+            if (window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', initializeSidebar);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeSidebar);
+    </script>
+</body>
+</html>

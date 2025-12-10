@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="696ae63b28e44306bbb43a50fe4fe887" Name="Diagram1">
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.CAUHINH_GHE" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.CHECKIN" Width="1.5" PointX="5.25" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.CHITIETVE" Width="1.5" PointX="9.75" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.CHUCVU" Width="1.5" PointX="3" PointY="35.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.CHUYENBAY" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.GHE" Width="1.5" PointX="3" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.GIOHANG" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.GIOHANG_CHITIET" Width="1.5" PointX="8.25" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.GIOHANG_HANHKHACH" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.HANGGHE_GIA" Width="1.5" PointX="5.25" PointY="25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.HANHLY" Width="1.5" PointX="10.75" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.KHACHHANG" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.LOG_TRUYCAP" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.LOTRINH" Width="1.5" PointX="5.25" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.MAYBAY" Width="1.5" PointX="0.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.NHANVIEN" Width="1.5" PointX="5.25" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.PHIEUDATVE" Width="1.5" PointX="7.5" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.SANBAY" Width="1.5" PointX="3" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.THONGKE_DOANHTHU" Width="1.5" PointX="5.25" PointY="31.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYMAYBAYModel.VEMAYBAY" Width="1.5" PointX="7.5" PointY="19.125" IsExpanded="true" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CG_MB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CI_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CI_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CI_VE" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CTV_PDV" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CTV_VE" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_NV_CV" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_CB_MB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_GHCT_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_GHKH_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_HGG_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_HL_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_LT_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_TK_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_VMB_CB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_GHE_MB" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_VMB_GHE" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_GH_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_GHCT_GH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_GHKH_GH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_PDV_GH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_VMB_HGG" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_HL_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_PDV_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_LT_SBDEN" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_LT_SBDI" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_PDV_NV" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYMAYBAYModel.FK_VMB_NV" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
