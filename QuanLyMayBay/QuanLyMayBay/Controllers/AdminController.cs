@@ -6,6 +6,7 @@ using QuanLyMayBay.Models.Admin;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
@@ -379,6 +380,108 @@ namespace QuanLyMayBay.Controllers
                 return View("ThongKe", new List<THONGKE_DOANHTHU>());
             }
         }
+
+        // ======================================================
+        // STATISTICS ACTIONS USING SQL OBJECTS (Lines 850-981 from QLMayBay.sql)
+        // ======================================================
+
+        /// <summary>
+        /// Display customer statistics by country
+        /// Uses SQL Function: fn_ThongKeKhachTheoQuocGia() (Lines 925-935 in QLMayBay.sql)
+        /// </summary>
+        public ActionResult ThongKeQuocGia()
+        {
+            try
+            {
+                // Call SQL function to get customer count by country
+                var result = db.Database.SqlQuery<ThongKeQuocGiaViewModel>(
+                    "SELECT * FROM fn_ThongKeKhachTheoQuocGia()"
+                ).ToList();
+
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Lỗi khi tải thống kê quốc gia: " + ex.Message;
+                return View(new List<ThongKeQuocGiaViewModel>());
+            }
+        }
+
+        /// <summary>
+        /// Display revenue statistics by flight using cursor
+        /// Uses SQL Stored Procedure: sp_ThongKeDoanhThuTheoChuyen (Wrapper for cursor lines 950-978)
+        /// </summary>
+        public ActionResult ThongKeDoanhThuTheoChuyen()
+        {
+            try
+            {
+                // Call stored procedure that uses cursor to iterate through flights
+                var result = db.Database.SqlQuery<DoanhThuChuyenBayViewModel>(
+                    "EXEC sp_ThongKeDoanhThuTheoChuyen"
+                ).ToList();
+
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Lỗi khi tải thống kê doanh thu: " + ex.Message;
+                return View(new List<DoanhThuChuyenBayViewModel>());
+            }
+        }
+
+        /// <summary>
+        /// Calculate total revenue for a specific month
+        /// Uses SQL Stored Procedure: sp_TinhTongDoanhThu_Thang (Lines 902-916 in QLMayBay.sql)
+        /// </summary>
+        public ActionResult ThongKeTheoThang(int? thang, int? nam)
+        {
+            // Default to current month if not specified
+            DateTime today = DateTime.Today;
+            int selectedMonth = thang ?? today.Month;
+            int selectedYear = nam ?? today.Year;
+
+            try
+            {
+                // Prepare parameters for stored procedure
+                var thangParam = new SqlParameter("@Thang", selectedMonth);
+                var namParam = new SqlParameter("@Nam", selectedYear);
+                var tongDoanhThuParam = new SqlParameter("@TongDoanhThu", SqlDbType.Money)
+                {
+                    Direction = ParameterDirection.Output
+                };
+
+                // Execute stored procedure with OUTPUT parameter
+                db.Database.ExecuteSqlCommand(
+                    "EXEC sp_TinhTongDoanhThu_Thang @Thang, @Nam, @TongDoanhThu OUTPUT",
+                    thangParam, namParam, tongDoanhThuParam
+                );
+
+                // Get the output value
+                decimal tongDoanhThu = tongDoanhThuParam.Value != DBNull.Value 
+                    ? (decimal)tongDoanhThuParam.Value 
+                    : 0M;
+
+                // Pass data to view
+                ViewBag.Thang = selectedMonth;
+                ViewBag.Nam = selectedYear;
+                ViewBag.TongDoanhThu = tongDoanhThu;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Lỗi khi tính doanh thu tháng: " + ex.Message;
+                ViewBag.Thang = selectedMonth;
+                ViewBag.Nam = selectedYear;
+                ViewBag.TongDoanhThu = 0M;
+                return View();
+            }
+        }
+
+        // ======================================================
+        // END OF STATISTICS ACTIONS
+        // ======================================================
+
         public ActionResult QLChuyenBay()
         {
             // Include("MAYBAY") để load thông tin tên máy bay
