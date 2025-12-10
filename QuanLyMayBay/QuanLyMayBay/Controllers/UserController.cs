@@ -271,10 +271,26 @@ namespace QuanLyMayBay.Controllers
             Image(chuyenBayList);
         }
         // Trang đặt vé
-        public ActionResult DatVe()
+        public ActionResult DatVe(string maKH, string maNV, string maGH)
         {
-            ListChuyenBayModel chuyenBayList = Session["ListFull"] as ListChuyenBayModel;
-            return View(chuyenBayList.listCB);
+            try
+            {
+                // Gọi PROCEDURE
+                db.Database.ExecuteSqlCommand(
+                    "EXEC sp_DatVe @MaKH, @MaNV, @MAGH",
+                    new SqlParameter("@MaKH", maKH),
+                    new SqlParameter("@MaNV", maNV),
+                    new SqlParameter("@MAGH", maGH)
+                );
+
+                ViewBag.Message = "Đặt vé thành công!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Đặt vé thất bại: " + ex.Message;
+            }
+
+            return View("ThongBao");
         }
         [HttpPost]
 
