@@ -39,7 +39,6 @@ namespace QuanLyMayBay
         public virtual DbSet<HANGGHE_GIA> HANGGHE_GIA { get; set; }
         public virtual DbSet<HANHLY> HANHLies { get; set; }
         public virtual DbSet<KHACHHANG> KHACHHANGs { get; set; }
-        public virtual DbSet<LOG_TRUYCAP> LOG_TRUYCAP { get; set; }
         public virtual DbSet<LOTRINH> LOTRINHs { get; set; }
         public virtual DbSet<MAYBAY> MAYBAYs { get; set; }
         public virtual DbSet<NHANVIEN> NHANVIENs { get; set; }
@@ -68,6 +67,51 @@ namespace QuanLyMayBay
                 new ObjectParameter("MAGH", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ThanhToanGioHang", mAGHParameter);
+        }
+    
+        public virtual int sp_CursorTaoPhieuDatVe()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_CursorTaoPhieuDatVe");
+        }
+    
+        public virtual int sp_DatVe(string maKH, string maNV, string mAGH)
+        {
+            var maKHParameter = maKH != null ?
+                new ObjectParameter("MaKH", maKH) :
+                new ObjectParameter("MaKH", typeof(string));
+    
+            var maNVParameter = maNV != null ?
+                new ObjectParameter("MaNV", maNV) :
+                new ObjectParameter("MaNV", typeof(string));
+    
+            var mAGHParameter = mAGH != null ?
+                new ObjectParameter("MAGH", mAGH) :
+                new ObjectParameter("MAGH", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_DatVe", maKHParameter, maNVParameter, mAGHParameter);
+        }
+    
+        public virtual int sp_DeleteEmployee_SafeTransaction(string maNVCuaBan, string maNVNhanBanGiao)
+        {
+            var maNVCuaBanParameter = maNVCuaBan != null ?
+                new ObjectParameter("MaNVCuaBan", maNVCuaBan) :
+                new ObjectParameter("MaNVCuaBan", typeof(string));
+    
+            var maNVNhanBanGiaoParameter = maNVNhanBanGiao != null ?
+                new ObjectParameter("MaNVNhanBanGiao", maNVNhanBanGiao) :
+                new ObjectParameter("MaNVNhanBanGiao", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_DeleteEmployee_SafeTransaction", maNVCuaBanParameter, maNVNhanBanGiaoParameter);
+        }
+    
+        public virtual int sp_DonVeHetHan()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_DonVeHetHan");
+        }
+    
+        public virtual ObjectResult<Nullable<int>> sp_UpdateFlightStatus_Cursor()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("sp_UpdateFlightStatus_Cursor");
         }
     }
 }

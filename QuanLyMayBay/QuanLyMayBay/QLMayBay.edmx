@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="QUANLYMAYBAYModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="QUANLYMAYBAYModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CAUHINH_GHE">
           <Key>
             <PropertyRef Name="MACG" />
@@ -129,18 +129,6 @@
           <Property Name="GTINH" Type="nvarchar" MaxLength="3" />
           <Property Name="NGSINH" Type="date" />
           <Property Name="QUOCGIA" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="LOG_TRUYCAP">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MANV" Type="char" MaxLength="10" />
-          <Property Name="TENDANGNHAP" Type="nvarchar" MaxLength="50" />
-          <Property Name="THAOTAC" Type="nvarchar" MaxLength="50" />
-          <Property Name="BANGTACTDONG" Type="nvarchar" MaxLength="50" />
-          <Property Name="THOIGIAN" Type="datetime" />
-          <Property Name="TRANGTHAI" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="LOTRINH">
           <Key>
@@ -555,13 +543,28 @@
           <Parameter Name="MaGH" Type="char" Mode="In" />
           <Parameter Name="MaCB" Type="char" Mode="In" />
         </Function>
+        <Function Name="fn_TongTien_KhachHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="money">
+          <Parameter Name="MaKH" Type="char" Mode="In" />
+        </Function>
         <Function Name="sp_BackupDatabase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DuongDanFile" Type="nvarchar" Mode="In" />
           <Parameter Name="LoaiBackup" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="sp_CursorTaoPhieuDatVe" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_DatVe" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MaKH" Type="char" Mode="In" />
+          <Parameter Name="MaNV" Type="char" Mode="In" />
+          <Parameter Name="MAGH" Type="char" Mode="In" />
+        </Function>
+        <Function Name="sp_DeleteEmployee_SafeTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MaNVCuaBan" Type="char" Mode="In" />
+          <Parameter Name="MaNVNhanBanGiao" Type="char" Mode="In" />
+        </Function>
+        <Function Name="sp_DonVeHetHan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_ThanhToanGioHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MAGH" Type="char" Mode="In" />
         </Function>
+        <Function Name="sp_UpdateFlightStatus_Cursor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="QUANLYMAYBAYModelStoreContainer">
           <EntitySet Name="CAUHINH_GHE" EntityType="Self.CAUHINH_GHE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CHECKIN" EntityType="Self.CHECKIN" Schema="dbo" store:Type="Tables" />
@@ -575,7 +578,6 @@
           <EntitySet Name="HANGGHE_GIA" EntityType="Self.HANGGHE_GIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HANHLY" EntityType="Self.HANHLY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KHACHHANG" EntityType="Self.KHACHHANG" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="LOG_TRUYCAP" EntityType="Self.LOG_TRUYCAP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LOTRINH" EntityType="Self.LOTRINH" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAYBAY" EntityType="Self.MAYBAY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NHANVIEN" EntityType="Self.NHANVIEN" Schema="dbo" store:Type="Tables" />
@@ -696,8 +698,7 @@
             <End Role="VEMAYBAY" EntitySet="VEMAYBAY" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QUANLYMAYBAYModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -858,18 +859,6 @@
           <NavigationProperty Name="CHECKINs" Relationship="Self.FK_CI_KH" FromRole="KHACHHANG" ToRole="CHECKIN" />
           <NavigationProperty Name="GIOHANGs" Relationship="Self.FK_GH_KH" FromRole="KHACHHANG" ToRole="GIOHANG" />
           <NavigationProperty Name="PHIEUDATVEs" Relationship="Self.FK_PDV_KH" FromRole="KHACHHANG" ToRole="PHIEUDATVE" />
-        </EntityType>
-        <EntityType Name="LOG_TRUYCAP">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MANV" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="TENDANGNHAP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="THAOTAC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BANGTACTDONG" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="THOIGIAN" Type="DateTime" Precision="3" />
-          <Property Name="TRANGTHAI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="LOTRINH">
           <Key>
@@ -1313,7 +1302,6 @@
           <EntitySet Name="HANGGHE_GIA" EntityType="Self.HANGGHE_GIA" />
           <EntitySet Name="HANHLies" EntityType="Self.HANHLY" />
           <EntitySet Name="KHACHHANGs" EntityType="Self.KHACHHANG" />
-          <EntitySet Name="LOG_TRUYCAP" EntityType="Self.LOG_TRUYCAP" />
           <EntitySet Name="LOTRINHs" EntityType="Self.LOTRINH" />
           <EntitySet Name="MAYBAYs" EntityType="Self.MAYBAY" />
           <EntitySet Name="NHANVIENs" EntityType="Self.NHANVIEN" />
@@ -1438,8 +1426,20 @@
             <Parameter Name="LoaiBackup" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ThanhToanGioHang">
+          <Parameter Name="MAGH" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CursorTaoPhieuDatVe" />
+          <FunctionImport Name="sp_DatVe">
+            <Parameter Name="MaKH" Mode="In" Type="String" />
+            <Parameter Name="MaNV" Mode="In" Type="String" />
             <Parameter Name="MAGH" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_DeleteEmployee_SafeTransaction">
+            <Parameter Name="MaNVCuaBan" Mode="In" Type="String" />
+            <Parameter Name="MaNVNhanBanGiao" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_DonVeHetHan" />
+          <FunctionImport Name="sp_UpdateFlightStatus_Cursor" ReturnType="Collection(Int32)" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -1582,19 +1582,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LOG_TRUYCAP">
-            <EntityTypeMapping TypeName="QUANLYMAYBAYModel.LOG_TRUYCAP">
-              <MappingFragment StoreEntitySet="LOG_TRUYCAP">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="MANV" ColumnName="MANV" />
-                <ScalarProperty Name="TENDANGNHAP" ColumnName="TENDANGNHAP" />
-                <ScalarProperty Name="THAOTAC" ColumnName="THAOTAC" />
-                <ScalarProperty Name="BANGTACTDONG" ColumnName="BANGTACTDONG" />
-                <ScalarProperty Name="THOIGIAN" ColumnName="THOIGIAN" />
-                <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="LOTRINHs">
             <EntityTypeMapping TypeName="QUANLYMAYBAYModel.LOTRINH">
               <MappingFragment StoreEntitySet="LOTRINH">
@@ -1673,6 +1660,11 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_BackupDatabase" FunctionName="QUANLYMAYBAYModel.Store.sp_BackupDatabase" />
           <FunctionImportMapping FunctionImportName="SP_ThanhToanGioHang" FunctionName="QUANLYMAYBAYModel.Store.SP_ThanhToanGioHang" />
+          <FunctionImportMapping FunctionImportName="sp_CursorTaoPhieuDatVe" FunctionName="QUANLYMAYBAYModel.Store.sp_CursorTaoPhieuDatVe" />
+          <FunctionImportMapping FunctionImportName="sp_DatVe" FunctionName="QUANLYMAYBAYModel.Store.sp_DatVe" />
+          <FunctionImportMapping FunctionImportName="sp_DeleteEmployee_SafeTransaction" FunctionName="QUANLYMAYBAYModel.Store.sp_DeleteEmployee_SafeTransaction" />
+          <FunctionImportMapping FunctionImportName="sp_DonVeHetHan" FunctionName="QUANLYMAYBAYModel.Store.sp_DonVeHetHan" />
+          <FunctionImportMapping FunctionImportName="sp_UpdateFlightStatus_Cursor" FunctionName="QUANLYMAYBAYModel.Store.sp_UpdateFlightStatus_Cursor" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

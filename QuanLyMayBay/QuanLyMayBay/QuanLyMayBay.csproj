@@ -227,9 +227,6 @@
     <Compile Include="KHACHHANG.cs">
       <DependentUpon>QLMAYBAY.tt</DependentUpon>
     </Compile>
-    <Compile Include="LOG_TRUYCAP.cs">
-      <DependentUpon>QLMAYBAY.tt</DependentUpon>
-    </Compile>
     <Compile Include="LOTRINH.cs">
       <DependentUpon>QLMAYBAY.tt</DependentUpon>
     </Compile>

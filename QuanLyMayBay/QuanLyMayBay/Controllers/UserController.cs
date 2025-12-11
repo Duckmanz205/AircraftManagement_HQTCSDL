@@ -289,8 +289,11 @@ namespace QuanLyMayBay.Controllers
             {
                 ViewBag.Message = "Đặt vé thất bại: " + ex.Message;
             }
-
-            return View("ThongBao");
+            ListChuyenBayModel chuyenBayList = Session["ListFull"] as ListChuyenBayModel;
+            Image(chuyenBayList);
+            Session["DiemDen"] = "";
+            Session["DiemDi"] = "";
+            return View(chuyenBayList.listCB);
         }
         [HttpPost]
 
@@ -808,7 +811,7 @@ namespace QuanLyMayBay.Controllers
         // Thêm vào UserController.cs
         public string NewIdPhieuDatVe()
         {
-            const string prefix = "PD";
+            const string prefix = "PDV";
             // Tìm mã phiếu lớn nhất hiện có
             var last = db.PHIEUDATVEs
                 .Where(p => p.MAPHIEU.StartsWith(prefix))

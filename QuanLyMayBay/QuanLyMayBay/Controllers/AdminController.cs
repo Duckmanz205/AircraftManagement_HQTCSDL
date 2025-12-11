@@ -1136,7 +1136,6 @@ namespace QuanLyMayBay.Controllers
         }
 
         [HttpPost]
-        // Chỉ cho phép Giám đốc (CV09) và Quản lý cấp cao (CV05) thực hiện sao lưu
         [PhanQuyenAdmin("CV09", "CV05")]
         public ActionResult BackupDatabase(string backupName, string backupType)
         {
@@ -1175,7 +1174,6 @@ namespace QuanLyMayBay.Controllers
                         messageType = "Toàn bộ (Full)";
                         break;
                 }
-                // 3. Tạo tên file hoàn chỉnh
                 string customName = string.IsNullOrEmpty(backupName) ? timeStamp : backupName + "_" + timeStamp;
                 string fileName = $"QLMayBay_{suffix}_{customName}{extension}";
                 string fullPath = Path.Combine(folderPath, fileName);
