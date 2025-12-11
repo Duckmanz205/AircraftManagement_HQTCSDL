@@ -1,0 +1,162 @@
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Func<decimal, string> FormatCurrency = (amount) => String.Format("{0:N0} VND", amount);
+    
+    int thang = ViewBag.Thang ?? DateTime.Today.Month;
+    int nam = ViewBag.Nam ?? DateTime.Today.Year;
+    decimal tongDoanhThu = ViewBag.TongDoanhThu ?? 0M;
+}
+
+<!-- Main Content -->
+<main class="flex-1 p-4 lg:p-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Thống kê doanh thu theo tháng</h2>
+        <p class="text-gray-600">Tính tổng doanh thu cho một tháng cụ thể</p>
+        <p class="text-sm text-blue-600 mt-2">
+            <i class="fas fa-database mr-1"></i>
+            Dữ liệu từ SQL Procedure: <code class="bg-gray-100 px-2 py-1 rounded">sp_TinhTongDoanhThu_Thang</code>
+            (Lines 902-916 trong QLMayBay.sql)
+        </p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+            <i class="fas fa-exclamation-circle mr-2"></i>@ViewBag.Error
+        </div>
+    }
+
+    <!-- Month/Year Selector -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Chọn tháng/năm</h3>
+        <form method="get" action="@Url.Action("ThongKeTheoThang", "Admin")" class="flex flex-wrap gap-4 items-end">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tháng</label>
+                <select name="thang" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i" selected="@(i == thang)">Tháng @i</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Năm</label>
+                <select name="nam" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    @for (int i = DateTime.Today.Year - 2; i <= DateTime.Today.Year + 1; i++)
+                    {
+                        <option value="@i" selected="@(i == nam)">@i</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition duration-200">
+                    <i class="fas fa-search mr-2"></i>Tính toán
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Result Card -->
+    <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg p-8 text-white mb-6 shadow-lg">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-blue-100 text-sm mb-2">Tổng doanh thu</p>
+                <h3 class="text-4xl font-bold mb-2">@FormatCurrency(tongDoanhThu)</h3>
+                <p class="text-blue-100">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    Tháng @thang năm @nam
+                </p>
+            </div>
+            <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-5xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Doanh thu trung bình/ngày</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                        @{
+                            int soNgayTrongThang = DateTime.DaysInMonth(nam, thang);
+                            decimal doanhThuTrungBinh = soNgayTrongThang > 0 ? tongDoanhThu / soNgayTrongThang : 0;
+                        }
+                        @FormatCurrency(doanhThuTrungBinh)
+                    </p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calendar-day text-green-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Số ngày trong tháng</p>
+                    <p class="text-2xl font-bold text-gray-900">@soNgayTrongThang ngày</p>
+                </div>
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calendar text-yellow-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Trạng thái</p>
+                    <p class="text-lg font-bold text-gray-900">
+                        @if (tongDoanhThu > 0)
+                        {
+                            <span class="text-green-600"><i class="fas fa-check-circle mr-1"></i>Có dữ liệu</span>
+                        }
+                        else
+                        {
+                            <span class="text-gray-500"><i class="fas fa-info-circle mr-1"></i>Chưa có dữ liệu</span>
+                        }
+                    </p>
+                </div>
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-info text-purple-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Xem thống kê khác</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="@Url.Action("ThongKe", "Admin")" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-chart-bar text-blue-600"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900">Thống kê chi tiết</p>
+                    <p class="text-sm text-gray-500">Xem doanh thu theo ngày</p>
+                </div>
+            </a>
+            <a href="@Url.Action("ThongKeQuocGia", "Admin")" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-globe text-green-600"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900">Thống kê quốc gia</p>
+                    <p class="text-sm text-gray-500">Khách hàng theo quốc gia</p>
+                </div>
+            </a>
+            <a href="@Url.Action("ThongKeDoanhThuTheoChuyen", "Admin")" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-plane text-yellow-600"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900">Doanh thu chuyến bay</p>
+                    <p class="text-sm text-gray-500">Sử dụng SQL Cursor</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>

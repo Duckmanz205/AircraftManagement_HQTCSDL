@@ -240,11 +240,13 @@
     <Compile Include="Models\Admin\ChiTietDoanhThuModel.cs" />
     <Compile Include="Models\Admin\CustomerHistoryViewModel.cs" />
     <Compile Include="Models\Admin\DashboardViewModel.cs" />
+    <Compile Include="Models\Admin\DoanhThuChuyenBayViewModel.cs" />
     <Compile Include="Models\Admin\KhachHangViewModel.cs" />
     <Compile Include="Models\Admin\LichSuVeDTO.cs" />
     <Compile Include="Models\Admin\PhanQuyenAdmin.cs" />
     <Compile Include="Models\Admin\QLPersonViewModel.cs" />
     <Compile Include="Models\Admin\QLVeViewModel.cs" />
+    <Compile Include="Models\Admin\ThongKeQuocGiaViewModel.cs" />
     <Compile Include="Models\Admin\TicketDetailAdminViewModel.cs" />
     <Compile Include="Models\User\CartItemDetailViewModel.cs" />
     <Compile Include="Models\User\ChiTietGioHang.cs" />
@@ -387,6 +389,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\User\DemoVNPay.cshtml" />
     <Content Include="Views\Admin\ApiFlight.cshtml" />
+    <Content Include="Views\Admin\ThongKeDoanhThuTheoChuyen.cshtml" />
+    <Content Include="Views\Admin\ThongKeQuocGia.cshtml" />
+    <Content Include="Views\Admin\ThongKeTheoThang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

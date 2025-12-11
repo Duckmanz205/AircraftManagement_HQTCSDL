@@ -1,0 +1,192 @@
+@model List<QuanLyMayBay.Models.Admin.ThongKeQuocGiaViewModel>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- Main Content -->
+<main class="flex-1 p-4 lg:p-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Thống kê khách hàng theo quốc gia</h2>
+        <p class="text-gray-600">Phân tích số lượng khách hàng từ các quốc gia khác nhau</p>
+        <p class="text-sm text-blue-600 mt-2">
+            <i class="fas fa-database mr-1"></i>
+            Dữ liệu từ SQL Function: <code class="bg-gray-100 px-2 py-1 rounded">fn_ThongKeKhachTheoQuocGia()</code>
+        </p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+            <i class="fas fa-exclamation-circle mr-2"></i>@ViewBag.Error
+        </div>
+    }
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Tổng số quốc gia</p>
+                    <p class="text-2xl font-bold text-gray-900">@Model.Count()</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-globe text-blue-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Tổng khách hàng</p>
+                    <p class="text-2xl font-bold text-gray-900">@Model.Sum(x => x.SOKHACH)</p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-users text-green-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Quốc gia có nhiều khách nhất</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                        @if (Model.Any())
+                        {
+                            var top = Model.OrderByDescending(x => x.SOKHACH).FirstOrDefault();
+                            @top.QUOCGIA
+                            <span class="text-sm text-gray-500">(@top.SOKHACH)</span>
+                        }
+                    </p>
+                </div>
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-trophy text-yellow-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="bg-white rounded-lg border border-gray-200">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Chi tiết theo quốc gia</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quốc gia</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số khách hàng</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tỷ lệ (%)</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Biểu đồ</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @if (Model.Any())
+                    {
+                        int stt = 1;
+                        int tongKhach = Model.Sum(x => x.SOKHACH);
+                        foreach (var item in Model.OrderByDescending(x => x.SOKHACH))
+                        {
+                            double tyLe = tongKhach > 0 ? (double)item.SOKHACH / tongKhach * 100 : 0;
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@stt</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <i class="fas fa-flag mr-2 text-blue-500"></i>@item.QUOCGIA
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <span class="font-semibold">@item.SOKHACH</span> khách
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @tyLe.ToString("F1")%
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: @tyLe%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            stt++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Không có dữ liệu khách hàng.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    @if (Model.Any())
+    {
+        <div class="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Biểu đồ phân bố khách hàng</h3>
+            <div class="h-80">
+                <canvas id="countryChart"></canvas>
+            </div>
+        </div>
+    }
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    @if (Model.Any())
+    {
+        <text>
+        const data = @Html.Raw(Json.Encode(Model.OrderByDescending(x => x.SOKHACH).Take(10)));
+        const labels = data.map(item => item.QUOCGIA);
+        const values = data.map(item => item.SOKHACH);
+
+        const ctx = document.getElementById('countryChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số khách hàng',
+                        data: values,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(20, 184, 166, 0.8)',
+                            'rgba(251, 146, 60, 0.8)',
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(168, 85, 247, 0.8)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = values.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        </text>
+    }
+</script>
