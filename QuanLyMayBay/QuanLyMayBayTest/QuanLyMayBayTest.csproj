@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.4.6.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.4.6.1\build\NUnit.props')" />
   <Import Project="..\packages\Selenium.WebDriver.4.44.0\build\Selenium.WebDriver.props" Condition="Exists('..\packages\Selenium.WebDriver.4.44.0\build\Selenium.WebDriver.props')" />
   <Import Project="..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -52,6 +53,12 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.2.10\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=4.6.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.4.6.1\lib\net462\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework.legacy, Version=4.6.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.4.6.1\lib\net462\nunit.framework.legacy.dll</HintPath>
+    </Reference>
     <Reference Include="Selenium.WebDriver, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1c2bd1631853048f, processorArchitecture=MSIL">
       <HintPath>..\packages\Selenium.WebDriver.4.44.0\lib\net462\Selenium.WebDriver.dll</HintPath>
     </Reference>
@@ -91,11 +98,77 @@
     <Reference Include="System.ValueTuple" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthTests.cs" />
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="BVATests.cs" />
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityAndNegativeTests.cs" />
     <Compile Include="Test1Test.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="bin\Debug\QuanLyMayBayTest.dll.config" />
+    <None Include="bin\Debug\runtimes\linux\native\selenium-manager" />
+    <None Include="bin\Debug\runtimes\osx\native\selenium-manager" />
+    <None Include="obj\Debug\build.force" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\QuanLyMa.C8A948A7.Up2Date" />
+    <None Include="obj\Debug\QuanLyMayBayTest.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\QuanLyMayBayTest.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\QuanLyMayBayTest.csproj.SuggestedBindingRedirects.cache" />
+    <None Include="obj\Debug\QuanLyMayBayTest.dll.config" />
+    <None Include="obj\Debug\QuanLyMayBayTest.genautoregisteredextensionsinputcache.cache" />
+    <None Include="obj\Debug\QuanLyMayBayTest.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\QuanLyMayBayTest.gentestingplatformentrypointinputcache.cache" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\chromedriver.exe" />
+    <Content Include="bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <Content Include="bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml" />
+    <Content Include="bin\Debug\Microsoft.TestPlatform.AdapterUtilities.dll" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml" />
+    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml" />
+    <Content Include="bin\Debug\nunit.framework.dll" />
+    <Content Include="bin\Debug\nunit.framework.legacy.dll" />
+    <Content Include="bin\Debug\nunit.framework.legacy.xml" />
+    <Content Include="bin\Debug\nunit.framework.xml" />
+    <Content Include="bin\Debug\QuanLyMayBayTest.dll" />
+    <Content Include="bin\Debug\QuanLyMayBayTest.pdb" />
+    <Content Include="bin\Debug\runtimes\win\native\selenium-manager.exe" />
+    <Content Include="bin\Debug\Selenium.WebDriver.dll" />
+    <Content Include="bin\Debug\Selenium.WebDriver.xml" />
+    <Content Include="bin\Debug\System.Buffers.dll" />
+    <Content Include="bin\Debug\System.Buffers.xml" />
+    <Content Include="bin\Debug\System.IO.Pipelines.dll" />
+    <Content Include="bin\Debug\System.IO.Pipelines.xml" />
+    <Content Include="bin\Debug\System.Memory.dll" />
+    <Content Include="bin\Debug\System.Memory.xml" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.dll" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.xml" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.dll" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.xml" />
+    <Content Include="bin\Debug\System.Text.Encodings.Web.dll" />
+    <Content Include="bin\Debug\System.Text.Encodings.Web.xml" />
+    <Content Include="bin\Debug\System.Text.Json.dll" />
+    <Content Include="bin\Debug\System.Text.Json.xml" />
+    <Content Include="bin\Debug\System.Threading.Channels.dll" />
+    <Content Include="bin\Debug\System.Threading.Channels.xml" />
+    <Content Include="bin\Debug\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="bin\Debug\System.Threading.Tasks.Extensions.xml" />
+    <Content Include="obj\Debug\QuanLyMayBayTest.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\QuanLyMayBayTest.dll" />
+    <Content Include="obj\Debug\QuanLyMayBayTest.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -108,6 +181,7 @@
     <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.148.0.7778.17800\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.148.0.7778.17800\build\Selenium.WebDriver.ChromeDriver.targets'))" />
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets'))" />
     <Error Condition="!Exists('..\packages\Selenium.WebDriver.4.44.0\build\Selenium.WebDriver.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.4.44.0\build\Selenium.WebDriver.props'))" />
+    <Error Condition="!Exists('..\packages\NUnit.4.6.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.4.6.1\build\NUnit.props'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets')" />
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.148.0.7778.17800\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.148.0.7778.17800\build\Selenium.WebDriver.ChromeDriver.targets')" />
