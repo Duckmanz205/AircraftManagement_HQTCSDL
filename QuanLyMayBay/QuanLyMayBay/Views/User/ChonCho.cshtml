@@ -190,28 +190,28 @@
                 var pData = (submittedPassengers != null && submittedPassengers.Count >= i) ? submittedPassengers[i - 1] : null;
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
-                <div><label>Họ và tên *</label><input type="text" name="Passengers[@(i-1)].Name" id="p@i-name" required value="@(pData?.Name)" /></div>
+                <div><label>Họ và tên *</label><input type="text" name="Passengers[@(i-1)].Name" id="p@(i)-name" required value="@(pData?.Name)" /></div>
                 <div>
                     <label>Giới tính *</label>
-                    <select name="Passengers[@(i-1)].Gender" id="p@i-gender" required>
+                    <select name="Passengers[@(i-1)].Gender" id="p@(i)-gender" required>
                         <option value="">Chọn</option>
                         <option value="Nam" @(pData?.Gender == "Nam" ? "selected" : "")>Nam</option>
                         <option value="Nữ" @(pData?.Gender == "Nữ" ? "selected" : "")>Nữ</option>
                         <option value="Khác" @(pData?.Gender == "Khác" ? "selected" : "")>Khác</option>
                     </select>
                 </div>
-                <div><label>Ngày sinh *</label><input type="date" name="Passengers[@(i-1)].Dob" id="p@i-dob" required value="@(pData?.Dob)" /></div>
+                <div><label>Ngày sinh *</label><input type="date" name="Passengers[@(i-1)].Dob" id="p@(i)-dob" required value="@(pData?.Dob)" /></div>
                 <div>
                     <label>Quốc gia *</label>
-                    <select name="Passengers[@(i-1)].Country" id="p@i-country" required>
+                    <select name="Passengers[@(i-1)].Country" id="p@(i)-country" required>
                         <option value="">Chọn</option>
                         <option value="VN" @(pData?.Country == "VN" ? "selected" : "")>Việt Nam</option>
                         <option value="US" @(pData?.Country == "US" ? "selected" : "")>Hoa Kỳ</option>
                         <option value="JP" @(pData?.Country == "JP" ? "selected" : "")>Nhật Bản</option>
                     </select>
                 </div>
-                <div><label>Email *</label><input type="email" name="Passengers[@(i-1)].Email" id="p@i-email" required value="@(pData?.Email)" /></div>
-                <div><label>Số điện thoại *</label><input type="tel" name="Passengers[@(i-1)].Phone" id="p@i-phone" required value="@(pData?.Phone)" /></div>
+                <div><label>Email *</label><input type="email" name="Passengers[@(i-1)].Email" id="p@(i)-email" required value="@(pData?.Email)" /></div>
+                <div><label>Số điện thoại *</label><input type="tel" name="Passengers[@(i-1)].Phone" id="p@(i)-phone" required value="@(pData?.Phone)" /></div>
             </div>
 
             <div class="mb-6">

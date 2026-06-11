@@ -1,0 +1,1893 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "version": "2.0",
+  "name": "QuanLyMayBayTests",
+  "url": "https://localhost:44373",
+  "tests": [
+    {
+      "id": "tc-datve-01",
+      "name": "TC_DATVE_01 - Tim chuyen mot chieu va hien thi danh sach",
+      "commands": [
+        {
+          "id": "cmd-01-001",
+          "comment": "Mo trang chu",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-01-002",
+          "comment": "Set kich thuoc cua so",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-01-003",
+          "comment": "Click nut Dang nhap tren header",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [
+            ["css=.bg-blue-600", "css"],
+            ["xpath=//a[contains(@class,'bg-blue-600')]", "xpath"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "cmd-01-004",
+          "comment": "Dien email",
+          "command": "type",
+          "target": "id=email",
+          "targets": [["id=email", "id"]],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-01-005",
+          "comment": "Dien mat khau",
+          "command": "type",
+          "target": "id=password",
+          "targets": [["id=password", "id"]],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-01-006",
+          "comment": "Click nut Dang nhap",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [["css=#userLoginForm button[type='submit']", "css"]],
+          "value": ""
+        },
+        {
+          "id": "cmd-01-007",
+          "comment": "Dien diem di",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [["id=from-input", "id"]],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-01-008",
+          "comment": "Dien diem den",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [["id=to-input", "id"]],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-01-009",
+          "comment": "Set ngay di la hom nay bang JS",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-01-010",
+          "comment": "Click nut Tim chuyen bay",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [["css=form[action*='TimChuyen'] button[type='submit']", "css"]],
+          "value": ""
+        },
+        {
+          "id": "cmd-01-011",
+          "comment": "Doi ket qua hien thi - gia ve dau tien",
+          "command": "waitForElementVisible",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [["css=.bg-white:nth-child(1) > .p-4 .text-2xl", "css"]],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-01-012",
+          "comment": "Xac nhan gia ve hien thi dung - 1,950,000d",
+          "command": "assertText",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [["css=.bg-white:nth-child(1) > .p-4 .text-2xl", "css"]],
+          "value": "1,950,000đ"
+        },
+        {
+          "id": "cmd-01-013",
+          "comment": "Dang xuat",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-02",
+      "name": "TC_DATVE_02",
+      "commands": [
+        {
+          "id": "cmd-02-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-02-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-02-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-007",
+          "comment": "Chon loai ve Khu hoi",
+          "command": "click",
+          "target": "css=input[value='Khứ hồi']",
+          "targets": [["css=input[value='Khứ hồi']", "css"]],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-02-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-02-010",
+          "comment": "Set ngay di",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-011",
+          "comment": "Set ngay ve = hom nay + 3 ngay",
+          "command": "executeScript",
+          "target": "var d = new Date(); d.setDate(d.getDate()+3); document.querySelector('[name=\"ngayve\"]').value = d.toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-012",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-02-013",
+          "comment": "Kiem tra header hien thi 'Chon chuyen cho chieu di'",
+          "command": "waitForElementVisible",
+          "target": "css=header h1",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-02-014",
+          "command": "assertText",
+          "target": "css=header h1",
+          "targets": [],
+          "value": "Chọn chuyến cho chiều đi"
+        },
+        {
+          "id": "cmd-02-015",
+          "comment": "Xac nhan danh sach chuyen bay hien thi",
+          "command": "waitForElementVisible",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-02-016",
+          "command": "assertText",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": "1,950,000đ"
+        },
+        {
+          "id": "cmd-02-017",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-03",
+      "name": "TC_DATVE_03",
+      "commands": [
+        {
+          "id": "cmd-03-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-03-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-03-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-03-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-03-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-03-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-03-007",
+          "comment": "Xac nhan gia tri mac dinh hanh khach = 1",
+          "command": "assertValue",
+          "target": "id=passenger-count",
+          "targets": [["id=passenger-count", "id"]],
+          "value": "1"
+        },
+        {
+          "id": "cmd-03-008",
+          "comment": "Click nut giam hanh khach",
+          "command": "click",
+          "target": "css=button[onclick*='decreasePassengers']",
+          "targets": [["css=button[onclick*='decreasePassengers']", "css"]],
+          "value": ""
+        },
+        {
+          "id": "cmd-03-009",
+          "comment": "Xac nhan gia tri van la 1 (khong giam xuong 0)",
+          "command": "assertValue",
+          "target": "id=passenger-count",
+          "targets": [],
+          "value": "1"
+        },
+        {
+          "id": "cmd-03-010",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-04",
+      "name": "TC_DATVE_04",
+      "commands": [
+        {
+          "id": "cmd-04-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-04-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-04-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-007",
+          "command": "click",
+          "target": "css=input[value='Một chiều']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-04-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-04-010",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-011",
+          "comment": "Set so hanh khach = 1 bang JS",
+          "command": "executeScript",
+          "target": "document.getElementById('passenger-count').value = '1';",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-012",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-013",
+          "comment": "Xac nhan danh sach hien thi",
+          "command": "waitForElementVisible",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-04-014",
+          "command": "assertElementPresent",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-04-015",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-05",
+      "name": "TC_DATVE_05",
+      "commands": [
+        {
+          "id": "cmd-05-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-05-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-05-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-007",
+          "command": "click",
+          "target": "css=input[value='Một chiều']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-05-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-05-010",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-011",
+          "comment": "Set so hanh khach = 9 bang JS (boundary max)",
+          "command": "executeScript",
+          "target": "document.getElementById('passenger-count').value = '9';",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-012",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-013",
+          "command": "waitForElementVisible",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-05-014",
+          "command": "assertElementPresent",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-05-015",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-06",
+      "name": "TC_DATVE_06",
+      "commands": [
+        {
+          "id": "cmd-06-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-06-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-06-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-007",
+          "command": "click",
+          "target": "css=input[value='Một chiều']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-06-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-06-010",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-011",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-012",
+          "command": "waitForElementVisible",
+          "target": "css=input[name='gia'][value='duoi2']",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-06-013",
+          "comment": "Tick checkbox loc gia Duoi 2 trieu",
+          "command": "executeScript",
+          "target": "document.querySelector(\"input[name='gia'][value='duoi2']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-014",
+          "comment": "Click Apply filter",
+          "command": "executeScript",
+          "target": "document.querySelector(\"form[action*='LocChuyen'] button[type='submit']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-015",
+          "command": "pause",
+          "target": "3000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-06-016",
+          "comment": "Xac nhan co ket qua hien thi",
+          "command": "waitForElementPresent",
+          "target": "css=.bg-white > .p-4 .text-2xl",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-06-017",
+          "comment": "Xac nhan gia hien thi dung < 2tr",
+          "command": "assertText",
+          "target": "css=.bg-white:nth-child(1) > .p-4 .text-2xl",
+          "targets": [],
+          "value": "1,950,000đ"
+        },
+        {
+          "id": "cmd-06-018",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-07",
+      "name": "TC_DATVE_07",
+      "commands": [
+        {
+          "id": "cmd-07-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-07-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-07-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-007",
+          "command": "click",
+          "target": "css=input[value='Một chiều']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-07-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-07-010",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-011",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-012",
+          "command": "waitForElementVisible",
+          "target": "css=input[name='gia'][value='2den5']",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-07-013",
+          "comment": "Tick checkbox loc gia 2-5 trieu",
+          "command": "executeScript",
+          "target": "document.querySelector(\"input[name='gia'][value='2den5']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-014",
+          "command": "executeScript",
+          "target": "document.querySelector(\"form[action*='LocChuyen'] button[type='submit']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-015",
+          "command": "pause",
+          "target": "3000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-07-016",
+          "comment": "Ket qua loc co the rong neu khong co chuyen nao trong khoang gia nay",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-08",
+      "name": "TC_DATVE_08",
+      "commands": [
+        {
+          "id": "cmd-08-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-08-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-08-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-007",
+          "command": "click",
+          "target": "css=input[value='Một chiều']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-08-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-08-010",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-011",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-012",
+          "command": "waitForElementVisible",
+          "target": "css=input[name='hangghe'][value='Phổ thông']",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-08-013",
+          "comment": "Tick checkbox hang ghe Pho thong",
+          "command": "executeScript",
+          "target": "document.querySelector(\"input[name='hangghe'][value='Phổ thông']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-014",
+          "command": "executeScript",
+          "target": "document.querySelector(\"form[action*='LocChuyen'] button[type='submit']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-015",
+          "command": "pause",
+          "target": "3000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-08-016",
+          "comment": "Xac nhan hang ghe hien thi la Pho thong",
+          "command": "assertText",
+          "target": "css=.bg-white:nth-child(1) .text-right .text-sm",
+          "targets": [],
+          "value": "Phổ thông"
+        },
+        {
+          "id": "cmd-08-017",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-datve-09",
+      "name": "TC_DATVE_09",
+      "commands": [
+        {
+          "id": "cmd-09-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-09-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-09-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-007",
+          "command": "click",
+          "target": "css=input[value='Một chiều']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-008",
+          "command": "type",
+          "target": "id=from-input",
+          "targets": [],
+          "value": "TP.HCM"
+        },
+        {
+          "id": "cmd-09-009",
+          "command": "type",
+          "target": "id=to-input",
+          "targets": [],
+          "value": "Hà Nội"
+        },
+        {
+          "id": "cmd-09-010",
+          "command": "executeScript",
+          "target": "document.querySelector('[name=\"ngaydi\"]').value = new Date().toISOString().split('T')[0];",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-011",
+          "command": "click",
+          "target": "css=form[action*='TimChuyen'] button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-012",
+          "command": "waitForElementVisible",
+          "target": "css=input[name='gio'][value='sang']",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-09-013",
+          "comment": "Tick checkbox gio sang som",
+          "command": "executeScript",
+          "target": "document.querySelector(\"input[name='gio'][value='sang']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-014",
+          "command": "executeScript",
+          "target": "document.querySelector(\"form[action*='LocChuyen'] button[type='submit']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-015",
+          "command": "pause",
+          "target": "3000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-09-016",
+          "comment": "Ket qua loc: danh sach chi hien thi chuyen bay gio 06:00-12:00",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-01",
+      "name": "TC_CHECKIN_01",
+      "commands": [
+        {
+          "id": "cmd-c01-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-c01-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-c01-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-007",
+          "comment": "Truy cap trang CheckIn",
+          "command": "open",
+          "target": "https://localhost:44373/User/CheckIn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-008",
+          "comment": "Click nut Check-in ngay cho ve VE01",
+          "command": "click",
+          "target": "xpath=//a[contains(@href, 'maVe=VE01') and contains(text(), 'Check-in ngay')]",
+          "targets": [
+            ["xpath=//a[contains(@href, 'maVe=VE01') and contains(text(), 'Check-in ngay')]", "xpath"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-009",
+          "comment": "Doi trang XacNhanCheckIn hien thi",
+          "command": "waitForElementPresent",
+          "target": "css=button[onclick*='confirmCheckIn']",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-c01-010",
+          "comment": "Tick tat ca checkbox dieu khoan",
+          "command": "executeScript",
+          "target": "document.querySelectorAll(\"input[type='checkbox'][required]\").forEach(cb => { if(!cb.checked) cb.click(); });",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-011",
+          "comment": "Click nut Xac nhan Check-in",
+          "command": "executeScript",
+          "target": "document.querySelector(\"button[onclick*='confirmCheckIn']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-012",
+          "comment": "Xac nhan dialog Confirm",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-013",
+          "comment": "Xac nhan dialog Success - kiem tra chu 'thanh cong'",
+          "command": "assertAlert",
+          "target": "glob=*thành công*",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-014",
+          "comment": "Chap nhan dialog Success",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c01-015",
+          "comment": "Doi step-2 hien thi",
+          "command": "waitForElementVisible",
+          "target": "id=step-2",
+          "targets": [["id=step-2", "id"]],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-c01-016",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-02",
+      "name": "TC_CHECKIN_02",
+      "commands": [
+        {
+          "id": "cmd-c02-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-c02-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-c02-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-007",
+          "comment": "Truy cap truc tiep trang XacNhanCheckIn voi ve VE101 (>24h truoc bay - CB02 ngay 2026-06-09)",
+          "command": "open",
+          "target": "https://localhost:44373/User/XacNhanCheckIn?maVe=VE101",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-008",
+          "command": "executeScript",
+          "target": "document.querySelectorAll(\"input[type='checkbox'][required]\").forEach(cb => { if(!cb.checked) cb.click(); });",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-009",
+          "command": "executeScript",
+          "target": "document.querySelector(\"button[onclick*='confirmCheckIn']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-010",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-011",
+          "comment": "Xac nhan canh bao: 'Chua den thoi gian check-in'",
+          "command": "assertAlert",
+          "target": "glob=*Chưa đến thời gian check-in*",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-012",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c02-013",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-03",
+      "name": "TC_CHECKIN_03",
+      "commands": [
+        {
+          "id": "cmd-c03-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-c03-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-c03-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-007",
+          "comment": "Truy cap truc tiep trang XacNhanCheckIn voi ve VE102 (<1h truoc bay - CB03 20:38 hom nay)",
+          "command": "open",
+          "target": "https://localhost:44373/User/XacNhanCheckIn?maVe=VE102",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-008",
+          "command": "executeScript",
+          "target": "document.querySelectorAll(\"input[type='checkbox'][required]\").forEach(cb => { if(!cb.checked) cb.click(); });",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-009",
+          "command": "executeScript",
+          "target": "document.querySelector(\"button[onclick*='confirmCheckIn']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-010",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-011",
+          "comment": "Xac nhan canh bao: 'Da het thoi gian check-in'",
+          "command": "assertAlert",
+          "target": "glob=*Đã hết thời gian check-in*",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-012",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c03-013",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-04",
+      "name": "TC_CHECKIN_04",
+      "commands": [
+        {
+          "id": "cmd-c04-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-c04-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-c04-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-007",
+          "comment": "Lan 1: Check-in VE01",
+          "command": "open",
+          "target": "https://localhost:44373/User/XacNhanCheckIn?maVe=VE01",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-008",
+          "command": "executeScript",
+          "target": "document.querySelectorAll(\"input[type='checkbox'][required]\").forEach(cb => { if(!cb.checked) cb.click(); });",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-009",
+          "command": "executeScript",
+          "target": "document.querySelector(\"button[onclick*='confirmCheckIn']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-010",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-011",
+          "comment": "Chap nhan alert lan 1 (thanh cong hoac da check-in)",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-012",
+          "comment": "Lan 2: Check-in lai VE01",
+          "command": "open",
+          "target": "https://localhost:44373/User/XacNhanCheckIn?maVe=VE01",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-013",
+          "command": "executeScript",
+          "target": "document.querySelectorAll(\"input[type='checkbox'][required]\").forEach(cb => { if(!cb.checked) cb.click(); });",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-014",
+          "command": "executeScript",
+          "target": "document.querySelector(\"button[onclick*='confirmCheckIn']\").click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-015",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-016",
+          "comment": "Xac nhan thong bao trung lap: 'da duoc check-in'",
+          "command": "assertAlert",
+          "target": "glob=*đã được check-in*",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-017",
+          "command": "acceptAlert",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c04-018",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-05",
+      "name": "TC_CHECKIN_05",
+      "commands": [
+        {
+          "id": "cmd-c05-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-c05-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-c05-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-007",
+          "comment": "Mo trang The len may bay cua VE01 (da check-in)",
+          "command": "open",
+          "target": "https://localhost:44373/User/XemTheLenMayBay?maVe=VE01",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-008",
+          "comment": "Xac nhan tieu de trang",
+          "command": "waitForElementVisible",
+          "target": "css=header h1",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-c05-009",
+          "command": "assertText",
+          "target": "css=header h1",
+          "targets": [],
+          "value": "glob=*Thẻ Lên Máy Bay*"
+        },
+        {
+          "id": "cmd-c05-010",
+          "comment": "Xac nhan ten hanh khach hien thi",
+          "command": "assertElementPresent",
+          "target": "xpath=//p[contains(text(), 'Họ và tên')]/following-sibling::p",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-011",
+          "comment": "Xac nhan so ghe hien thi",
+          "command": "assertElementPresent",
+          "target": "css=span.text-3xl.font-bold",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c05-012",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-06",
+      "name": "TC_CHECKIN_06",
+      "commands": [
+        {
+          "id": "cmd-c06-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c06-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c06-003",
+          "comment": "Dam bao dang xuat neu dang dang nhap",
+          "command": "executeScript",
+          "target": "try { document.querySelector(\"a[href*='DangXuat']\").click(); } catch(e) {}",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c06-004",
+          "comment": "Truy cap trang CheckIn khi chua dang nhap",
+          "command": "open",
+          "target": "https://localhost:44373/User/CheckIn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c06-005",
+          "comment": "Kiem tra thong bao yeu cau dang nhap",
+          "command": "waitForElementVisible",
+          "target": "css=main h2",
+          "targets": [],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-c06-006",
+          "command": "assertText",
+          "target": "css=main h2",
+          "targets": [],
+          "value": "glob=*Bạn phải đăng nhập*"
+        }
+      ]
+    },
+    {
+      "id": "tc-checkin-07",
+      "name": "TC_CHECKIN_07",
+      "commands": [
+        {
+          "id": "cmd-c07-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c07-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c07-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c07-004",
+          "comment": "Dang nhap voi KH01 (khoa@gmail.com)",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-c07-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-c07-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c07-007",
+          "comment": "Thu truy cap ve VE06 cua KH02 (hoa@gmail.com)",
+          "command": "open",
+          "target": "https://localhost:44373/User/XacNhanCheckIn?maVe=VE06",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c07-008",
+          "comment": "He thong phai redirect ve trang CheckIn",
+          "command": "waitForElementPresent",
+          "target": "css=.checkin-list, css=.flight-card, xpath=//h1[contains(text(),'Check')]",
+          "targets": [],
+          "value": "5000"
+        },
+        {
+          "id": "cmd-c07-009",
+          "comment": "Xac nhan URL chua '/User/CheckIn'",
+          "command": "assertLocation",
+          "target": "glob=*User/CheckIn*",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-c07-010",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "tc-bva-03",
+      "name": "TC_BVA_03",
+      "commands": [
+        {
+          "id": "cmd-b03-001",
+          "command": "open",
+          "target": "https://localhost:44373/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-b03-002",
+          "command": "setWindowSize",
+          "target": "1936x1048",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-b03-003",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-b03-004",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "cmd-b03-005",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "cmd-b03-006",
+          "command": "click",
+          "target": "css=#userLoginForm button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-b03-007",
+          "comment": "Truy cap trang CheckIn (co filter ready), kiem tra VE103 (CB04 bay 2026-06-09 20:08, dang 24h truoc)",
+          "command": "open",
+          "target": "https://localhost:44373/User/CheckIn?filter=ready",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-b03-008",
+          "comment": "Xac nhan nut Check-in ngay cua VE103 hien thi",
+          "command": "waitForElementVisible",
+          "target": "xpath=//a[contains(@href, 'maVe=VE103') and contains(text(), 'Check-in ngay')]",
+          "targets": [
+            ["xpath=//a[contains(@href, 'maVe=VE103') and contains(text(), 'Check-in ngay')]", "xpath"]
+          ],
+          "value": "10000"
+        },
+        {
+          "id": "cmd-b03-009",
+          "command": "assertElementPresent",
+          "target": "xpath=//a[contains(@href, 'maVe=VE103') and contains(text(), 'Check-in ngay')]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cmd-b03-010",
+          "command": "executeScript",
+          "target": "document.querySelector(\"a[href*='DangXuat']\").click();",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "suites": [
+    {
+      "id": "suite-datve",
+      "name": "TC_DATVE - Dat ve may bay",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": [
+        "tc-datve-01",
+        "tc-datve-02",
+        "tc-datve-03",
+        "tc-datve-04",
+        "tc-datve-05",
+        "tc-datve-06",
+        "tc-datve-07",
+        "tc-datve-08",
+        "tc-datve-09"
+      ]
+    },
+    {
+      "id": "suite-checkin",
+      "name": "TC_CHECKIN - Check-in va the len may bay",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": [
+        "tc-checkin-01",
+        "tc-checkin-02",
+        "tc-checkin-03",
+        "tc-checkin-04",
+        "tc-checkin-05",
+        "tc-checkin-06",
+        "tc-checkin-07",
+        "tc-bva-03"
+      ]
+    },
+    {
+      "id": "suite-all",
+      "name": "All Tests - QuanLyMayBay",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 600,
+      "tests": [
+        "tc-datve-01",
+        "tc-datve-02",
+        "tc-datve-03",
+        "tc-datve-04",
+        "tc-datve-05",
+        "tc-datve-06",
+        "tc-datve-07",
+        "tc-datve-08",
+        "tc-datve-09",
+        "tc-checkin-01",
+        "tc-checkin-02",
+        "tc-checkin-03",
+        "tc-checkin-04",
+        "tc-checkin-05",
+        "tc-checkin-06",
+        "tc-checkin-07",
+        "tc-bva-03"
+      ]
+    }
+  ],
+  "urls": [
+    "https://localhost:44373/"
+  ],
+  "plugins": []
+}

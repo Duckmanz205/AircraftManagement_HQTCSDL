@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "HoSo";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
@@ -28,6 +28,7 @@
             <div class="text-center md:text-left flex-1">
                 <h1 class="text-4xl font-bold mb-2">Hồ sơ cá nhân của bạn</h1>
                 <p class="text-blue-100 text-lg">Cập nhật thông tin để thuận tiện khi đặt vé và check-in online.</p>
+                <div id="avatarError" class="text-red-300 font-medium text-sm mt-2 hidden"></div>
             </div>
         </div>
     </div>
@@ -219,6 +220,12 @@
     <span id="successText" class="font-semibold">Cập nhật thông tin thành công ✅</span>
 </div>
 
+<!-- Error Notification -->
+<div id="errorMessage" class="fixed top-6 right-6 bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl hidden items-center z-50 transform transition-all">
+    <i class="fas fa-exclamation-circle text-2xl mr-3"></i>
+    <span id="errorText" class="font-semibold">Có lỗi xảy ra ❌</span>
+</div>
+
 <script>
     // Form validation and submission
     document.getElementById('profileForm').addEventListener('submit', function (e) {
@@ -243,23 +250,47 @@
             hideError('phoneError');
         }
 
-        if (isValid) {
-            showSuccessMessage('Cập nhật thông tin thành công ✅');
+        // Validate file on submit
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarError = document.getElementById('avatarError');
+        if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+            const file = avatarInput.files[0];
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.webp)$/i;
+            if (!allowedExtensions.exec(file.name)) {
+                avatarError.textContent = 'Định dạng file không hợp lệ';
+                avatarError.classList.remove('hidden');
+                showErrorMessage('Định dạng file không hợp lệ');
+                isValid = false;
+            } else if (file.size > 5242880) {
+                avatarError.textContent = 'Dung lượng vượt mức cho phép';
+                avatarError.classList.remove('hidden');
+                showErrorMessage('Dung lượng vượt mức cho phép');
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
         }
     });
 
     // Password form
     // Hiển thị lỗi
-function showError(id, msg) {
-    const el = document.getElementById(id);
-    el.textContent = msg;
-    el.classList.remove('hidden');
-}
-function hideError(id) {
-    document.getElementById(id).classList.add('hidden');
-}
+    function showError(id, msg) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+    }
+    function hideError(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.add('hidden');
+        }
+    }
 
-// Success message
+    // Success message
     function showSuccessMessage(message) {
         const successMessage = document.getElementById('successMessage');
         const successText = document.getElementById('successText');
@@ -273,65 +304,90 @@ function hideError(id) {
         }, 3000);
     }
 
-// Modal
-function openPasswordModal() {
-    const modal = document.getElementById('passwordModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-function closePasswordModal() {
-    const modal = document.getElementById('passwordModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.getElementById('passwordForm').reset();
-    hideError('currentPasswordError');
-    hideError('newPasswordError');
-    hideError('confirmPasswordError');
-}
+    // Error message
+    function showErrorMessage(message) {
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        errorText.textContent = message;
+        errorMessage.classList.remove('hidden');
+        errorMessage.classList.add('flex');
 
-// Mở modal nếu server báo lỗi
-document.addEventListener("DOMContentLoaded", function() {
-    @* Razor mở modal khi có lỗi *@
-    @if (ViewBag.ShowPasswordModal != null && (bool)ViewBag.ShowPasswordModal)
-    {
-        <text>openPasswordModal();</text>
+        setTimeout(() => {
+            errorMessage.classList.add('hidden');
+            errorMessage.classList.remove('flex');
+        }, 3000);
     }
 
-    @if (ViewBag.PasswordSuccess != null)
-    {
-        <text>showSuccessMessage("Đổi mật khẩu thành công");</text>
+    // Modal
+    function openPasswordModal() {
+        const modal = document.getElementById('passwordModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
-});
+    function closePasswordModal() {
+        const modal = document.getElementById('passwordModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.getElementById('passwordForm').reset();
+        hideError('currentPasswordError');
+        hideError('newPasswordError');
+        hideError('confirmPasswordError');
+    }
 
-// Password form validation
-document.getElementById('passwordForm').addEventListener('submit', function(e) {
-    let isValid = true;
-    const current = document.getElementById('currentPassword').value.trim();
-    const newP = document.getElementById('newPassword').value.trim();
-    const confirm = document.getElementById('confirmPassword').value.trim();
+    // Mở modal nếu server báo lỗi hoặc hiển thị thông báo TempData
+    document.addEventListener("DOMContentLoaded", function() {
+        @* Razor mở modal khi có lỗi *@
+        @if (ViewBag.ShowPasswordModal != null && (bool)ViewBag.ShowPasswordModal)
+        {
+            <text>openPasswordModal();</text>
+        }
 
-    hideError('currentPasswordError');
-    hideError('newPasswordError');
-    hideError('confirmPasswordError');
+        @if (ViewBag.PasswordSuccess != null)
+        {
+            <text>showSuccessMessage("@ViewBag.PasswordSuccess");</text>
+        }
 
-    if (!current) { showError('currentPasswordError', 'Vui lòng nhập mật khẩu hiện tại'); isValid=false; }
-    if (newP.length<6){ showError('newPasswordError','Mật khẩu phải ít nhất 6 ký tự'); isValid=false; }
-    if (newP !== confirm){ showError('confirmPasswordError','Mật khẩu xác nhận không khớp'); isValid=false; }
+        @if (TempData["ProfileSuccess"] != null)
+        {
+            <text>showSuccessMessage("@TempData["ProfileSuccess"]");</text>
+        }
 
-    if (!isValid) e.preventDefault();
-});
+        @if (TempData["ProfileError"] != null)
+        {
+            <text>showErrorMessage("@TempData["ProfileError"]");</text>
+        }
+    });
+
+    // Password form validation
+    document.getElementById('passwordForm').addEventListener('submit', function(e) {
+        let isValid = true;
+        const current = document.getElementById('currentPassword').value.trim();
+        const newP = document.getElementById('newPassword').value.trim();
+        const confirm = document.getElementById('confirmPassword').value.trim();
+
+        hideError('currentPasswordError');
+        hideError('newPasswordError');
+        hideError('confirmPasswordError');
+
+        if (!current) { showError('currentPasswordError', 'Vui lòng nhập mật khẩu hiện tại'); isValid=false; }
+        if (newP.length<6){ showError('newPasswordError','Mật khẩu phải ít nhất 6 ký tự'); isValid=false; }
+        if (newP !== confirm){ showError('confirmPasswordError','Mật khẩu xác nhận không khớp'); isValid=false; }
+
+        if (!isValid) e.preventDefault();
+    });
 
     // Hoàn tác lại thông tin đăng nhập trước đó
     function cancelChanges() {
         document.getElementById('fullName').value = 'Nguyễn Văn An';
         document.getElementById('phone').value = '0123456789';
         document.getElementById('birthDate').value = '1990-01-15';
-        document.querySelector('input[name="gender"][value="male"]').checked = true;
-        document.getElementById('country').value = 'VN';
+        document.querySelector('input[name="gender"][value="Nam"]').checked = true;
+        document.getElementById('country').value = 'Việt Nam';
         document.getElementById('address').value = '123 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh';
 
         hideError('fullNameError');
         hideError('phoneError');
+        hideError('avatarError');
 
         showSuccessMessage('Đã hủy các thay đổi');
     }
@@ -348,10 +404,31 @@ document.getElementById('passwordForm').addEventListener('submit', function(e) {
         document.getElementById('avatarInput').click();
     });
 
-    // Khi người dùng chọn ảnh -> hiển thị preview
+    // Khi người dùng chọn ảnh -> hiển thị preview và kiểm tra hợp lệ
     document.getElementById('avatarInput').addEventListener('change', function (event) {
         const file = event.target.files[0];
+        const avatarError = document.getElementById('avatarError');
         if (file) {
+            // Kiểm tra định dạng file
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.webp)$/i;
+            if (!allowedExtensions.exec(file.name)) {
+                avatarError.textContent = 'Định dạng file không hợp lệ';
+                avatarError.classList.remove('hidden');
+                showErrorMessage('Định dạng file không hợp lệ');
+                event.target.value = ''; // Reset input
+                return;
+            }
+
+            // Kiểm tra dung lượng (5MB = 5242880 bytes)
+            if (file.size > 5242880) {
+                avatarError.textContent = 'Dung lượng vượt mức cho phép';
+                avatarError.classList.remove('hidden');
+                showErrorMessage('Dung lượng vượt mức cho phép');
+                event.target.value = ''; // Reset input
+                return;
+            }
+
+            avatarError.classList.add('hidden');
             const reader = new FileReader();
             reader.onload = function (e) {
                 document.getElementById('avatarPreview').src = e.target.result;
@@ -359,8 +436,6 @@ document.getElementById('passwordForm').addEventListener('submit', function(e) {
             reader.readAsDataURL(file);
         }
     });
-
-
 </script>
 
 
