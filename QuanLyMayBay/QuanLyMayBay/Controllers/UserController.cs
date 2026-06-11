@@ -161,13 +161,36 @@ namespace QuanLyMayBay.Controllers
         {
             KHACHHANG sessionKH = (KHACHHANG)Session["UserName"];
             var kh = db.KHACHHANGs.Find(sessionKH.MAKH);
+
+            if (Image != null && !string.IsNullOrEmpty(Image.FileName))
+            {
+                // Kiểm tra dung lượng (5MB = 5242880 bytes)
+                if (Image.ContentLength > 5242880)
+                {
+                    TempData["ProfileError"] = "Dung lượng vượt mức cho phép";
+                    return RedirectToAction("HoSo");
+                }
+
+                // Kiểm tra định dạng ảnh
+                string fileExtension = Path.GetExtension(Image.FileName);
+                if (string.IsNullOrEmpty(fileExtension) || 
+                    !(fileExtension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                      fileExtension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                      fileExtension.Equals(".png", StringComparison.OrdinalIgnoreCase) ||
+                      fileExtension.Equals(".gif", StringComparison.OrdinalIgnoreCase) ||
+                      fileExtension.Equals(".webp", StringComparison.OrdinalIgnoreCase)))
+                {
+                    TempData["ProfileError"] = "Định dạng file không hợp lệ";
+                    return RedirectToAction("HoSo");
+                }
+            }
+
             // Thực hiện thay đổi thông tin
             kh.TENKH = form["fullName"];
             kh.SDT = form["phone"];
             string ngSinh = form["birthDate"];
 
             if (ngSinh != string.Empty)
-
             {
                 kh.NGSINH = DateTime.Parse(ngSinh);
             }
@@ -191,12 +214,10 @@ namespace QuanLyMayBay.Controllers
                 string[] oldFiles = Directory.GetFiles(DirPath, searchPattern);
 
                 if (oldFiles != null)
-
                 {
                     foreach (var oldFilePath in oldFiles)
                     {
                         System.IO.File.Delete(oldFilePath);
-
                     }
                 }
 
@@ -208,6 +229,7 @@ namespace QuanLyMayBay.Controllers
             }
 
             Session["UserName"] = kh;
+            TempData["ProfileSuccess"] = "Cập nhật thông tin thành công ✅";
 
             return RedirectToAction("HoSo");
         }
@@ -544,6 +566,10 @@ namespace QuanLyMayBay.Controllers
         //Trang Chon Chỗ
         public ActionResult ChonCho(string MaCB)
         {
+            if (TempData["Error"] != null)
+            {
+                ViewBag.Error = TempData["Error"];
+            }
             ListChuyenBayModel list = (ListChuyenBayModel)Session["ListChuyenBay"];
             ChuyenBayModel chuyenBay = list.listCB.FirstOrDefault(x => x.MaCB.Trim() == MaCB.Trim());
             Session["DiemDi"] = chuyenBay.DiemDi;
