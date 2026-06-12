@@ -119,6 +119,7 @@ namespace QuanLyMayBay.Controllers
 
 
             Session["UserName"] = kh;
+            Session["JustLoggedIn"] = true;
             return RedirectToAction("TrangChu");
         }
 

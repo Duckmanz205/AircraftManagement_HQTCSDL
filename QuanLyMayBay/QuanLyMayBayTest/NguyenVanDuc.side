@@ -1,0 +1,2603 @@
+{
+  "id": "a8fc376c-54cb-410b-b6b7-9026a9d8d865",
+  "version": "2.0",
+  "name": "NguyenVanDuc",
+  "url": "https://localhost:44373",
+  "tests": [
+    {
+      "id": "t-tCADMIN01",
+      "name": "tCADMIN01",
+      "commands": [
+        {
+          "id": "c1",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c2",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1280x672",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c3",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c4",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c5",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c6",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c7",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c8",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-gray-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c9",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600:nth-child(1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c10",
+          "comment": "",
+          "command": "select",
+          "target": "id=aircraftSelect",
+          "targets": [],
+          "value": "label=Airbus A320 (MB01 )"
+        },
+        {
+          "id": "c11",
+          "comment": "",
+          "command": "select",
+          "target": "id=arrivalAirport",
+          "targets": [],
+          "value": "label=Hồ Chí Minh (SB02 )"
+        },
+        {
+          "id": "c12",
+          "comment": "",
+          "command": "click",
+          "target": "id=departureTime",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c13",
+          "comment": "",
+          "command": "type",
+          "target": "id=departureTime",
+          "targets": [],
+          "value": "2026-01-01T08:00"
+        },
+        {
+          "id": "c14",
+          "comment": "",
+          "command": "click",
+          "target": "id=arrivalTime",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c15",
+          "comment": "",
+          "command": "type",
+          "target": "id=arrivalTime",
+          "targets": [],
+          "value": "2026-01-01T09:00"
+        },
+        {
+          "id": "c16",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600:nth-child(2)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c17",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN02",
+      "name": "tCADMIN02",
+      "commands": [
+        {
+          "id": "c18",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c19",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1280x672",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c20",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c21",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c22",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c23",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c24",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c25",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-gray-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c26",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(3) .text-blue-600 > .fas",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c27",
+          "comment": "",
+          "command": "click",
+          "target": "id=departureTime",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c28",
+          "comment": "",
+          "command": "type",
+          "target": "id=departureTime",
+          "targets": [],
+          "value": "2026-01-01T09:00"
+        },
+        {
+          "id": "c29",
+          "comment": "",
+          "command": "click",
+          "target": "id=arrivalTime",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c30",
+          "comment": "",
+          "command": "type",
+          "target": "id=arrivalTime",
+          "targets": [],
+          "value": "2026-01-01T11:00"
+        },
+        {
+          "id": "c31",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600:nth-child(2)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c32",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN03",
+      "name": "tCADMIN03",
+      "commands": [
+        {
+          "id": "c33",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c34",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1050x652",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c35",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c36",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c37",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c38",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c39",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c40",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-gray-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c41",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(3) > .px-6 > .rounded",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c42",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(3) .text-red-600 > .fas",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c43",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-red-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c44",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN04",
+      "name": "tCADMIN04",
+      "commands": [
+        {
+          "id": "c45",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c46",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1050x652",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c47",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c48",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c49",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c50",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c51",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c52",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Quản lý Chuyến bay",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c53",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(1) > .px-6 > .rounded",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c54",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(1) .text-red-600 > .fas",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c55",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-red-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c56",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN05",
+      "name": "tCADMIN05",
+      "commands": [
+        {
+          "id": "c57",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c58",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c59",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c60",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c61",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c62",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c63",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c64",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-gray-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c65",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Cập nhật trạng thái",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c66",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#toast-notification .text-sm",
+          "targets": [],
+          "value": "Đã cập nhật trạng thái cho 0 chuyến bay dựa trên giờ thực tế!"
+        },
+        {
+          "id": "c67",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(2) .px-2",
+          "targets": [],
+          "value": "Đã hạ cánh"
+        },
+        {
+          "id": "c68",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN06",
+      "name": "tCADMIN06",
+      "commands": [
+        {
+          "id": "c69",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c70",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1050x652",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c71",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c72",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c73",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV01"
+        },
+        {
+          "id": "c74",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "c75",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c76",
+          "comment": "",
+          "command": "pause",
+          "target": "",
+          "targets": [],
+          "value": "3000"
+        },
+        {
+          "id": "c77",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/QLPerson",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c78",
+          "comment": "",
+          "command": "pause",
+          "target": "",
+          "targets": [],
+          "value": "3000"
+        },
+        {
+          "id": "c79",
+          "comment": "",
+          "command": "assertLocation",
+          "target": "https://localhost:44373/Admin/TrangChu",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c80",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN07",
+      "name": "tCADMIN07",
+      "commands": [
+        {
+          "id": "c81",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c82",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c83",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c84",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c85",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c86",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c87",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c88",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(1) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c89",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-add-employee",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c90",
+          "comment": "",
+          "command": "type",
+          "target": "name=MANV",
+          "targets": [],
+          "value": "NV11"
+        },
+        {
+          "id": "c91",
+          "comment": "",
+          "command": "type",
+          "target": "name=TENNV",
+          "targets": [],
+          "value": "Nguyễn Thị Mới"
+        },
+        {
+          "id": "c92",
+          "comment": "",
+          "command": "type",
+          "target": "name=SDT",
+          "targets": [],
+          "value": "0912345611"
+        },
+        {
+          "id": "c93",
+          "comment": "",
+          "command": "select",
+          "target": "id=MACV",
+          "targets": [],
+          "value": "label=Nhân viên bán vé"
+        },
+        {
+          "id": "c94",
+          "comment": "",
+          "command": "type",
+          "target": "name=MATKHAU",
+          "targets": [],
+          "value": "pass123"
+        },
+        {
+          "id": "c95",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600:nth-child(2)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c96",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(11) > .px-6:nth-child(1)",
+          "targets": [],
+          "value": "NV11"
+        },
+        {
+          "id": "c97",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(11) > .px-6:nth-child(2)",
+          "targets": [],
+          "value": "Nguyễn Thị Mới"
+        },
+        {
+          "id": "c98",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(11) > .px-6:nth-child(3)",
+          "targets": [],
+          "value": "0912345611"
+        },
+        {
+          "id": "c99",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(11) > .px-6:nth-child(4)",
+          "targets": [],
+          "value": "CV01"
+        },
+        {
+          "id": "c100",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN08",
+      "name": "tCADMIN08",
+      "commands": [
+        {
+          "id": "c101",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c102",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c103",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c104",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c105",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c106",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c107",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c108",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(1) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c109",
+          "comment": "",
+          "command": "chooseOkOnNextConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c110",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(11) .text-red-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c111",
+          "comment": "",
+          "command": "assertConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c112",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#toast-notification .font-bold",
+          "targets": [],
+          "value": "Thành công"
+        },
+        {
+          "id": "c113",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN09",
+      "name": "tCADMIN09",
+      "commands": [
+        {
+          "id": "c114",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c115",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c116",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c117",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c118",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c119",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c120",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c121",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(1) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c122",
+          "comment": "",
+          "command": "chooseOkOnNextConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c123",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(9) .text-red-600 > .fas",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c124",
+          "comment": "",
+          "command": "assertConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c125",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=div > .text-sm:nth-child(2)",
+          "targets": [],
+          "value": "Không thể tự xóa chính tài khoản bản thân!"
+        },
+        {
+          "id": "c126",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN10",
+      "name": "tCADMIN10",
+      "commands": [
+        {
+          "id": "c127",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c128",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c129",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c130",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c131",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c132",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c133",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c134",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(1) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c135",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-gray-50:nth-child(9) .mr-3 > .fas",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c136",
+          "comment": "",
+          "command": "select",
+          "target": "name=MACV",
+          "targets": [],
+          "value": "label=Nhân viên bán vé"
+        },
+        {
+          "id": "c137",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c138",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Huỷ",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c139",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#toast-notification .font-bold",
+          "targets": [],
+          "value": "Lỗi"
+        },
+        {
+          "id": "c140",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN11",
+      "name": "tCADMIN11",
+      "commands": [
+        {
+          "id": "c141",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c142",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c143",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c144",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c145",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c146",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c147",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c148",
+          "comment": "",
+          "command": "click",
+          "target": "css=.sidebar-item > .flex > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c149",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(1) > .px-3 > span",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c150",
+          "comment": "",
+          "command": "select",
+          "target": "name=thang",
+          "targets": [],
+          "value": "label=Tháng 11"
+        },
+        {
+          "id": "c151",
+          "comment": "",
+          "command": "select",
+          "target": "name=nam",
+          "targets": [],
+          "value": "label=2025"
+        },
+        {
+          "id": "c152",
+          "comment": "",
+          "command": "click",
+          "target": "css=.px-6",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c153",
+          "comment": "",
+          "command": "pause",
+          "target": "",
+          "targets": [],
+          "value": "2000"
+        },
+        {
+          "id": "c154",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.text-4xl",
+          "targets": [],
+          "value": "26,050,000 VND"
+        },
+        {
+          "id": "c155",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN12",
+      "name": "tCADMIN12",
+      "commands": [
+        {
+          "id": "c156",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c157",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c158",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c159",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c160",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c161",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c162",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c163",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(4) .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c164",
+          "comment": "",
+          "command": "type",
+          "target": "name=startDate",
+          "targets": [],
+          "value": "2025-11-01"
+        },
+        {
+          "id": "c165",
+          "comment": "",
+          "command": "type",
+          "target": "name=endDate",
+          "targets": [],
+          "value": "2025-11-30"
+        },
+        {
+          "id": "c166",
+          "comment": "",
+          "command": "click",
+          "target": "css=.duration-200",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c167",
+          "comment": "",
+          "command": "pause",
+          "target": "",
+          "targets": [],
+          "value": "2000"
+        },
+        {
+          "id": "c168",
+          "comment": "",
+          "command": "click",
+          "target": "css=.gap-2:nth-child(1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c169",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN13",
+      "name": "tCADMIN13",
+      "commands": [
+        {
+          "id": "c170",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c171",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c172",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c173",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c174",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c175",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c176",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c177",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c178",
+          "comment": "",
+          "command": "click",
+          "target": "css=.group-hover\\3Atext-green-700",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c179",
+          "comment": "",
+          "command": "type",
+          "target": "id=backupName",
+          "targets": [],
+          "value": "Backup_Test"
+        },
+        {
+          "id": "c180",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-green-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c181",
+          "comment": "",
+          "command": "pause",
+          "target": "",
+          "targets": [],
+          "value": "3000"
+        },
+        {
+          "id": "c182",
+          "comment": "",
+          "command": "storeText",
+          "target": "css=#notification p.text-gray-200",
+          "targets": [],
+          "value": "backupText"
+        },
+        {
+          "id": "c183",
+          "comment": "",
+          "command": "executeScript",
+          "target": "return \"${backupText}\".includes(\"QLMayBay_FULL_Backup_Test_\")",
+          "targets": [],
+          "value": "result"
+        },
+        {
+          "id": "c184",
+          "comment": "",
+          "command": "assert",
+          "target": "result",
+          "targets": [],
+          "value": "true"
+        },
+        {
+          "id": "c185",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN14",
+      "name": "tCADMIN14",
+      "commands": [
+        {
+          "id": "c186",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c187",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1050x652",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c188",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c189",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c190",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c191",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c192",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c193",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c194",
+          "comment": "",
+          "command": "click",
+          "target": "css=.relative > span",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c195",
+          "comment": "",
+          "command": "type",
+          "target": "id=file-upload",
+          "targets": [],
+          "value": "D:\\Backups_QLMayBay\\backup.bak"
+        },
+        {
+          "id": "c196",
+          "comment": "",
+          "command": "chooseCancelOnNextConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c197",
+          "comment": "",
+          "command": "click",
+          "target": "id=restoreText",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c198",
+          "comment": "",
+          "command": "assertConfirmation",
+          "target": "CẢNH BÁO CUỐI CÙNG: \n\nBạn sắp xóa toàn bộ dữ liệu hiện tại để thay thế bằng bản backup này. \n\nBạn có chắc chắn muốn tiếp tục?",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c199",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN15",
+      "name": "tCADMIN15",
+      "commands": [
+        {
+          "id": "c200",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c201",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c202",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c203",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c204",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c205",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c206",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c207",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(2) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c208",
+          "comment": "",
+          "command": "click",
+          "target": "id=restoreText",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c209",
+          "comment": "",
+          "command": "assertAlert",
+          "target": "Vui lòng chọn file backup (.bak) để phục hồi.",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c210",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCADMIN16",
+      "name": "tCADMIN16",
+      "commands": [
+        {
+          "id": "c211",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c212",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c213",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c214",
+          "comment": "",
+          "command": "click",
+          "target": "id=adminLoginTab",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c215",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminId",
+          "targets": [],
+          "value": "NV09"
+        },
+        {
+          "id": "c216",
+          "comment": "",
+          "command": "type",
+          "target": "id=adminPassword",
+          "targets": [],
+          "value": "admin123"
+        },
+        {
+          "id": "c217",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c218",
+          "comment": "",
+          "command": "click",
+          "target": "css=li:nth-child(1) > .hover\\3A bg-red-50 > .font-medium",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c219",
+          "comment": "",
+          "command": "type",
+          "target": "name=manv",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c220",
+          "comment": "",
+          "command": "sendKeys",
+          "target": "name=manv",
+          "targets": [],
+          "value": "${KEY_ENTER}"
+        },
+        {
+          "id": "c221",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#content-nhanvien .hover\\3A bg-gray-50 > .px-6:nth-child(1)",
+          "targets": [],
+          "value": "NV05"
+        },
+        {
+          "id": "c222",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#content-nhanvien .hover\\3A bg-gray-50 > .px-6:nth-child(2)",
+          "targets": [],
+          "value": "Hoàng Thị E"
+        },
+        {
+          "id": "c223",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#content-nhanvien .hover\\3A bg-gray-50 > .px-6:nth-child(3)",
+          "targets": [],
+          "value": "0905678901"
+        },
+        {
+          "id": "c224",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=#content-nhanvien .hover\\3A bg-gray-50 > .px-6:nth-child(4)",
+          "targets": [],
+          "value": "CV05"
+        },
+        {
+          "id": "c225",
+          "comment": "",
+          "command": "open",
+          "target": "/Admin/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCBVA04",
+      "name": "tCBVA04",
+      "commands": [
+        {
+          "id": "c226",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c227",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c228",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c229",
+          "comment": "",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "c230",
+          "comment": "",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "c231",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-700",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c232",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Check-in",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c233",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Check-in ngay",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c234",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.querySelectorAll('input[type=\"checkbox\"]').forEach(c => c.checked = true);",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c235",
+          "comment": "",
+          "command": "runScript",
+          "target": "window.confirm = function() { return true; };",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c236",
+          "comment": "",
+          "command": "runScript",
+          "target": "window.lastAlert = null; window.alert = function(msg) { window.lastAlert = msg; };",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c237",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.querySelector('button[onclick*=\"confirmCheckIn\"]').click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c238",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.gap-3:nth-child(1) .mb-1",
+          "targets": [],
+          "value": "Check-in thành công!"
+        },
+        {
+          "id": "c239",
+          "comment": "",
+          "command": "open",
+          "target": "/User/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCDATVE14",
+      "name": "tCDATVE14",
+      "commands": [
+        {
+          "id": "c240",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c241",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c242",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c243",
+          "comment": "",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "c244",
+          "comment": "",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "c245",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-700",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c246",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Đặt Vé",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c247",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[onclick^='checkPassengerAndBook']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c248",
+          "comment": "",
+          "command": "click",
+          "target": "css=#passengerModal button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c249",
+          "comment": "",
+          "command": "runScript",
+          "target": "var seat = Array.from(document.querySelectorAll('.seat.available')).find(s => s.dataset.className.includes('Phổ thông')) || document.querySelector('.seat.available'); if (seat) { seat.click(); }",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c250",
+          "comment": "",
+          "command": "runScript",
+          "target": "showPassengerForm();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c251",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-name",
+          "targets": [],
+          "value": "Nguyễn Văn A"
+        },
+        {
+          "id": "c252",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.getElementById('p1-dob').value = '2005-09-24';",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c253",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-country",
+          "targets": [],
+          "value": "label=Việt Nam"
+        },
+        {
+          "id": "c254",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-email",
+          "targets": [],
+          "value": "nguyenvana@gmail.com"
+        },
+        {
+          "id": "c255",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-phone",
+          "targets": [],
+          "value": "0903911132"
+        },
+        {
+          "id": "c256",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-gender",
+          "targets": [],
+          "value": "label=Nam"
+        },
+        {
+          "id": "c257",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-carry-on",
+          "targets": [],
+          "value": "label=10kg (+200,000 VNĐ)"
+        },
+        {
+          "id": "c258",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.querySelector('#passenger-form button[type=\"submit\"]').click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c259",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.sm\\3Atext-3xl",
+          "targets": [],
+          "value": "2150000 VNĐ"
+        },
+        {
+          "id": "c260",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Vé của tôi",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c261",
+          "comment": "",
+          "command": "click",
+          "target": "css=.flex:nth-child(7) > .sm\\3Aw-auto",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c262",
+          "comment": "",
+          "command": "open",
+          "target": "/User/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCDATVE15",
+      "name": "tCDATVE15",
+      "commands": [
+        {
+          "id": "c263",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c264",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c265",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c266",
+          "comment": "",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "c267",
+          "comment": "",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "c268",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-700",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c269",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Đặt Vé",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c270",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[onclick^='checkPassengerAndBook']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c271",
+          "comment": "",
+          "command": "click",
+          "target": "css=#passengerModal button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c272",
+          "comment": "",
+          "command": "runScript",
+          "target": "var seat = Array.from(document.querySelectorAll('.seat.available')).find(s => s.dataset.className.includes('Phổ thông')) || document.querySelector('.seat.available'); if (seat) { seat.click(); }",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c273",
+          "comment": "",
+          "command": "runScript",
+          "target": "showPassengerForm();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c274",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-name",
+          "targets": [],
+          "value": "Nguyễn Văn A"
+        },
+        {
+          "id": "c275",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.getElementById('p1-dob').value = '2005-09-24';",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c276",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-country",
+          "targets": [],
+          "value": "label=Việt Nam"
+        },
+        {
+          "id": "c277",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-email",
+          "targets": [],
+          "value": "nguyenvana@gmail.com"
+        },
+        {
+          "id": "c278",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-phone",
+          "targets": [],
+          "value": "0903911132"
+        },
+        {
+          "id": "c279",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-gender",
+          "targets": [],
+          "value": "label=Nam"
+        },
+        {
+          "id": "c280",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-checked",
+          "targets": [],
+          "value": "label=20kg (+500,000 VNĐ)"
+        },
+        {
+          "id": "c281",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.querySelector('#passenger-form button[type=\"submit\"]').click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c282",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.sm\\3Atext-3xl",
+          "targets": [],
+          "value": "2450000 VNĐ"
+        },
+        {
+          "id": "c283",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Vé của tôi",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c284",
+          "comment": "",
+          "command": "click",
+          "target": "css=.flex:nth-child(7) > .sm\\3Aw-auto",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c285",
+          "comment": "",
+          "command": "open",
+          "target": "/User/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t-tCDATVE16",
+      "name": "tCDATVE16",
+      "commands": [
+        {
+          "id": "c286",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c287",
+          "comment": "",
+          "command": "setWindowSize",
+          "target": "1296x688",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c288",
+          "comment": "",
+          "command": "click",
+          "target": "css=.bg-blue-600",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c289",
+          "comment": "",
+          "command": "type",
+          "target": "id=email",
+          "targets": [],
+          "value": "khoa@gmail.com"
+        },
+        {
+          "id": "c290",
+          "comment": "",
+          "command": "type",
+          "target": "id=password",
+          "targets": [],
+          "value": "123456"
+        },
+        {
+          "id": "c291",
+          "comment": "",
+          "command": "click",
+          "target": "css=.hover\\3A bg-blue-700",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c292",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Đặt Vé",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c293",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[onclick^='checkPassengerAndBook']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c294",
+          "comment": "",
+          "command": "click",
+          "target": "css=#passengerModal button[type='submit']",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c295",
+          "comment": "",
+          "command": "runScript",
+          "target": "var seat = Array.from(document.querySelectorAll('.seat.available')).find(s => s.dataset.className.includes('Phổ thông')) || document.querySelector('.seat.available'); if (seat) { seat.click(); }",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c296",
+          "comment": "",
+          "command": "runScript",
+          "target": "showPassengerForm();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c297",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-name",
+          "targets": [],
+          "value": "Nguyễn Văn A"
+        },
+        {
+          "id": "c298",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.getElementById('p1-dob').value = '2025-09-24';",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c299",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-country",
+          "targets": [],
+          "value": "label=Việt Nam"
+        },
+        {
+          "id": "c300",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-email",
+          "targets": [],
+          "value": "nguyenvana@gmail.com"
+        },
+        {
+          "id": "c301",
+          "comment": "",
+          "command": "type",
+          "target": "id=p1-phone",
+          "targets": [],
+          "value": "0903911132"
+        },
+        {
+          "id": "c302",
+          "comment": "",
+          "command": "select",
+          "target": "id=p1-gender",
+          "targets": [],
+          "value": "label=Nam"
+        },
+        {
+          "id": "c303",
+          "comment": "",
+          "command": "runScript",
+          "target": "document.querySelector('#passenger-form button[type=\"submit\"]').click();",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c304",
+          "comment": "",
+          "command": "assertText",
+          "target": "css=.bg-red-100 p",
+          "targets": [],
+          "value": "Hành khách bắt buộc phải đạt độ tuổi từ đủ 2 tuổi trở lên!"
+        },
+        {
+          "id": "c305",
+          "comment": "",
+          "command": "open",
+          "target": "/User/DangXuat",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "suites": [
+    {
+      "id": "4365f158-a544-43d8-be50-e23fb1109d1d",
+      "name": "Default Suite",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": [
+        "t-tCADMIN01",
+        "t-tCADMIN02",
+        "t-tCADMIN03",
+        "t-tCADMIN04",
+        "t-tCADMIN05",
+        "t-tCADMIN06",
+        "t-tCADMIN07",
+        "t-tCADMIN08",
+        "t-tCADMIN09",
+        "t-tCADMIN10",
+        "t-tCADMIN11",
+        "t-tCADMIN12",
+        "t-tCADMIN13",
+        "t-tCADMIN14",
+        "t-tCADMIN15",
+        "t-tCADMIN16",
+        "t-tCBVA04",
+        "t-tCDATVE14",
+        "t-tCDATVE15",
+        "t-tCDATVE16"
+      ]
+    }
+  ],
+  "urls": [
+    "https://localhost:44373/"
+  ],
+  "plugins": []
+}

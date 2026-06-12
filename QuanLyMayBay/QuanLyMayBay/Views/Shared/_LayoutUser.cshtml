@@ -1,4 +1,4 @@
-﻿@{
+@{
     var controller = ViewContext.RouteData.Values["controller"].ToString();
     var action = ViewContext.RouteData.Values["action"].ToString();
     KHACHHANG KH = (KHACHHANG)Session["UserName"];
@@ -9,6 +9,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if (KH != null)
+    {
+        if (Session["JustLoggedIn"] != null && (bool)Session["JustLoggedIn"])
+        {
+            <script>
+                sessionStorage.setItem("sessionActive", "true");
+            </script>
+            Session["JustLoggedIn"] = null;
+        }
+        else
+        {
+            <script>
+                if (!sessionStorage.getItem("sessionActive")) {
+                    window.location.href = '@Url.Action("DangXuat", "User")';
+                }
+            </script>
+        }
+    }
     <title>SkyBooking - Đặt vé máy bay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">

@@ -1,4 +1,4 @@
-﻿@using QuanLyMayBay.Models
+@using QuanLyMayBay.Models
 @{
     // 1. LẤY THÔNG TIN NGƯỜI DÙNG TỪ SESSION
     var adminUser = Session["AdminUser"] as NHANVIEN;
@@ -27,6 +27,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if (adminUser != null)
+    {
+        if (Session["AdminJustLoggedIn"] != null && (bool)Session["AdminJustLoggedIn"])
+        {
+            <script>
+                sessionStorage.setItem("adminSessionActive", "true");
+            </script>
+            Session["AdminJustLoggedIn"] = null;
+        }
+        else
+        {
+            <script>
+                if (!sessionStorage.getItem("adminSessionActive")) {
+                    window.location.href = '@Url.Action("DangXuat", "Admin")';
+                }
+            </script>
+        }
+    }
     <title>Hệ Thống Quản Lý Vé Máy Bay</title>
 
     <script src="https://cdn.tailwindcss.com"></script>

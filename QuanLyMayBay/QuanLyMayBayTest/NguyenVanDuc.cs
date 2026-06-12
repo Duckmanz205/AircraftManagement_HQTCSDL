@@ -70,6 +70,16 @@ namespace QuanLyMayBayTest
         {
             if (driver != null)
             {
+                try
+                {
+                    // Đảm bảo đăng xuất sạch sẽ để không lưu session trên server
+                    driver.Navigate().GoToUrl("https://localhost:44373/Admin/DangXuat");
+                    driver.Navigate().GoToUrl("https://localhost:44373/User/DangXuat");
+                }
+                catch (Exception)
+                {
+                    // Bỏ qua lỗi nếu driver không còn khả dụng hoặc server không phản hồi
+                }
                 driver.Quit(); // Đóng toàn bộ trình duyệt một cách an toàn
             }
         }
@@ -891,47 +901,6 @@ namespace QuanLyMayBayTest
 
             Assert.AreEqual("CV05",
                 driver.FindElement(By.CssSelector("#content-nhanvien .hover\\3A bg-gray-50 > .px-6:nth-child(4)")).Text);
-        }
-        [TestMethod]
-        public void tCBVA04()
-        {
-            // 1. Điều hướng và cấu hình kích thước màn hình
-            driver.Navigate().GoToUrl("https://localhost:44373/");
-            driver.Manage().Window.Size = new System.Drawing.Size(1296, 688);
-
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-
-            // 2. Đăng nhập tài khoản Khách hàng
-            driver.FindElement(By.CssSelector(".bg-blue-600")).Click();
-
-            // Lược bỏ click thừa, nhập thẳng thông tin
-            IWebElement emailInput = wait.Until(d => d.FindElement(By.Id("email")));
-            emailInput.SendKeys("khoa@gmail.com");
-            driver.FindElement(By.Id("password")).SendKeys("123456");
-            driver.FindElement(By.CssSelector(".hover\\3A bg-blue-700")).Click();
-
-            // 3. Điều hướng đến trang Check-in
-            IWebElement checkinTab = wait.Until(d => d.FindElement(By.LinkText("Check-in")));
-            checkinTab.Click();
-
-            IWebElement checkinNowBtn = wait.Until(d => d.FindElement(By.LinkText("Check-in ngay")));
-            string href = checkinNowBtn.GetAttribute("href");
-            driver.Navigate().GoToUrl(href);
-
-            // 4. Đánh dấu các mục xác nhận (Checkbox/Radio)
-            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("document.querySelectorAll('input[type=\"checkbox\"]').forEach(c => c.checked = true);");
-
-            // Mock confirm and alert
-            js.ExecuteScript("window.confirm = function() { return true; };");
-            js.ExecuteScript("window.lastAlert = null; window.alert = function(msg) { window.lastAlert = msg; };");
-
-            // 5. Bấm nút Xác nhận Check-in cuối cùng
-            js.ExecuteScript("document.querySelector('button[onclick*=\"confirmCheckIn\"]').click();");
-
-            // 6. Kiểm tra giao diện hiển thị trạng thái thành công
-            IWebElement successMessageUI = wait.Until(d => d.FindElement(By.CssSelector(".gap-3:nth-child(1) .mb-1")));
-            Assert.AreEqual("Check-in thành công!", successMessageUI.Text);
         }
         [TestMethod]
         public void tCDATVE14()

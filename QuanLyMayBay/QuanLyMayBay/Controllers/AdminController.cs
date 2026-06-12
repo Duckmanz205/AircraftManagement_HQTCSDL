@@ -70,6 +70,7 @@ namespace QuanLyMayBay.Controllers
             // 4. Đăng nhập thành công
             // Lưu thông tin nhân viên vào Session
             Session["AdminUser"] = nhanVien;
+            Session["AdminJustLoggedIn"] = true;
             Session["AdminError"] = null; // Xóa lỗi
 
             return RedirectToAction("TrangChu");
